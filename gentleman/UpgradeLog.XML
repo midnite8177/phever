@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="gentleman">
+</Property><Property Name="Solution File" Value="C:\var\phever\trunk\gentleman\gentleman.sln">
+</Property><Property Name="User Options File" Value="C:\var\phever\trunk\gentleman\gentleman.suo">
+</Property><Property Name="Date" Value="Tuesday, December 29, 2009">
+</Property><Property Name="Time" Value="16:57 PM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="gentleman.sln" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman.sln">
+</Event><Event ErrorLevel="0" Project="" Source="gentleman.suo" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman.suo">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\gentleman.csproj" Description="Project file successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\gentleman.csproj">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\JPGKeywordHelper.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\JPGKeywordHelper.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Constants.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Constants.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Form1.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Form1.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Form1.Designer.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Fraction.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Fraction.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Info.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Info.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Metadata.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Metadata.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Program.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Program.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Properties\AssemblyInfo.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Properties\Resources.Designer.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Properties\Settings.Designer.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\PropertyTag.cs" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\PropertyTag.cs">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\app.config" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\app.config">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Properties\Settings.settings" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Form1.resx" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Form1.resx">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\Properties\Resources.resx" Description="File successfully backed up as C:\var\phever\trunk\gentleman\Backup\gentleman\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\gentleman.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="gentleman" Source="gentleman\gentleman.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="gentleman.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="gentleman.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="gentleman" Source="gentleman\app.config" Description="File converted successfully. All &lt;supportedRuntime&gt; and &lt;requiredRuntime&gt; tags were removed to enable the project to build and run with Visual Studio 2005.">
+</Event><Event ErrorLevel="3" Project="gentleman" Source="gentleman\app.config" Description="Converted">
+</Event></UpgradeLog>

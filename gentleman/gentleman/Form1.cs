@@ -25,6 +25,8 @@ namespace gentleman
     public partial class Form1 : Form
     {
         int scaned = 0;
+        int jpged = 0;
+        int error = 0;
 
         public Form1()
         {
@@ -32,10 +34,9 @@ namespace gentleman
             //System.Diagnostics.Process.Start(@"file://C:\var\000a_370ra.jpg");
             //Image image = Image.FromFile(@"C:\var\000a_370ra.jpg");
             StreamWriter writer = new StreamWriter(@"c:\var\test.log");
-            writer.WriteLine(DateTime.Now.ToString());
-            selftest(@"f:\");
-            writer.WriteLine(Convert.ToString(scaned));
-            writer.WriteLine(DateTime.Now.ToString());
+            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), scaned, jpged, error));
+            selftest(@"F:\imagehash\data\2\img");
+            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), scaned, jpged, error));
             writer.Close();
         }
         public void selftest(string dic)
@@ -50,11 +51,26 @@ namespace gentleman
             }
             foreach (var x in Directory.GetFiles(dic))
             {
-                string ext = System.IO.Path.GetExtension(x).ToLower();
-                if( ext == ".jpg" ||ext == ".jpeg") {
-                    JPGKeywordHelper helper = new JPGKeywordHelper(x);
-                    string hashcode = helper.Hash();
-                    scaned += 1;
+                scaned += 1;
+                try
+                {
+                    string ext = System.IO.Path.GetExtension(x).ToLower();
+                    if (ext == ".jpg" || ext == ".jpeg")
+                    {
+                        //continue;
+                        JPGKeywordHelper helper = new JPGKeywordHelper(x);
+                        jpged += 1;
+                        string hashcode = helper.Hash();
+
+                    }
+                }
+                catch (FormatException)
+                {
+
+                }
+                catch (Exception)
+                {
+                    error += 1;
                 }
             }
 

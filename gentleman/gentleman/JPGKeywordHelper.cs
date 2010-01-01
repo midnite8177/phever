@@ -24,14 +24,30 @@ namespace gentleman
        
         public JPGKeywordHelper(string path)
         {
-            if(!File.Exists(path))  throw new Exception();
+            //Image v = Image.FromFile(path);
+            //if(!File.Exists(path))  throw new Exception();
 
             jpegPath = path;
-            using(Stream jpegStreamIn = File.Open(jpegPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+
+            using (Stream jpegStreamIn = File.Open(jpegPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                decoder = new JpegBitmapDecoder(jpegStreamIn, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+
+                try
+                {
+                    decoder = new JpegBitmapDecoder(jpegStreamIn, BitmapCreateOptions.DelayCreation, BitmapCacheOption.OnLoad);
+                }
+                catch
+                {
+                    //Image x = Image.FromStream(jpegStreamIn);
+                    //if (x.RawFormat != ImageFormat.Jpeg)
+                    //    throw new FormatException();
+
+                    //else throw new Exception();
+                }
             }
+
             bitmapFrame = decoder.Frames[0];            
+
             metadata = (BitmapMetadata)bitmapFrame.Metadata;
             try
             {
@@ -41,8 +57,8 @@ namespace gentleman
             {
                 metadataCopy = new BitmapMetadata("jpg");
             }
-            
-            Keywords = metadata.Keywords == null? new List<string>():new List<string>(metadata.Keywords);
+
+            //Keywords = metadata.Keywords == null ? new List<string>() : new List<string>(metadata.Keywords);
             
 
         }
@@ -63,23 +79,26 @@ namespace gentleman
         }
         public string Hash()
         {
-            Bitmap bmp = new Bitmap(jpegPath);
-            int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width *120/ bmp.Height;
+            Image bmp = new Bitmap(jpegPath);
+           
+            
+            int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
             int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
             nwidth = nwidth == 0 ? 1 : nwidth;
             nheight = nheight == 0 ? 1 : nheight;
 
             Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-            Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);                 
+            Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);
 
             using (MemoryStream streamout = new MemoryStream())
             {
-                myThumbnail.Save(streamout, ImageFormat.Png);
+                myThumbnail.Save(streamout, ImageFormat.Bmp);
                 //myThumbnail.Save(@"c:\var\testpng.png");
-                
+
                 SHA1 x = new SHA1CryptoServiceProvider();
                 return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
             }
+            return "";
         }
                                  
     }
