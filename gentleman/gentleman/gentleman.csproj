@@ -89,6 +89,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="PropertyTag.cs" />
+    <Compile Include="thumb\FileObject.cs" />
+    <Compile Include="thumb\FileObjectCollection.cs" />
+    <Compile Include="thumb\IBaseStorageWrapper.cs" />
+    <Compile Include="thumb\Interop.cs" />
+    <Compile Include="thumb\IStorageWrapper.cs" />
+    <Compile Include="thumb\ITStorageWrapper.cs" />
+    <Compile Include="thumb\ThumbDB.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

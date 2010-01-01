@@ -23,26 +23,22 @@ namespace gentleman
         public List<string> Keywords = null;
        
         public JPGKeywordHelper(string path)
-        {
-            //Image v = Image.FromFile(path);
-            //if(!File.Exists(path))  throw new Exception();
-
+        {            
             jpegPath = path;
 
             using (Stream jpegStreamIn = File.Open(jpegPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-
                 try
                 {
                     decoder = new JpegBitmapDecoder(jpegStreamIn, BitmapCreateOptions.DelayCreation, BitmapCacheOption.OnLoad);
                 }
                 catch
                 {
-                    //Image x = Image.FromStream(jpegStreamIn);
-                    //if (x.RawFormat != ImageFormat.Jpeg)
-                    //    throw new FormatException();
+                    Image x = Image.FromStream(jpegStreamIn);
+                    if (x.RawFormat != ImageFormat.Jpeg)
+                        throw new FormatException();
 
-                    //else throw new Exception();
+                    else throw new Exception();
                 }
             }
 
@@ -58,8 +54,7 @@ namespace gentleman
                 metadataCopy = new BitmapMetadata("jpg");
             }
 
-            //Keywords = metadata.Keywords == null ? new List<string>() : new List<string>(metadata.Keywords);
-            
+            Keywords = metadata.Keywords == null ? new List<string>() : new List<string>(metadata.Keywords);            
 
         }
 
@@ -79,8 +74,7 @@ namespace gentleman
         }
         public string Hash()
         {
-            Image bmp = new Bitmap(jpegPath);
-           
+            Image bmp = new Bitmap(jpegPath);           
             
             int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
             int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
@@ -94,12 +88,28 @@ namespace gentleman
             {
                 myThumbnail.Save(streamout, ImageFormat.Bmp);
                 //myThumbnail.Save(@"c:\var\testpng.png");
-
+                streamout.Position = 0;
                 SHA1 x = new SHA1CryptoServiceProvider();
                 return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
-            }
-            return "";
+            }            
         }
+
+        //public string Hash()
+        //{
+        //    Image bmp = new Bitmap(jpegPath);
+
+        //    Image myThumbnail = bmp;
+
+        //    using (MemoryStream streamout = new MemoryStream())
+        //    {
+        //        myThumbnail.Save(streamout, ImageFormat.Bmp);
+        //        //myThumbnail.Save(@"c:\var\testpng.png");
+        //        streamout.Position = 0;
+        //        SHA1 x = new SHA1CryptoServiceProvider();
+        //        return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
+        //    }
+            
+        //}
                                  
     }
 }

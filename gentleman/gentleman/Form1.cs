@@ -24,44 +24,69 @@ namespace gentleman
 {
     public partial class Form1 : Form
     {
-        int scaned = 0;
-        int jpged = 0;
-        int error = 0;
+        int ScanedFile = 0;
+        int JpgFile = 0;
+        int ErrFile = 0;
+
+        Dictionary<string, List<string>> HashMap = new Dictionary<string, List<string>>();
 
         public Form1()
         {
             InitializeComponent();
-            //System.Diagnostics.Process.Start(@"file://C:\var\000a_370ra.jpg");
-            //Image image = Image.FromFile(@"C:\var\000a_370ra.jpg");
+            
             StreamWriter writer = new StreamWriter(@"c:\var\test.log");
-            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), scaned, jpged, error));
-            selftest(@"F:\imagehash\data\2\img");
-            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), scaned, jpged, error));
+
+            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
+
+            Scan(@"F:\");
+
+            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
+
+            foreach (var i in HashMap)
+            {
+                if (i.Value.Count > 1)
+                    writer.WriteLine(string.Format("{0} {1}", i.Key, string.Join(",", i.Value.ToArray())));
+            }
+
             writer.Close();
         }
-        public void selftest(string dic)
+        public void TestThumbData()
+        {
+            var filename = @"F:\pics\Thumbs.db";
+            ThumbDBLib.ThumbDB x = new ThumbDBLib.ThumbDB(filename);
+            var thumbData = x.GetThumbData(@"F:\pics\DSC03716.JPG");
+            MemoryStream ms = new MemoryStream(thumbData);
+            Image img = Image.FromStream(ms);
+
+        }
+        public void Scan(string dic)
         {
             try
             {
-                foreach (var x in Directory.GetDirectories(dic))
-                    selftest(x);
+                foreach (var dicpath in Directory.GetDirectories(dic))
+                    Scan(dicpath);
             }
             catch(UnauthorizedAccessException)
             {
+
             }
-            foreach (var x in Directory.GetFiles(dic))
+
+            foreach (var filepath in Directory.GetFiles(dic))
             {
-                scaned += 1;
+                ScanedFile += 1;
                 try
                 {
-                    string ext = System.IO.Path.GetExtension(x).ToLower();
+                    string ext = System.IO.Path.GetExtension(filepath).ToLower();
                     if (ext == ".jpg" || ext == ".jpeg")
-                    {
-                        //continue;
-                        JPGKeywordHelper helper = new JPGKeywordHelper(x);
-                        jpged += 1;
+                    {                        
+                        JPGKeywordHelper helper = new JPGKeywordHelper(filepath);
+                        JpgFile += 1;
                         string hashcode = helper.Hash();
-
+                        if (!HashMap.ContainsKey(hashcode))
+                            HashMap[hashcode] = new List<string>();
+    
+                        HashMap[hashcode].Add(filepath);
+                        
                     }
                 }
                 catch (FormatException)
@@ -70,7 +95,7 @@ namespace gentleman
                 }
                 catch (Exception)
                 {
-                    error += 1;
+                    ErrFile += 1;
                 }
             }
 
