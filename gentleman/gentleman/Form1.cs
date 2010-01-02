@@ -19,7 +19,7 @@ using System.Windows.Media.Imaging;
 /// http://www.dreamincode.net/code/snippet3144.htm
 /// http://msdn.microsoft.com/en-us/library/bb643802.aspx#merged_properties__zerh
 /// http://msdn.microsoft.com/en-us/library/system.windows.media.imaging.bitmapmetadata.setquery.aspx
-/// 
+/// System.Diagnostics.Process.Start(@"file://C:\var\000a_370ra.jpg");
 namespace gentleman
 {
     public partial class Form1 : Form
@@ -33,23 +33,64 @@ namespace gentleman
         public Form1()
         {
             InitializeComponent();
+            test2();
+            //JpegHelper x = new JpegHelper(@"C:\var\000a_370ra.jpg");
+            //x.Save(@"c:\var\test1.jpg");
+            //TestShow();
             
-            StreamWriter writer = new StreamWriter(@"c:\var\test.log");
+            //StreamWriter writer = new StreamWriter(@"c:\var\test.log");
 
-            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
+            //writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
 
-            Scan(@"F:\");
+            //Scan(@"F:\");
 
-            writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
+            //writer.WriteLine(string.Format("{0}, {1}, {2}, {3}", DateTime.Now.ToString(), ScanedFile, JpgFile, ErrFile));
 
-            foreach (var i in HashMap)
+            //foreach (var i in HashMap)
+            //{
+            //    if (i.Value.Count > 1)
+            //        writer.WriteLine(string.Format("{0} {1}", i.Key, string.Join(",", i.Value.ToArray())));
+            //}
+
+            //writer.Close();
+        }
+
+        public void TestShow()
+        {            
+
+            StreamReader reader = new StreamReader("test.log");
+            ;
+            reader.ReadLine();
+            reader.ReadLine();
+            string line = null;
+            int number = 0;
+            
+            while((line = reader.ReadLine()) != null)
             {
-                if (i.Value.Count > 1)
-                    writer.WriteLine(string.Format("{0} {1}", i.Key, string.Join(",", i.Value.ToArray())));
+                var hash = line.Substring(0, 40);
+                imageList1.Images.Add(hash, new Bitmap(@"C:\var\top-rogo.jpg"));
+                imageList1.ImageSize = new Size(120, 120);
+                
+                var paths = line.Substring(40).Split(',');
+                number += 1;
+                var group = new ListViewGroup(hash);
+                listView1.Groups.Add(group);                
+                foreach (var path in paths)
+                {                                        
+                    var item = new ListViewItem(System.IO.Path.GetFileName(path), group);
+                    item.ImageKey = hash;
+                    item.Tag = path;
+                    listView1.Items.Add(item);                    
+                }
+                if (number >= 100) break;
             }
 
-            writer.Close();
+            
+
         }
+       
+
+
         public void TestThumbData()
         {
             var filename = @"F:\pics\Thumbs.db";
@@ -79,9 +120,9 @@ namespace gentleman
                     string ext = System.IO.Path.GetExtension(filepath).ToLower();
                     if (ext == ".jpg" || ext == ".jpeg")
                     {                        
-                        JPGKeywordHelper helper = new JPGKeywordHelper(filepath);
+                        JpegHelper helper = new JpegHelper(filepath);
                         JpgFile += 1;
-                        string hashcode = helper.Hash();
+                        string hashcode = helper.Hash;
                         if (!HashMap.ContainsKey(hashcode))
                             HashMap[hashcode] = new List<string>();
     
@@ -103,12 +144,11 @@ namespace gentleman
 
         public void test2()
         {
-            JPGKeywordHelper x = new JPGKeywordHelper(@"C:\var\000a_370ra.jpg");
+            JpegHelper x = new JpegHelper(@"C:\var\000a_370ra.jpg");
             x.Keywords = new List<string> { "test3", "test4" };
             x.Save(@"c:\var\000a_370ra_temp.jpg");
-            x.Hash();
-            Bitmap xx = new Bitmap(@"C:\var\000a_370ra.jpg");
-            xx.Save(@"c:\var\test.bmp");            
+            JpegHelper xx = new JpegHelper(@"c:\var\000a_370ra_temp.jpg");            
+        
         }
         public void test1()
         {
@@ -314,6 +354,22 @@ namespace gentleman
                 }
             }
 
+        }
+
+        private void listView1_ItemActivate(object sender, EventArgs e)
+        {            
+            System.Diagnostics.Process.Start(string.Format(@"file://{0}",listView1.SelectedItems[0].Tag));
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            listView1.Width = this.Width - 20;
+            listView1.Height = this.Height - 60;
         }
     }
 }
