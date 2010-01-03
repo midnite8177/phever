@@ -10,7 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 //using Michaelis.Drawing;
 using System.Windows.Media.Imaging;
-
+using System.Security.Cryptography;
 /// 1. File link (solved)
 /// 2. Upload Tag
 /// 3. Server Side Code
@@ -24,12 +24,24 @@ namespace gentleman
 {
     public partial class Form1 : Form
     {
-        int ScanedFile = 0;
-        int JpgFile = 0;
-        int ErrFile = 0;
-
-        Dictionary<string, List<string>> HashMap = new Dictionary<string, List<string>>();
-
+        private int ScanedFile = 0;
+        private int JpgFile = 0;
+        private int ErrFile = 0;
+        private const string HashPathDB = "HashPath.db";
+        private const string FolderDB = "FolderOption.db";
+        private const string CacheFile = ".Gentleman.db";
+        /// Path, Hash, tags 
+        /// Doesn't need load in memory
+        private Dictionary<string, KeyValuePair<string,string>> PathHash = null; 
+        /// Hash, [Path]
+        private Dictionary<string, List<string>> HashPath = null;
+        /// Tag, [Hash]
+        private Dictionary<string, List<string>> TagHash = new Dictionary<string, List<string>>();
+        /// Folder, option
+        private Dictionary<string, bool> FolderOption = null;
+        /// Scaned Path
+        private Dictionary<string, bool> ParsedPath = new Dictionary<string, bool>();
+                
         public Form1()
         {
             InitializeComponent();
@@ -55,6 +67,216 @@ namespace gentleman
             //writer.Close();
         }
 
+        public Dictionary<string,bool> LoadFolderOption()
+        {
+            if (FolderOption != null) return FolderOption;
+
+            FolderOption = new Dictionary<string, bool>();
+
+            if (System.IO.File.Exists(FolderDB))
+            {
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(FolderDB))
+                {
+                    string data = null;
+                    string path = null;
+                    bool option = false;
+                    while ((data = reader.ReadLine()) != null)
+                    {
+                        var token = data.Split(';');
+                        if (token.Length == 2)
+                        {
+                            path = token[0];
+                            option = Convert.ToBoolean(token[1]);
+                            FolderOption[path] = option;
+                        }
+                    }
+                }
+            }
+            return FolderOption;
+        }
+
+        public void UpdateFolderOption(Dictionary<string, bool> nFolderOption)
+        {
+            FolderOption = nFolderOption;
+            Scan();
+        }
+
+        public void SaveFolderOption()
+        {
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(FolderDB))
+            {
+                foreach (var item in FolderOption)
+                {
+                    writer.WriteLine(string.Format("{0};{1}", item.Key, item.Value));
+                }
+            }
+        }
+
+        public Dictionary<string, List<string>> LoadHashPath()
+        {
+            if (HashPath != null) return HashPath;
+
+            HashPath = new Dictionary<string, List<string>>();
+
+            if (System.IO.File.Exists(HashPathDB))
+            {
+
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(HashPathDB))
+                {
+                    string line = null;
+                    string hash = null;
+                    string[] paths = null;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var token = line.Split(';');
+                        if (token.Length == 2)
+                        {
+                            hash = token[0];
+                            paths = token[1].Split(',');
+
+                            HashPath[hash] = new List<string>(paths);
+                        }
+
+                    }
+
+                }
+            }
+            return HashPath;
+        }
+
+        public void SaveHashPath()
+        {
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(HashPathDB))
+            {
+                foreach (var item in HashPath)
+                {
+                    writer.WriteLine(string.Format("{0};{1}", item.Key, string.Join(",", item.Value.ToArray())));
+                }
+            }
+        }
+
+        public void Scan()
+        {
+            List<string> Paths = new List<string>(FolderOption.Keys);
+            Paths.RemoveAll(a => FolderOption[a] == false);
+            Paths.Sort();
+            
+            backgroundWorker1.RunWorkerAsync(Paths);
+        }        
+
+        // Return Path => Hash
+        public static Dictionary<string, string> LoadCacheFile(string filepath)
+        {
+           Dictionary<string, string> FolderTemp = new Dictionary<string, string>();
+
+            if (System.IO.File.Exists(filepath))
+            {
+                using (System.IO.StreamReader reader = new StreamReader(filepath))
+                {
+                    string line = null;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        var token = line.Split(';');
+                        if (token.Length == 2)
+                        {
+                            var Hash = token[0];
+                            var Path = token[1];
+                            FolderTemp[Path] = Hash;
+                        }
+                    }
+                }
+            }
+            return FolderTemp;
+        }
+
+        public static void SaveCacheFile(string filepath, Dictionary<string, string> FolderResult)
+        {
+            if (FolderResult.Count > 0)
+            {
+                using (System.IO.StreamWriter writer = new StreamWriter(filepath))
+                {
+                    foreach (var i in FolderResult)
+                    {
+                        writer.WriteLine(string.Format("{0};{1}", i.Value, i.Key));
+                    }
+                }
+            }
+        }
+        private List<string> SupportType = new List<string>() { ".jpg", ".jpeg", ".png", ".gif" };
+        public void ScanFolder(string folderPath)
+        {
+            if (ParsedPath.ContainsKey(folderPath)) return;
+
+            Dictionary<string, string> FolderTemp = LoadCacheFile(folderPath + @"\" + CacheFile);            
+            string[] files = System.IO.Directory.GetFiles(folderPath);
+            Dictionary<string, string> FolderResult = new Dictionary<string,string>();
+
+            foreach (string file in files)
+            {      
+                string ext =  System.IO.Path.GetExtension(file).ToLower();
+                if (SupportType.Contains(ext))
+                {
+
+                    string hash = null;
+
+                    if (FolderTemp.ContainsKey(file))
+                    {
+                        hash = FolderTemp[file];
+                    }
+                    else
+                    {
+                        try
+                        {
+                            hash = ComputeHash(file);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                    if (!HashPath.ContainsKey(hash))
+                        HashPath[hash] = new List<string>();
+
+                    HashPath[hash].Add(file);
+                    FolderResult[file] = hash;
+                }
+            }
+            SaveCacheFile(folderPath + @"\" + CacheFile, FolderResult);
+            ParsedPath[folderPath] = true;
+
+            foreach (var folder in System.IO.Directory.GetDirectories(folderPath))
+            {
+                ScanFolder(folder);
+            }
+        }
+        public static bool ThumbnailCallback()
+        {
+            return false;
+        }
+        private static Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+        private static string ComputeHash(string path)
+        {
+            using (Image bmp = new Bitmap(path))
+            {
+
+                int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
+                int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
+                nwidth = nwidth == 0 ? 1 : nwidth;
+                nheight = nheight == 0 ? 1 : nheight;
+
+                Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);
+
+                using (MemoryStream streamout = new MemoryStream())
+                {
+                    myThumbnail.Save(streamout, ImageFormat.Bmp);
+                    streamout.Position = 0;
+                    SHA1 x = new SHA1CryptoServiceProvider();
+                    return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
+                }
+            }
+
+        }
         public void TestShow()
         {            
 
@@ -102,43 +324,43 @@ namespace gentleman
         }
         public void Scan(string dic)
         {
-            try
-            {
-                foreach (var dicpath in Directory.GetDirectories(dic))
-                    Scan(dicpath);
-            }
-            catch(UnauthorizedAccessException)
-            {
+            //try
+            //{
+            //    foreach (var dicpath in Directory.GetDirectories(dic))
+            //        Scan(dicpath);
+            //}
+            //catch(UnauthorizedAccessException)
+            //{
 
-            }
+            //}
 
-            foreach (var filepath in Directory.GetFiles(dic))
-            {
-                ScanedFile += 1;
-                try
-                {
-                    string ext = System.IO.Path.GetExtension(filepath).ToLower();
-                    if (ext == ".jpg" || ext == ".jpeg")
-                    {                        
-                        JpegHelper helper = new JpegHelper(filepath);
-                        JpgFile += 1;
-                        string hashcode = helper.Hash;
-                        if (!HashMap.ContainsKey(hashcode))
-                            HashMap[hashcode] = new List<string>();
+            //foreach (var filepath in Directory.GetFiles(dic))
+            //{
+            //    ScanedFile += 1;
+            //    try
+            //    {
+            //        string ext = System.IO.Path.GetExtension(filepath).ToLower();
+            //        if (ext == ".jpg" || ext == ".jpeg")
+            //        {                        
+            //            JpegHelper helper = new JpegHelper(filepath);
+            //            JpgFile += 1;
+            //            string hashcode = helper.Hash;
+            //            if (!HashPath.ContainsKey(hashcode))
+            //                HashPath[hashcode] = new List<string>();
     
-                        HashMap[hashcode].Add(filepath);
+            //            HashPath[hashcode].Add(filepath);
                         
-                    }
-                }
-                catch (FormatException)
-                {
+            //        }
+            //    }
+            //    catch (FormatException)
+            //    {
 
-                }
-                catch (Exception)
-                {
-                    ErrFile += 1;
-                }
-            }
+            //    }
+            //    catch (Exception)
+            //    {
+            //        ErrFile += 1;
+            //    }
+            //}
 
         }        
 
@@ -371,5 +593,215 @@ namespace gentleman
             listView1.Width = this.Width - 20;
             listView1.Height = this.Height - 60;
         }
+        private Form2 f;        
+
+        private void opToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+                f = new Form2(this);
+                f.Show();
+            
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SaveFolderOption();
+            SaveHashPath();
+        }
+
+        
+        
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Dictionary<string, bool> ParsedPath = new Dictionary<string, bool>();
+
+            var Paths = (List<String>)e.Argument;
+            List<string> Queue = new List<string>(Paths);
+
+            while (Queue.Count > 0)
+            {
+                var path = Queue[0];
+                
+                backgroundWorker1.ReportProgress(0, path);
+                if (!ParsedPath.ContainsKey(path))
+                {
+                    Dictionary<string, string> Picasacache = LoadPicasaCache(path);                    
+
+                    Dictionary<string, string> FolderCache = LoadCacheFile(path + @"\" + CacheFile);                    
+                    string[] files = System.IO.Directory.GetFiles(path);
+                    Queue.RemoveAt(0);                
+                    Queue.InsertRange(0,System.IO.Directory.GetDirectories(path));
+
+                    Dictionary<string, string> FolderCacheNew = new Dictionary<string, string>();
+
+                    foreach (string file in files)
+                    {
+                        string hash = null;
+                        string ext = System.IO.Path.GetExtension(file).ToLower();
+                        if (SupportType.Contains(ext))
+                        {
+                            if (FolderCache.ContainsKey(file)) hash = FolderCache[file];
+                            else
+                            {
+                                try
+                                {
+                                    hash = ComputeHash(file);
+                                }
+                                catch
+                                {
+                                    continue;
+                                }
+                            }
+                            if (!HashPath.ContainsKey(hash))
+                                HashPath[hash] = new List<string>();
+
+                            HashPath[hash].Add(file);
+                            FolderCacheNew[file] = hash;
+
+                            List<string> tags = new List<string>();
+                            string filepath = System.IO.Path.GetFileName(path);
+                            /// Tags
+                            if (Picasacache.ContainsKey(filepath))
+                            {
+                                var ts = Picasacache[filepath].Split(',');
+                                tags.AddRange(ts);
+                            }
+
+                            if (ext == ".jpg" || ext == ".jpeg")                            
+                            {
+                                try
+                                {
+                                    JpegHelper helper = new JpegHelper(file);
+
+                                    tags.AddRange(helper.Keywords);
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            var filetag = System.IO.Path.GetDirectoryName(file).Split('\\');
+                            tags.AddRange(filetag);
+
+                            foreach (var tag in tags)
+                            {
+                                if(!TagHash.ContainsKey(tag)) 
+                                    TagHash[tag] = new List<string>();
+
+                                if(!TagHash[tag].Contains(hash))
+                                    TagHash[tag].Add(hash);
+                            }
+
+                        }
+
+                    }
+                    SaveCacheFile(path + @"\" + CacheFile, FolderCacheNew);
+                    ParsedPath[path] = true;
+                }
+            }            
+        }
+
+        private Dictionary<string, string> LoadPicasaCache(string path)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            if (System.IO.File.Exists(path + @"\.picasa.ini"))
+            {
+                using(StreamReader reader = new StreamReader(path + @"\.picasa.ini")) 
+                {
+                    string line = null;
+                    string filepath = null;
+                    while((line = reader.ReadLine()) != null) {
+                        if(line[0] == '[') 
+                        {
+                            int index = line.IndexOf(']');
+                            filepath = path + @"\" + line.Substring(1,index-1);
+                        }
+                        else if(line.Substring(0,8) == "keywords")
+                        {
+                            result.Add(filepath, line.Substring(9));
+                        }
+                    }
+                }                
+            }
+            return result;
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            toolStripStatusLabelStatus.Text =  "Scanning: " + e.UserState.ToString();            
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            toolStripStatusLabelStatus.Text = "Idle";            
+            foreach(var i in TagHash) {
+                textBox1.AutoCompleteCustomSource.Add(i.Key);
+            }
+        }
+
+        private void duplicateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            imageList1.ImageSize = new Size(120, 120);
+            int x = 0;
+            foreach (var i in HashPath)
+            {
+
+                if (x > 100) break;
+                if (i.Value.Count > 1)
+                {
+                    x += 1;
+                    imageList1.Images.Add(i.Key, new Bitmap(i.Value[0]));
+                    ListViewGroup group = new ListViewGroup(i.Key, i.Key);
+                    listView1.Groups.Add(group);
+                    foreach (var it in i.Value)
+                    {
+                        ListViewItem item = new ListViewItem(it, group);
+                        item.ImageKey = i.Key;
+                        item.Tag = it;
+                        listView1.Items.Add(item);
+                    }
+
+                }
+            }    
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                DoSearch(textBox1.Text);
+        }
+
+        private void DoSearch(string p)
+        {
+            listView1.Items.Clear();
+            listView1.Groups.Clear();
+            imageList1.Images.Clear();
+            imageList1.ImageSize = new Size(120,120);
+            foreach (var hash in TagHash[p])
+            {
+                var paths = HashPath[hash];
+                ListViewGroup group = new ListViewGroup(hash, hash);
+                listView1.Groups.Add(group);
+                imageList1.Images.Add(hash, new Bitmap(paths[0]));
+                
+                ListViewItem item = new ListViewItem(paths[0], group);
+                item.ImageKey = hash;
+
+                listView1.Items.Add(item);
+
+                for (int i = 1; i < paths.Count; i++)
+                {
+                    ListViewItem item1 = new ListViewItem(paths[i], group);
+                    item1.ImageKey = hash;
+                    listView1.Items.Add(item1);
+                }
+            }
+        }
+
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            DoSearch(SearchButton.Text);
+        }
+
     }
 }
