@@ -1,0 +1,8 @@
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\bin\Debug\Tagtoo.exe
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\bin\Debug\Tagtoo.pdb
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\Tagtoo.Form1.resources
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\Tagtoo.Properties.Resources.resources
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\Tagtoo.csproj.GenerateResource.Cache
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\Tagtoo.exe
+C:\Users\lucemia\Documents\Visual Studio 2008\Projects\Tagtoo\Tagtoo\obj\Debug\Tagtoo.pdb
