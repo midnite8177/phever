@@ -34,6 +34,18 @@ application = webapp.WSGIApplication([
 def main():
     run_wsgi_app(application)
 
+def profile_main():
+    import cProfile, pstats
+    prof = cProfile.Profile()
+    prof = prof.runctx( "real_main()", globals(), locals() )    
+#    print '<pre>'
+    stats = pstats.Stats( prof )
+    stats.sort_stats( "cumulative" )
+    stats.print_stats( 200 )
+    stats.print_callees()
+    stats.print_callers()
+#    print '</pre>'
+
 
 if __name__ == "__main__":
     main()

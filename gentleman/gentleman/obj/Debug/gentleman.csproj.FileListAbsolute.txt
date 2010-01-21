@@ -11,7 +11,6 @@ C:\var\phever\trunk\gentleman\gentleman\bin\Debug\gentleman.exe.config
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.exe
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.pdb
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\ResolveAssemblyReference.cache
-C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.Form1.resources
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.Properties.Resources.resources
 C:\var\phever\trunk\gentleman\gentleman\bin\Debug\gentleman.exe
 C:\var\phever\trunk\gentleman\gentleman\bin\Debug\gentleman.pdb
@@ -26,3 +25,4 @@ C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.Form1.resources
 C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.Properties.Resources.resources
 C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.csproj.GenerateResource.Cache
 C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.Form2.resources
+C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.Form1.resources

@@ -1,4 +1,4 @@
-application: sample-app
+application: pheever 
 version: 1
 runtime: python
 api_version: 1
