@@ -10,18 +10,87 @@ namespace gentleman
 {
     public partial class Form1 : Form
     {
+        // secret = 24889
         private const string CacheFile = ".Gentleman.db";
         
         private static List<string> SupportFileExt = new List<string>() { ".jpg", ".jpeg", ".png", ".bmp" };
-
-        private Dictionary<string, List<string>> HashPath = new Dictionary<string, List<string>>();
-        private Dictionary<string, List<string>> HashTags = new Dictionary<string, List<string>>();
+        
+        Dictionary<string, Dictionary<string, PMetaData>> HashDB = new Dictionary<string, Dictionary<string, PMetaData>>();
 
         private FClient uploader = new FClient();
 
         public Form1()
         {
             InitializeComponent();
+            var result = ScanFolder(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕");
+            PicasaHelper.UpdateCache(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕",result);
+            GHelper.UpdateCache(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕",result);
+        }
+
+        public Dictionary<string, PMetaData> ScanFolder(string folder)
+        {
+            Dictionary<string, PMetaData> Results = new Dictionary<string,PMetaData>();
+            Dictionary<string, PMetaData> DataFromPicasa = PicasaHelper.LoadCache(folder);
+            Dictionary<string, PMetaData> DataFromGentleman = GHelper.LoadCache(folder);
+
+            foreach (var filepath in System.IO.Directory.GetFiles(folder))
+            {
+                string ext = System.IO.Path.GetExtension(filepath).ToLower();
+
+                if (!SupportFileExt.Contains(ext)) continue;
+
+                Results[filepath] = new PMetaData();
+                Results[filepath].FilePath = filepath;
+                Results[filepath].Updated = System.IO.File.GetLastWriteTimeUtc(filepath);
+
+                // FolderKeywords
+                var folderpaths = folder.Split('\\');
+                List<string> folderkeywords = new List<string>();
+                if(folderpaths.Length > 3) {
+                    folderkeywords.Add("#" + folderpaths[folderpaths.Length - 1]);
+                    folderkeywords.Add("#" + folderpaths[folderpaths.Length - 2]);
+                }
+
+                // Copy Keywords and RawData from Picasa
+                if (DataFromPicasa.ContainsKey(filepath))
+                {
+                    Results[filepath].Keywords = DataFromPicasa[filepath].Keywords;
+                    Results[filepath].RawData = DataFromPicasa[filepath].RawData;
+                }
+
+                // Update Keywords from image Raw Data
+                if (!DataFromGentleman.ContainsKey(filepath)
+                    || DataFromGentleman[filepath].Updated != Results[filepath].Updated)
+                {
+                    try
+                    {
+                        JpegHelper p = new JpegHelper(filepath);
+                        Results[filepath].Keywords.AddRange(p.Keywords);
+                    }
+                    catch { }
+                    // Update Path Keywords     
+                    Results[filepath].Keywords.AddRange(folderkeywords);
+                }
+                if (DataFromGentleman.ContainsKey(filepath) && DataFromGentleman[filepath].Hash != null)
+                {
+                    Results[filepath].Hash = DataFromGentleman[filepath].Hash;
+                }
+                else
+                {
+                    try
+                    {
+                        Results[filepath].Hash = ComputeHash(filepath);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                Results[filepath].Keywords = Algorithm.TagSet(Results[filepath].Keywords);
+                Results[filepath].Hash = Results[filepath].Hash.ToUpper();
+            }
+            return Results;
         }
 
         private static bool ThumbnailCallback()
@@ -90,256 +159,42 @@ namespace gentleman
         }
 
         private void buttonSync_Click(object sender, EventArgs e)
-        {
-            
-            HashPath.Clear();
+        {            
             backgroundWorker1.RunWorkerAsync(textBox1.Text);
             this.Enabled = false;
         }
-
-        private void UpdateGentlemanCache(string folderPath, Dictionary<string, PMetaData> PathMeta)
-        {
-            if (PathMeta.Count > 0)
-            {
-                System.IO.FileInfo info;
-                if (System.IO.File.Exists(folderPath + @"\.gentleman.ini"))
-                {
-                    info = new System.IO.FileInfo(folderPath + @"\.gentleman.ini");
-                    info.Attributes = System.IO.FileAttributes.Normal;
-                }
-
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(folderPath + @"\.gentleman.ini"))
-                {
-                    foreach(var item in PathMeta) 
-                    {
-                        writer.WriteLine(string.Format("[{0}]", System.IO.Path.GetFileName(item.Key)));
-                        writer.WriteLine(string.Format("keywords={0}", string.Join(",", item.Value.Keywords.ToArray())));
-                        writer.WriteLine(string.Format("hash={0}", item.Value.Hash));
-                        writer.WriteLine(string.Format("updated={0}", item.Value.Updated));                            
-                    }                        
-                }
-                info = new System.IO.FileInfo(folderPath + @"\.gentleman.ini");
-                info.Attributes = System.IO.FileAttributes.Hidden;
-            }
-        }
-
-        private void UpdatePicasaCache(string folderPath, Dictionary<string, List<string>> PathTags)
-        {
-            if (PathTags.Count > 0)
-            {
-                System.IO.FileInfo info;
-                if (System.IO.File.Exists(folderPath + @"\.picasa.ini"))
-                {
-                    info = new System.IO.FileInfo(folderPath + @"\.picasa.ini");
-                    info.Attributes = System.IO.FileAttributes.Normal;
-                }
-
-                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(folderPath + @"\.picasa.ini"))
-                {
-                    foreach (var item in PathTags)
-                    {
-                        writer.WriteLine(string.Format("[{0}]", System.IO.Path.GetFileName(item.Key)));
-                        writer.WriteLine(string.Format("keywords={0}", string.Join(",", item.Value.ToArray())));
-                    }
-                }
-                info = new System.IO.FileInfo(folderPath + @"\.picasa.ini");
-                info.Attributes = System.IO.FileAttributes.Hidden;
-            }
-        }               
-
-        private Dictionary<string, PMetaData> LoadGentlemanCache(string folderPath)
-        {
-            Dictionary<string, PMetaData> CacheResult = new Dictionary<string, PMetaData>();
-
-            if (System.IO.File.Exists(folderPath + @"\.gentleman.ini"))
-            {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(folderPath + @"\.gentleman.ini"))
-                {
-                    string line;
-                    string filepath = null;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        if (line[0] == '[')
-                        {
-                            int index = line.IndexOf(']');
-                            filepath = folderPath + @"\" + line.Substring(1, index - 1);
-                            CacheResult[filepath] = new PMetaData();
-                        }
-                        else if (line.Substring(0, 4) == "hash")
-                        {
-                            if(line.Substring(5).Trim().Length == 40)
-                                CacheResult[filepath].Hash = line.Substring(5);
-                        }
-                        else if (line.Substring(0, 8) == "keywords")
-                        {
-                            CacheResult[filepath].Keywords = new List<string>(line.Substring(9).Split(','));
-                        }
-                        else if (line.Substring(0, 7) == "updated")
-                        {
-                            CacheResult[filepath].Updated = Convert.ToDateTime(line.Substring(8));
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            return CacheResult;
-        }
-
-        private Dictionary<string, List<string>> LoadPicasaCache(string folderPath)
-        {
-            Dictionary<string, List<string>> CacheResult = new Dictionary<string, List<string>>();
-            List<string> PathQuene = new List<string>();
-            if (System.IO.File.Exists(folderPath + @"\.picasa.ini"))
-                PathQuene.Add(folderPath + @"\.picasa.ini");
-            if (System.IO.File.Exists(folderPath + @"\picasa.ini"))
-                PathQuene.Add(folderPath + @"\picasa.ini");
-
-            foreach (string path in PathQuene)
-            {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(path))
-                {
-                    string line;
-                    string filepath = null;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        if (line[0] == '[')
-                        {
-                            int index = line.IndexOf(']');
-                            filepath = folderPath + @"\" + line.Substring(1, index - 1);
-                        }
-                        else if (line.Substring(0, 8) == "keywords")
-                        {
-                            var value=  new List<string>(line.Substring(9).Split(','));                            
-                            CacheResult[filepath] = value;
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            return CacheResult;
-        }
-
+        
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            
             // Start Scan Subfolder
             var root = e.Argument.ToString();
 
             if (System.IO.Directory.Exists(root))
             {
-                List<string> Quene = new List<string>() { root};
+                List<string> Queue = new List<string>() { root};
 
-                while (Quene.Count > 0)
+                while (Queue.Count > 0)
                 {
-                    string folderPath = Quene[0];
-                    Quene.RemoveAt(0);
+                    string folderPath = Queue[0];
+                    Queue.RemoveAt(0);
 
                     backgroundWorker1.ReportProgress(50, folderPath);
 
-                    bool isPicasaCacheUpdated = false;
-                    bool isGentlemanCacheUpdated = false;
+                    var Results = ScanFolder(folderPath);
 
-                    Dictionary<string, List<string>> PathTags = LoadPicasaCache(folderPath);
-                    Dictionary<string, PMetaData> PathMeta = LoadGentlemanCache(folderPath);
-                    
-                    foreach (string filePath in System.IO.Directory.GetFiles(folderPath))
+                    foreach (var r in Results)
                     {
-                        string ext = System.IO.Path.GetExtension(filePath);
-                        if (SupportFileExt.Contains(ext.ToLower()))
-                        {
-                            string hash;
-                            DateTime LastUpdate = System.IO.File.GetLastWriteTime(filePath);
-                            if (PathMeta.ContainsKey(filePath) && PathMeta[filePath].Hash != null) hash = PathMeta[filePath].Hash;
-                            else
-                            {
-                                try
-                                {
-                                    hash = ComputeHash(filePath);
-                                }
-                                catch
-                                {
-                                    continue;
-                                }
-                            }
+                        if (!HashDB.ContainsKey(r.Value.Hash))
+                            HashDB[r.Value.Hash] = new Dictionary<string, PMetaData>();
 
-                            List<string> tags = new List<string>();
-                            if (PathTags.ContainsKey(filePath)) tags.AddRange(PathTags[filePath]);
-
-                            if (PathMeta.ContainsKey(filePath))
-                                tags.AddRange(PathMeta[filePath].Keywords);
-
-                            if (!PathMeta.ContainsKey(filePath) || PathMeta[filePath].Updated != LastUpdate)
-                            {
-                                if (ext == ".jpg" || ext == ".jpeg")
-                                {
-                                    try
-                                    {
-                                        JpegHelper helper = new JpegHelper(filePath);
-                                        tags.AddRange(helper.Keywords);
-                                    }
-                                    catch
-                                    {
-                                    }
-                                }
-                            }
-
-                            tags.Sort();
-                            tags = Algorithm.RemoveRepeat<string>(tags);
-                            tags = tags.ConvertAll<string>(a => a.Trim());
-                            tags.RemoveAll(a => a.Length == 0);
-
-                            if (!HashPath.ContainsKey(hash))
-                                HashPath[hash] = new List<string>();
-                            HashPath[hash].Add(filePath);
-                            if (!HashTags.ContainsKey(hash))
-                                HashTags[hash] = new List<string>();
-                            HashTags[hash].AddRange(tags);
-
-                            //
-                            if (!PathTags.ContainsKey(filePath))
-                            {
-                                isPicasaCacheUpdated = true;
-                                PathTags[filePath] = new List<string>();
-                            }
-
-                            if (Algorithm.DiffSet<string>(tags, PathTags[filePath]).Count > 0)
-                            {
-                                isPicasaCacheUpdated = true;
-                                PathTags[filePath] = tags;
-                            }
-
-                            if (!PathMeta.ContainsKey(filePath))
-                            {
-                                isGentlemanCacheUpdated = true;
-                                PathMeta[filePath] = new PMetaData();
-                            }
-
-                            if (PathMeta[filePath].Hash == null)
-                            {
-                                isGentlemanCacheUpdated = true;
-                                PathMeta[filePath].Hash = hash;
-                            }
-
-                            if (PathMeta[filePath].Updated != LastUpdate)
-                            {
-                                isGentlemanCacheUpdated = true;
-                                PathMeta[filePath].Updated = LastUpdate;
-                            }
-
-                            if (Algorithm.DiffSet<string>(PathMeta[filePath].Keywords, tags).Count > 0)
-                            {
-                                isGentlemanCacheUpdated = true;
-                                PathMeta[filePath].Keywords = tags;
-                            }
-                        }
+                        HashDB[r.Value.Hash][r.Value.FilePath] = r.Value;                                                   
                     }
 
-                    if (isGentlemanCacheUpdated)
-                        UpdateGentlemanCache(folderPath, PathMeta);
-                    if (isPicasaCacheUpdated)
-                        UpdatePicasaCache(folderPath, PathTags);
-
-                    Quene.InsertRange(0, System.IO.Directory.GetDirectories(folderPath));
-
+                    PicasaHelper.UpdateCache(folderPath, Results);
+                    GHelper.UpdateCache(folderPath, Results);
+                    
+                    Queue.InsertRange(0, System.IO.Directory.GetDirectories(folderPath));
                 }
             }
         }
@@ -358,11 +213,27 @@ namespace gentleman
         int Page = 1;
         private void buttonDuplicate_Click(object sender, EventArgs e)
         {
-            Page = 1;
-            toolStripLabel1.Text = "Page 1";
-            Paging(0, HashPath);
+            Dictionary<string, Dictionary<string, PMetaData>> datas = new Dictionary<string, Dictionary<string, PMetaData>>();
+            Dictionary<string, List<string>> tags = new Dictionary<string,List<string>>();
+            foreach (var item in HashDB)
+            {
+                if (item.Value.Count > 1)
+                    datas[item.Key] = item.Value;
 
+                tags[item.Key] = new List<string>();
+                foreach(var v in item.Value) {
+                    tags[item.Key].AddRange(v.Value.Keywords);
+                }
+                tags[item.Key] = Algorithm.TagSet(tags[item.Key]);
+            }
             uploader.secret = "24889";
+            uploader.UploadImage(tags);
+
+            //Page = 1;
+            //toolStripLabel1.Text = "Page 1";
+            //Paging(0, HashPath);
+
+            
             //uploader.UploadImage(HashTags);
             //var result = uploader.QueryImage(new List<string>(HashTags.Keys));
             //var result1 = uploader.QueryUserImage(new List<string>(HashTags.Keys));
@@ -370,16 +241,12 @@ namespace gentleman
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            Page += 1;
-            toolStripLabel1.Text = "Page " + Page;
-            Paging(Page, HashPath);
+          
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            Page -= 1;
-            toolStripLabel1.Text = "Page " + Page;
-            Paging(Page, HashPath);
+            
         }        
     }
 }

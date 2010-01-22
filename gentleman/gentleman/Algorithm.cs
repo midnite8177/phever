@@ -46,5 +46,16 @@ namespace gentleman
             }
             return rlist;
         }
+        public static List<string> TagSet(IEnumerable<string> tags)
+        {
+            Dictionary<string, bool> tagresult = new Dictionary<string, bool>();
+
+            foreach (string t in tags)
+            {
+                if(t.Trim().Length > 0) 
+                    tagresult[t.Trim()] = true;
+            }
+            return new List<string>(tagresult.Keys);
+        }
     }
 }

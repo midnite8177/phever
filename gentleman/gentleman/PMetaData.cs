@@ -6,14 +6,14 @@ namespace gentleman
 {
     public class PMetaData
     {
-        public string FilePath;
-        public string Hash;
-
-        public List<String> Keywords; // Keywords from server
-        public List<String> UserKeywords; // Keywords from Local
-        public Dictionary<string, string> RawData;
-
+        public string FilePath = null;
+        public string Hash = null;
         public DateTime Updated;
+
+        public List<String> Keywords = new List<string>(); // Keywords from server
+        //public List<String> UserKeywords = new List<string>(); // Keywords from Local
+        public Dictionary<string, string> RawData = new Dictionary<string,string>();
+        
     }
 
 }

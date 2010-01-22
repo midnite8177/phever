@@ -22,8 +22,7 @@ namespace gentleman
         //private JpegBitmapEncoder encoder = null;
 
         //public string Hash = null;
-        public List<string> Keywords = null;
-        public List<string> PathKeywords = null;
+        public List<string> Keywords = null;        
         
         public JpegHelper(string path)
         {            
