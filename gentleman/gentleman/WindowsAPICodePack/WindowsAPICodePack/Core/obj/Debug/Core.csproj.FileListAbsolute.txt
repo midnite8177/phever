@@ -1,0 +1,5 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Core\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Core\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Core\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Core\obj\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Core\obj\Debug\Microsoft.WindowsAPICodePack.pdb

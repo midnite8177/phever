@@ -5,10 +5,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gentleman", "gentleman\gent
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CodeAnalysisDebug|Any CPU = CodeAnalysisDebug|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FCE7DCB-039A-43C7-A0B9-B09D9AEA270A}.CodeAnalysisDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCE7DCB-039A-43C7-A0B9-B09D9AEA270A}.CodeAnalysisDebug|Any CPU.Build.0 = Debug|Any CPU
 		{9FCE7DCB-039A-43C7-A0B9-B09D9AEA270A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FCE7DCB-039A-43C7-A0B9-B09D9AEA270A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FCE7DCB-039A-43C7-A0B9-B09D9AEA270A}.Release|Any CPU.ActiveCfg = Release|Any CPU

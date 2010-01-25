@@ -1,0 +1,14 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\ThumbnailBrowserDemo.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\ThumbnailBrowserDemo.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\Microsoft.WindowsAPICodePack.Samples.ThumbnailBrowserDemo.Properties.Resources.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\Microsoft.WindowsAPICodePack.Samples.ThumbnailBrowserDemo.ThumbnailBrowser.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\ShellThumbnailBrowserDemo.csproj.GenerateResource.Cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\ThumbnailBrowserDemo.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ShellThumbnailBrowserDemo\CS\ThumbnailBrowserDemo\obj\Debug\ThumbnailBrowserDemo.pdb

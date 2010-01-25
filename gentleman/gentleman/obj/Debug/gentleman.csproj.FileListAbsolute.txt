@@ -26,3 +26,9 @@ C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.Properties.Resources
 C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.csproj.GenerateResource.Cache
 C:\var\fever\phever\gentleman\gentleman\obj\Debug\gentleman.Form2.resources
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.Form1.resources
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\Microsoft.WindowsAPICodePack.xml

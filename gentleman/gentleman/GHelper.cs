@@ -4,6 +4,10 @@ using System.Text;
 
 namespace gentleman
 {
+    // Load Thumb http://hi.baidu.com/anynum/blog/item/5cf48b2e3d3c70301f3089ad.html
+    //http://hi.baidu.com/%CC%EC%CF%C2%D7%E3%C7%F2001/blog/item/2d6d07c962a39d14bf09e6ff.html
+    //http://msdn.microsoft.com/en-us/library/bb774628(VS.85).aspx for vista and later IThumbCache Interface
+    // http://code.msdn.microsoft.com/WindowsAPICodePack/Release/ProjectReleases.aspx?ReleaseId=3574 , pack the interface in managed way
     public class GHelper
     {
         private const string GENTLE_FILE = ".gentleman.ini";
@@ -42,7 +46,14 @@ namespace gentleman
                             }
                             else if (line.Substring(0, 7) == "updated")
                             {
-                                CacheResult[filepath].Updated = Convert.ToDateTime(line.Substring(8));
+                                try
+                                {
+                                    CacheResult[filepath].Updated = Convert.ToInt64(line.Substring(8));
+                                }
+                                catch
+                                {
+                                    
+                                }
                             }
                         }
                     }

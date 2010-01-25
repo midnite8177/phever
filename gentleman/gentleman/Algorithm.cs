@@ -52,7 +52,7 @@ namespace gentleman
 
             foreach (string t in tags)
             {
-                if(t.Trim().Length > 0) 
+                if(t.Trim().Length > 0 && !t.Contains(";") && !t.Contains(",") && !t.Contains(":")) 
                     tagresult[t.Trim()] = true;
             }
             return new List<string>(tagresult.Keys);

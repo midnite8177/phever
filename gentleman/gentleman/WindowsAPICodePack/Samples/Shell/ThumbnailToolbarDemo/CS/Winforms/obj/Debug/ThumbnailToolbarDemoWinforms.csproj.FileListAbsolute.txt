@@ -1,0 +1,14 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\ImageViewerDemoWinforms.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\ImageViewerDemoWinforms.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\Microsoft.WindowsAPICodePack.Samples.ImageViewerDemoWinforms.Form1.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\Microsoft.WindowsAPICodePack.Samples.ImageViewerDemoWinforms.Properties.Resources.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\ThumbnailToolbarDemoWinforms.csproj.GenerateResource.Cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\ImageViewerDemoWinforms.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\ThumbnailToolbarDemo\CS\Winforms\obj\Debug\ImageViewerDemoWinforms.pdb

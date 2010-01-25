@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace gentleman
+{
+    public partial class Form1 : Form
+    {
+        private const string CacheFile = ".Gentleman.db";
+        private const Dictionary<string, List<string>> HashPath = new Dictionary<string, List<string>>();
+        
+        private const List<string> SupportFileExt = new List<string>() { ".jpg",".jpeg",".png",".bmp"};
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private static string ComputeHash(string path)
+        {
+            using (Image bmp = new Bitmap(path))
+            {
+
+                int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
+                int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
+                nwidth = nwidth == 0 ? 1 : nwidth;
+                nheight = nheight == 0 ? 1 : nheight;
+
+                Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);
+
+                using (MemoryStream streamout = new MemoryStream())
+                {
+                    myThumbnail.Save(streamout, ImageFormat.Bmp);
+                    streamout.Position = 0;
+                    SHA1 x = new SHA1CryptoServiceProvider();
+                    return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
+                }
+            }
+
+        }
+
+        private void buttonOpen_Click(object sender, EventArgs e)
+        {
+            DialogResult result =  folderBrowserDialog1.ShowDialog();
+            textBox1.Text = folderBrowserDialog1.SelectedPath;            
+        }
+
+
+
+        private void buttonSync_Click(object sender, EventArgs e)
+        {
+            // Start Scan Subfolder
+
+            if (System.IO.Directory.Exists(textBox1.Text))
+            {
+                List<string> Quene = new List<string>() { textBox1.Text };
+
+                while (Quene.Count > 0)
+                {
+                    string folderPath = Quene[0];
+                    Quene.RemoveAt(0);
+
+                    foreach(string filePath in System.IO.Directory.GetFiles(folderPath))
+                    {
+                        string ext = System.IO.Path.GetExtension(filePath);
+                        if(SupportFileExt.Contains(ext.ToLower())) 
+                        {
+
+                        }
+                        
+                    }
+
+
+
+                    Quene.InsertRange(0, System.IO.Directory.GetDirectories(folderPath);
+                }
+            }
+        }
+    }
+}

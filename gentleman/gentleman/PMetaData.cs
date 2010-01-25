@@ -8,7 +8,7 @@ namespace gentleman
     {
         public string FilePath = null;
         public string Hash = null;
-        public DateTime Updated;
+        public long Updated;
 
         public List<String> Keywords = new List<string>(); // Keywords from server
         //public List<String> UserKeywords = new List<string>(); // Keywords from Local

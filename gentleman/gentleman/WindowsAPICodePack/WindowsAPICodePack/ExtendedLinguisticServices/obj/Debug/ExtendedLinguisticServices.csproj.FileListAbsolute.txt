@@ -1,0 +1,5 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\ExtendedLinguisticServices\bin\Debug\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\ExtendedLinguisticServices\bin\Debug\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\ExtendedLinguisticServices\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\ExtendedLinguisticServices\obj\Debug\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\ExtendedLinguisticServices\obj\Debug\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.pdb

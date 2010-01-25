@@ -1,0 +1,8 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\bin\Debug\Microsoft.WindowsAPICodePack.Sensors.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\bin\Debug\Microsoft.WindowsAPICodePack.Sensors.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\obj\Debug\Microsoft.WindowsAPICodePack.Sensors.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sensors\obj\Debug\Microsoft.WindowsAPICodePack.Sensors.pdb

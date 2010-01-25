@@ -1,0 +1,175 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace gentleman
+{
+    public partial class Form1 : Form
+    {
+        private const string CacheFile = ".Gentleman.db";
+        private const Dictionary<string, List<string>> HashPath = new Dictionary<string, List<string>>();        
+        
+        private const List<string> SupportFileExt = new List<string>() { ".jpg",".jpeg",".png",".bmp" };
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private static bool ThumbnailCallback()
+        {
+            return false;
+        }
+        private static Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+        private static string ComputeHash(string path)
+        {
+            using (Image bmp = new Bitmap(path))
+            {
+
+                int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
+                int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
+                nwidth = nwidth == 0 ? 1 : nwidth;
+                nheight = nheight == 0 ? 1 : nheight;
+
+                Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);
+
+                using (System.IO.MemoryStream streamout = new System.IO.MemoryStream())
+                {
+                    myThumbnail.Save(streamout, System.Drawing.Imaging.ImageFormat.Bmp);
+                    streamout.Position = 0;
+                    System.Security.Cryptography.SHA1 x = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+                    return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
+                }
+            }
+
+        }
+
+        private void buttonOpen_Click(object sender, EventArgs e)
+        {
+            DialogResult result =  folderBrowserDialog1.ShowDialog();
+            textBox1.Text = folderBrowserDialog1.SelectedPath;            
+        }
+
+        private void buttonSync_Click(object sender, EventArgs e)
+        {
+            // Start Scan Subfolder
+
+            if (System.IO.Directory.Exists(textBox1.Text))
+            {
+                List<string> Quene = new List<string>() { textBox1.Text };
+
+                while (Quene.Count > 0)
+                {
+                    string folderPath = Quene[0];
+                    Quene.RemoveAt(0);
+
+                    Dictionary<string, List<string>> PathTags = LoadPicasaCache(folderPath);
+                    Dictionary<string, MetaData> PathMeta = LoadGentlemanCache(folderPath);
+
+                    foreach(string filePath in System.IO.Directory.GetFiles(folderPath))
+                    {
+                        string ext = System.IO.Path.GetExtension(filePath);
+                        if(SupportFileExt.Contains(ext.ToLower())) 
+                        {
+                            string hash;
+                            if(PathMeta.ContainsKey(filePath)) hash = PathMeta[filePath].Hash;
+                            else hash = ComputeHash(filePath);
+
+                            List<string> tags;
+                            if(PathTags.ContainsKey(filePath)) tags = PathTags[filePath];
+                            
+                            JpegHelper helper = new JpegHelper(filePath);
+
+                            
+                            
+                        }
+                        
+                    }
+
+
+
+                    Quene.InsertRange(0, System.IO.Directory.GetDirectories(folderPath);
+                }
+            }
+        }
+
+        private class MetaData
+        {
+            public string Hash = null;
+            public List<string> Keywords = null;
+            public DateTime Updated;
+        }
+
+        private Dictionary<string, MetaData> LoadGentlemanCache(string folderPath)
+        {
+            Dictionary<string, MetaData> CacheResult = new Dictionary<string, MetaData>();
+
+            if (System.IO.File.Exists(folderPath + @"\.gentleman.ini"))
+            {
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(folderPath + @"\.gentleman.ini"))
+                {
+                    string line;
+                    string filepath = null;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line[0] == '[')
+                        {
+                            int index = line.IndexOf(']');
+                            filepath = folderPath + @"\" + line.Substring(1,index-1);
+                            CacheResult[filepath] = new MetaData();
+                        }
+                        else if (line.Substring(0, 4) == "hash")
+                        {
+                            CacheResult[filepath].Hash = line.Substring(5);
+                        }
+                        else if (line.Substring(0, 8) == "keywords")
+                        {
+                            CacheResult[filepath].Keywords = new List<string>(line.Substring(9).Split(','));
+                        }
+                        else if (line.Substring(0, 7) == "updated")
+                        {
+                            CacheResult[filepath].Updated = Convert.ToDateTime(line.Substring(8));
+                        }
+                    }
+                }
+            }
+            return CacheResult;
+        }
+
+        private Dictionary<string, List<string>> LoadPicasaCache(string folderPath)
+        {
+            Dictionary<string, List<string>> CacheResult = new Dictionary<string,List<string>>();
+            List<string> PathQuene = new List<string>();
+            if (System.IO.File.Exists(folderPath + @"\.picasa.ini"))
+                PathQuene.Add( folderPath + @"\.picasa.ini");
+            if(System.IO.File.Exists(folderPath + @"\picasa.ini"))
+                PathQuene.Add(folderPath + @"\picasa.ini");
+
+            foreach(string path in PathQuene)
+            {
+                using(System.IO.StreamReader reader =new System.IO.StreamReader(path))
+                {
+                    string line;
+                    string filepath = null;
+                    while((line = reader.ReadLine()) != null)
+                    {
+                        if(line[0] == '[')
+                        {
+                            int index = line.IndexOf(']');
+                            filepath = folderPath + @"\" + line.Substring(1, index-1);
+                        }
+                        else if(line.Substring(0,8) == "keywords")
+                        {
+                            CacheResult[filepath] = new List<string>(line.Substring(9).Split(','));
+                        }
+                    }
+                }
+            }
+            return CacheResult;
+        }
+    }
+}

@@ -1,0 +1,15 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Controls\CommandLinkWPF.baml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\ExplorerBrowser\ExplorerBrowser.WPF.baml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Controls\CommandLinkWPF.g.cs
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\ExplorerBrowser\ExplorerBrowser.WPF.g.cs
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell_MarkupCompile.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell.g.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll.config

@@ -5,6 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using ThumbLib;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace gentleman
 {
@@ -13,7 +15,7 @@ namespace gentleman
         // secret = 24889
         private const string CacheFile = ".Gentleman.db";
         
-        private static List<string> SupportFileExt = new List<string>() { ".jpg", ".jpeg", ".png", ".bmp" };
+        private static List<string> SupportFileExt = new List<string>() { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
         
         Dictionary<string, Dictionary<string, PMetaData>> HashDB = new Dictionary<string, Dictionary<string, PMetaData>>();
 
@@ -22,9 +24,8 @@ namespace gentleman
         public Form1()
         {
             InitializeComponent();
-            var result = ScanFolder(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕");
-            PicasaHelper.UpdateCache(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕",result);
-            GHelper.UpdateCache(@"C:\AliceSoft\アリス２０１０\ロコ抱き枕",result);
+            ShellHelper.ImageFiles();
+
         }
 
         public Dictionary<string, PMetaData> ScanFolder(string folder)
@@ -32,16 +33,16 @@ namespace gentleman
             Dictionary<string, PMetaData> Results = new Dictionary<string,PMetaData>();
             Dictionary<string, PMetaData> DataFromPicasa = PicasaHelper.LoadCache(folder);
             Dictionary<string, PMetaData> DataFromGentleman = GHelper.LoadCache(folder);
-
+            int index = 0;
             foreach (var filepath in System.IO.Directory.GetFiles(folder))
             {
                 string ext = System.IO.Path.GetExtension(filepath).ToLower();
 
                 if (!SupportFileExt.Contains(ext)) continue;
-
+                index += 1;
                 Results[filepath] = new PMetaData();
                 Results[filepath].FilePath = filepath;
-                Results[filepath].Updated = System.IO.File.GetLastWriteTimeUtc(filepath);
+                Results[filepath].Updated = System.IO.File.GetLastWriteTimeUtc(filepath).Ticks;
 
                 // FolderKeywords
                 var folderpaths = folder.Split('\\');
@@ -59,8 +60,8 @@ namespace gentleman
                 }
 
                 // Update Keywords from image Raw Data
-                if (!DataFromGentleman.ContainsKey(filepath)
-                    || DataFromGentleman[filepath].Updated != Results[filepath].Updated)
+                if ((ext == ".jpg" || ext ==".jpeg") && (!DataFromGentleman.ContainsKey(filepath)
+                    || DataFromGentleman[filepath].Updated != Results[filepath].Updated))
                 {
                     try
                     {
@@ -79,11 +80,12 @@ namespace gentleman
                 {
                     try
                     {
-                        Results[filepath].Hash = ComputeHash(filepath);
+                        Results[filepath].Hash = ThumbHelper.ComputeHash(filepath);
                     }
                     catch
                     {
-
+                        Results.Remove(filepath);
+                        continue;
                     }
                 }
 
@@ -93,63 +95,37 @@ namespace gentleman
             return Results;
         }
 
-        private static bool ThumbnailCallback()
-        {
-            return false;
-        }
-        private static Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-        private static string ComputeHash(string path)
-        {
-            using (Image bmp = new Bitmap(path))
-            {
-                int nwidth = bmp.Width > bmp.Height ? 120 : bmp.Width * 120 / bmp.Height;
-                int nheight = bmp.Width > bmp.Height ? bmp.Height * 120 / bmp.Width : 120;
-                nwidth = nwidth == 0 ? 1 : nwidth;
-                nheight = nheight == 0 ? 1 : nheight;
-
-                Image myThumbnail = bmp.GetThumbnailImage(nwidth, nheight, myCallback, IntPtr.Zero);
-
-                using (System.IO.MemoryStream streamout = new System.IO.MemoryStream())
-                {
-                    myThumbnail.Save(streamout, System.Drawing.Imaging.ImageFormat.Bmp);
-                    streamout.Position = 0;
-                    System.Security.Cryptography.SHA1 x = new System.Security.Cryptography.SHA1CryptoServiceProvider();
-                    return BitConverter.ToString(x.ComputeHash(streamout)).Replace("-", "");
-                }
-            }
-
-        }
-
+       
         private void Paging(int index, Dictionary<string, List<string>> Results)
         {
-            listView1.Items.Clear();
-            listView1.Groups.Clear();
-            imageList1.Images.Clear();
+            //listView1.Items.Clear();
+            //listView1.Groups.Clear();
+            //imageList1.Images.Clear();
 
-            int limit = 20;
-            imageList1.ImageSize = new Size(120, 120);
+            //int limit = 20;
+            //imageList1.ImageSize = new Size(120, 120);
 
-            var Keys = new List<string>(Results.Keys);
+            //var Keys = new List<string>(Results.Keys);
 
-            for (int i = Page; i < limit+ Page; i++)
-            {
-                var key = Keys[i];
-                var value = Results[key];
+            //for (int i = Page; i < limit+ Page; i++)
+            //{
+            //    var key = Keys[i];
+            //    var value = Results[key];
 
-                if (value.Count <= 1) continue;
-                using (Image img = new Bitmap(value[0]))
-                {
-                    imageList1.Images.Add(key, img.GetThumbnailImage(120, 120, myCallback, IntPtr.Zero));
-                    ListViewGroup group = new ListViewGroup(key, key);
-                    listView1.Groups.Add(group);
-                    foreach (var im in value)
-                    {
-                        ListViewItem it = new ListViewItem(im, group);
-                        it.ImageKey = key;
-                        listView1.Items.Add(it);
-                    }
-                }
-            }
+            //    if (value.Count <= 1) continue;
+            //    using (Image img = new Bitmap(value[0]))
+            //    {
+            //        imageList1.Images.Add(key, img.GetThumbnailImage(120, 120, myCallback, IntPtr.Zero));
+            //        ListViewGroup group = new ListViewGroup(key, key);
+            //        listView1.Groups.Add(group);
+            //        foreach (var im in value)
+            //        {
+            //            ListViewItem it = new ListViewItem(im, group);
+            //            it.ImageKey = key;
+            //            listView1.Items.Add(it);
+            //        }
+            //    }
+            //}
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
@@ -181,20 +157,26 @@ namespace gentleman
 
                     backgroundWorker1.ReportProgress(50, folderPath);
 
-                    var Results = ScanFolder(folderPath);
-
-                    foreach (var r in Results)
+                    try
                     {
-                        if (!HashDB.ContainsKey(r.Value.Hash))
-                            HashDB[r.Value.Hash] = new Dictionary<string, PMetaData>();
+                        var Results = ScanFolder(folderPath);
+                        foreach (var r in Results)
+                        {
+                            if (!HashDB.ContainsKey(r.Value.Hash))
+                                HashDB[r.Value.Hash] = new Dictionary<string, PMetaData>();
 
-                        HashDB[r.Value.Hash][r.Value.FilePath] = r.Value;                                                   
+                            HashDB[r.Value.Hash][r.Value.FilePath] = r.Value;
+                        }
+
+                        PicasaHelper.UpdateCache(folderPath, Results);
+                        GHelper.UpdateCache(folderPath, Results);
+                        Queue.InsertRange(0, System.IO.Directory.GetDirectories(folderPath));
                     }
-
-                    PicasaHelper.UpdateCache(folderPath, Results);
-                    GHelper.UpdateCache(folderPath, Results);
+                    catch
+                    {                        
+                    }
+                                        
                     
-                    Queue.InsertRange(0, System.IO.Directory.GetDirectories(folderPath));
                 }
             }
         }

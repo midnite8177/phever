@@ -1,0 +1,15 @@
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\TabbedThumbnailDemoWinforms.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\TabbedThumbnailDemoWinforms.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.pdb
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\bin\Debug\Microsoft.WindowsAPICodePack.xml
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\ResolveAssemblyReference.cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\Microsoft.WindowsAPICodePack.Samples.TabbedThumbnailDemo.FavoritesWindow.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\Microsoft.WindowsAPICodePack.Samples.TabbedThumbnailDemo.Form1.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\Microsoft.WindowsAPICodePack.Samples.TabbedThumbnailDemo.Properties.Resources.resources
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\TabbedThumbnailDemoWinforms.csproj.GenerateResource.Cache
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\TabbedThumbnailDemoWinforms.exe
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\Samples\Shell\TabbedThumbnailDemo\CS\Winforms\obj\Debug\TabbedThumbnailDemoWinforms.pdb

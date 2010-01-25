@@ -9,7 +9,7 @@ namespace gentleman
     {
         private System.Net.WebClient client = null;
         public string secret = null;
-        private int BlukSize = 20;
+        private int BlukSize = 5;
 
         public FClient()
         {            
