@@ -5,9 +5,8 @@ using System.Text;
 using System.Runtime.InteropServices;  
 using System.IO;  
 using System.ComponentModel;
-//http://www.microsoft.com/msj/1099/journal2/journal2.aspx
-
-
+// http://www.microsoft.com/msj/1099/journal2/journal2.aspx
+// http://www.microsoft.com/msj/0999/journal/journal.aspx
 namespace Tagtoo
 {
     public class FileNameAndFrn
@@ -53,19 +52,25 @@ namespace Tagtoo
  
     class CChangeJournal
     {
-        public void EnumerateVolume(string drive, out Dictionary<UInt64, FileNameAndFrn> files, string[] fileExtensions)
+        public CChangeJournal(string drive)
         {
+
+        }
+
+        public Dictionary<UInt64, FileNameAndFrn> EnumerateVolume(string drive,ulong lowUsn,  string[] fileExtensions)
+        {            
             _drive = drive;
-            files = new Dictionary<ulong, FileNameAndFrn>();
+            Dictionary<UInt64, FileNameAndFrn> files = new Dictionary<UInt64, FileNameAndFrn>();
+
             IntPtr medBuffer = IntPtr.Zero;
             try
             {
-                GetRootFrnEntry();
+                //GetRootFrnEntry();
                 GetRootHandle();
 
                 CreateChangeJournal();
 
-                SetupMFT_Enum_DataBuffer(ref medBuffer);
+                SetupMFT_Enum_DataBuffer(ref medBuffer, lowUsn);
                 EnumerateFiles(medBuffer, ref files, fileExtensions);
             }
             catch (Exception e)
@@ -83,13 +88,14 @@ namespace Tagtoo
             {
                 if (_changeJournalRootHandle.ToInt32() != PInvokeWin32.INVALID_HANDLE_VALUE)
                 {
-                    PInvokeWin32.CloseHandle(_changeJournalRootHandle);
+                    //PInvokeWin32.CloseHandle(_changeJournalRootHandle);
                 }
                 if (medBuffer != IntPtr.Zero)
                 {
-                    Marshal.FreeHGlobal(medBuffer);
+                    //Marshal.FreeHGlobal(medBuffer);
                 }
             }
+            return files;
         }
         private void GetRootFrnEntry()
         {
@@ -106,8 +112,8 @@ namespace Tagtoo
             if (hRoot.ToInt32() != PInvokeWin32.INVALID_HANDLE_VALUE)
             {
                 PInvokeWin32.BY_HANDLE_FILE_INFORMATION fi = new PInvokeWin32.BY_HANDLE_FILE_INFORMATION();
-                bool bRtn = PInvokeWin32.GetFileInformationByHandle(hRoot, out fi);
-                if (bRtn)
+                var bRtn = PInvokeWin32.GetFileInformationByHandle(hRoot, out fi);
+                if (bRtn != false)
                 {
                     UInt64 fileIndexHigh = (UInt64)fi.FileIndexHigh;
                     UInt64 indexRoot = (fileIndexHigh << 32) | fi.FileIndexLow;
@@ -248,19 +254,20 @@ namespace Tagtoo
             PInvokeWin32.ZeroMemory(cujdBuffer, sizeCujd);
             Marshal.StructureToPtr(cujd, cujdBuffer, true);
 
-            bool fOk = PInvokeWin32.DeviceIoControl(_changeJournalRootHandle, PInvokeWin32.FSCTL_CREATE_USN_JOURNAL,
+            var fOk = PInvokeWin32.DeviceIoControl(_changeJournalRootHandle, PInvokeWin32.FSCTL_CREATE_USN_JOURNAL,
                 cujdBuffer, sizeCujd, IntPtr.Zero, 0, out cb, IntPtr.Zero);
-            if (!fOk)
+            if (fOk == false)
             {
                 throw new IOException("DeviceIoControl() returned false", new Win32Exception(Marshal.GetLastWin32Error()));
             }
         }
-        unsafe private void SetupMFT_Enum_DataBuffer(ref IntPtr medBuffer)
+        unsafe private void SetupMFT_Enum_DataBuffer(ref IntPtr medBuffer, ulong lowUsn)
         {
+            /// This Function query the statistics of volumn
             uint bytesReturned = 0;
             ujd = new PInvokeWin32.USN_JOURNAL_DATA();
 
-            bool bOk = PInvokeWin32.DeviceIoControl(_changeJournalRootHandle,                           // Handle to drive  
+            var bOk = PInvokeWin32.DeviceIoControl(_changeJournalRootHandle,                           // Handle to drive  
                 PInvokeWin32.FSCTL_QUERY_USN_JOURNAL,   // IO Control Code  
                 IntPtr.Zero,                // In Buffer  
                 0,                          // In Buffer Size  
@@ -268,12 +275,12 @@ namespace Tagtoo
                 sizeof(PInvokeWin32.USN_JOURNAL_DATA),  // Size Of Out Buffer  
                 out bytesReturned,          // Bytes Returned  
                 IntPtr.Zero);               // lpOverlapped  
-            if (bOk)
+            if (bOk != false)
             {
                 PInvokeWin32.MFT_ENUM_DATA med;
                 med.StartFileReferenceNumber = 0;
-                med.LowUsn = 0;
-                med.HighUsn = ujd.NextUsn;
+                med.LowUsn = (long)lowUsn;
+                med.HighUsn = ujd.NextUsn;  // the next usn writting point
                 int sizeMftEnumData = Marshal.SizeOf(med);
                 medBuffer = Marshal.AllocHGlobal(sizeMftEnumData);
                 PInvokeWin32.ZeroMemory(medBuffer, sizeMftEnumData);
@@ -283,46 +290,149 @@ namespace Tagtoo
             {
                 throw new IOException("DeviceIoControl() returned false", new Win32Exception(Marshal.GetLastWin32Error()));
             }
+        }        
+        public static unsafe UInt64 GetPathFRN(string FilePath)
+        {
+            IntPtr hDir = PInvokeWin32.CreateFile(FilePath,
+                0,
+                PInvokeWin32.FILE_SHARE_READ,
+                IntPtr.Zero,
+                PInvokeWin32.OPEN_EXISTING,
+                PInvokeWin32.FILE_FLAG_BACKUP_SEMANTICS,
+                IntPtr.Zero
+                );
+
+            if (hDir.ToInt32() == PInvokeWin32.INVALID_HANDLE_VALUE)
+                throw new Exception();
+
+            PInvokeWin32.BY_HANDLE_FILE_INFORMATION fi = new PInvokeWin32.BY_HANDLE_FILE_INFORMATION();
+            PInvokeWin32.GetFileInformationByHandle(hDir, out fi);
+
+            PInvokeWin32.CloseHandle(hDir);
+
+            return (fi.FileIndexHigh << 32) | fi.FileIndexLow;
         }
-        //unsafe private void GetRecords(UInt32 filter)
-        //{
-        //    filter = 2;
-        //    PInvokeWin32.READ_USN_JOURNAL_DATA rujd;
-        //    rujd.StartUSN = 0;
-        //    rujd.ReasonMask = filter;
-        //    rujd.BytesToWaitFor = 2000;
-        //    rujd.UsnJournalID = ujd.UsnJournalID;
+        public unsafe PInvokeWin32.USN_RECORD ReadFileUSN(String Path)
+        {
+            String DevicePath = @"\\.\" + Path;
+            IntPtr handle = PInvokeWin32.CreateFile(DevicePath,
+                PInvokeWin32.GENERIC_READ,
+                PInvokeWin32.FILE_SHARE_READ,
+                IntPtr.Zero,
+                PInvokeWin32.OPEN_EXISTING,
+                0,
+                IntPtr.Zero);
 
-        //    IntPtr buffer = rujd;
-        //    IntPtr pData = Marshal.AllocHGlobal(sizeof(UInt64) + 0x10000);
-        //    PInvokeWin32.ZeroMemory(pData, sizeof(UInt64) + 0x10000);
-        //    uint outBytesReturned = 0;
+            if (_changeJournalRootHandle.ToInt32() == PInvokeWin32.INVALID_HANDLE_VALUE)
+            {
+                throw new IOException();
+            }
+            int BufferSize = 200;
+            IntPtr UsnBuffer = Marshal.AllocHGlobal(BufferSize);
+            uint outBytesReturned = 0;
 
-        //    PInvokeWin32.DeviceIoControl(_changeJournalRootHandle, PInvokeWin32.FSCTL_READ_USN_JOURNAL, out rujd, sizeof(PInvokeWin32.READ_USN_JOURNAL_DATA), pData, sizeof(UInt64) + 0x10000, out outBytesReturned, IntPtr.Zero);
+            var retOK = PInvokeWin32.DeviceIoControl(handle, PInvokeWin32.FSCTL_READ_FILE_USN_DATA, IntPtr.Zero, 0, UsnBuffer, BufferSize, out outBytesReturned, IntPtr.Zero);
+            if (retOK == false)
+            {
+                throw new Exception();
+            }
+            PInvokeWin32.USN_RECORD p = new PInvokeWin32.USN_RECORD(UsnBuffer);
 
-        //    PInvokeWin32.USN_RECORD usn = new PInvokeWin32.USN_RECORD(pUsnRecord);
-        //}
+            Marshal.FreeHGlobal(UsnBuffer);
+
+            return p;
+        }
+        public unsafe List<PInvokeWin32.USN_RECORD> ReadUSN(UInt64 startUsn)
+        {
+            int buffersize = sizeof(UInt64) + 65535;
+
+            // Set READ_USN_JOURNAL_DATA
+            PInvokeWin32.READ_USN_JOURNAL_DATA Rujd = new PInvokeWin32.READ_USN_JOURNAL_DATA();
+            Rujd.StartUSN = startUsn;
+            Rujd.ReasonMask = uint.MaxValue;
+            Rujd.UsnJournalID = ujd.UsnJournalID;
+            Rujd.BytesToWaitFor = (ulong)buffersize;
+
+            int SizeOfUsnJournalData = Marshal.SizeOf(Rujd);
+            IntPtr UsnBuffer = Marshal.AllocHGlobal(SizeOfUsnJournalData);
+            PInvokeWin32.ZeroMemory(UsnBuffer, SizeOfUsnJournalData);
+            Marshal.StructureToPtr(Rujd, UsnBuffer, true);
+
+            // Set Output Buffer
+            IntPtr pData = Marshal.AllocHGlobal(buffersize);
+            PInvokeWin32.ZeroMemory(pData, buffersize);
+            uint outBytesReturned = 0;
+
+
+            List<PInvokeWin32.USN_RECORD> USNRecords = new List<PInvokeWin32.USN_RECORD>();
+            while (true)
+            {
+                Rujd.StartUSN = startUsn;
+                Rujd.ReasonMask = uint.MaxValue;
+                Rujd.UsnJournalID = ujd.UsnJournalID;
+                Rujd.BytesToWaitFor = (ulong)buffersize;
+                Marshal.StructureToPtr(Rujd, UsnBuffer, true);
+
+                var retOK = PInvokeWin32.DeviceIoControl(_changeJournalRootHandle,
+                    PInvokeWin32.FSCTL_READ_USN_JOURNAL,
+                    UsnBuffer,
+                    sizeof(PInvokeWin32.READ_USN_JOURNAL_DATA),
+                    pData,
+                    buffersize,
+                    out outBytesReturned,
+                    IntPtr.Zero);
+
+                if (retOK == false)
+                {
+                    int err = Marshal.GetLastWin32Error();
+                    throw new Win32Exception(err);
+                }
+
+                /// the first returned USN record
+                IntPtr pUsnRecord = new IntPtr(pData.ToInt32() + sizeof(Int64)); // skip first gap
+
+
+                while (outBytesReturned > 60)
+                {
+                    PInvokeWin32.USN_RECORD p = new PInvokeWin32.USN_RECORD(pUsnRecord);
+                    pUsnRecord = new IntPtr(pUsnRecord.ToInt32() + p.RecordLength);
+                    outBytesReturned -= p.RecordLength;
+
+                    USNRecords.Add(p);
+
+                }
+                if (startUsn == USNRecords[USNRecords.Count - 1].Usn)
+                    break;
+                startUsn = USNRecords[USNRecords.Count - 1].Usn;
+            }
+            return USNRecords;
+        }
         public static void SelfTest()
         {
-            Dictionary<UInt64, FileNameAndFrn> result;
             CChangeJournal mft = new CChangeJournal();
+            var usn = mft.ReadFileUSN(@"C:\Users\lucemia\Desktop\durarara-trust me [ed].mp3");            
+            
+            Dictionary<UInt64, FileNameAndFrn> result;
+            //CChangeJournal mft = new CChangeJournal();
 
-            StreamWriter folderwriter = new StreamWriter("folder.log");            
-            mft.EnumerateVolume("c:", out result, new string[] { ".jpg",".gif", ".bmp", ".jpeg", ".png" });
+            //StreamWriter folderwriter = new StreamWriter("folder.log");            
+            var r = mft.EnumerateVolume("c:", usn.Usn, new string[] { ".jpg", ".gif", ".bmp", ".jpeg", ".png" });            
 
-            StreamWriter filewriter = new StreamWriter("files.log");
-            foreach (KeyValuePair<UInt64, FileNameAndFrn> entry in result)
-            {
-                filewriter.WriteLine(string.Format("{0} {1} {2}", entry.Key, entry.Value.Name, entry.Value.ParentFrn));
-            }                        
-            foreach (var x in mft._directories)  
-            {
-                folderwriter.WriteLine(string.Format("{0} {1} {2}", x.Key, x.Value.Name, x.Value.ParentFrn));
-            }
+            var r1 = mft.ReadUSN(0);
+
+            //StreamWriter filewriter = new StreamWriter("files.log");
+            //foreach (KeyValuePair<UInt64, FileNameAndFrn> entry in result)
+            //{
+            //    filewriter.WriteLine(string.Format("{0} {1} {2}", entry.Key, entry.Value.Name, entry.Value.ParentFrn));
+            //}                        
+            //foreach (var x in mft._directories)  
+            //{
+            //    folderwriter.WriteLine(string.Format("{0} {1} {2}", x.Key, x.Value.Name, x.Value.ParentFrn));
+            //}
 
             
-            filewriter.Close();
-            folderwriter.Close();
+            //filewriter.Close();
+            //folderwriter.Close();
             //writer.ReadKey();
         }
         private IntPtr _changeJournalRootHandle;

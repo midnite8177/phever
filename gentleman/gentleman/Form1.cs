@@ -24,7 +24,8 @@ namespace gentleman
         public Form1()
         {
             InitializeComponent();
-            ShellHelper.ImageFiles();
+            Tagtoo.CChangeJournal.SelfTest();
+            //ShellHelper.ImageFiles();
 
         }
 

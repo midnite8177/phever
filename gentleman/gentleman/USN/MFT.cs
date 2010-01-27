@@ -47,7 +47,7 @@ namespace Tagtoo
             uint bytesReturned = 0;
             mUSN = new PInvokeWin32.USN_JOURNAL_DATA();
 
-            bool retOK = PInvokeWin32.DeviceIoControl(mDriveHandle,
+            var retOK = PInvokeWin32.DeviceIoControl(mDriveHandle,
                 PInvokeWin32.FSCTL_QUERY_USN_JOURNAL,
                 IntPtr.Zero,
                 0,
@@ -56,7 +56,7 @@ namespace Tagtoo
                 out bytesReturned,          // Bytes Returned  
                 IntPtr.Zero);
             // mUSN.UsnJournalID the id of usn journal
-            if (!retOK)
+            if (retOK == false)
             {
                 throw new IOException("DeviceIoControl() returned false", new Win32Exception(Marshal.GetLastWin32Error()));
             }
@@ -94,7 +94,7 @@ namespace Tagtoo
                 OutBuffer,
                 OutBufferSize,
                 out BytesReturned,
-                IntPtr.Zero))
+                IntPtr.Zero)!= false)
             {
                 IntPtr pUsnRecord = new IntPtr(OutBuffer.ToInt32() + sizeof(Int64));
 
@@ -180,7 +180,7 @@ namespace Tagtoo
                 Marshal.StructureToPtr(Rujd, UsnBuffer, true);  
 
                 
-                bool retOK = PInvokeWin32.DeviceIoControl(mDriveHandle,
+                var retOK = PInvokeWin32.DeviceIoControl(mDriveHandle,
                     PInvokeWin32.FSCTL_READ_USN_JOURNAL,
                     UsnBuffer,
                     sizeof(PInvokeWin32.READ_USN_JOURNAL_DATA),
@@ -189,7 +189,7 @@ namespace Tagtoo
                     out outBytesReturned,
                     IntPtr.Zero);
 
-                if (!retOK)
+                if (retOK==false)
                 {
                     throw new IOException();
                 }
@@ -233,8 +233,8 @@ namespace Tagtoo
             IntPtr UsnBuffer = Marshal.AllocHGlobal(BufferSize);
             uint outBytesReturned = 0;
 
-            bool retOK = PInvokeWin32.DeviceIoControl(handle, PInvokeWin32.FSCTL_READ_FILE_USN_DATA, IntPtr.Zero, 0, UsnBuffer, BufferSize, out outBytesReturned, IntPtr.Zero);
-            if (!retOK)
+            var retOK = PInvokeWin32.DeviceIoControl(handle, PInvokeWin32.FSCTL_READ_FILE_USN_DATA, IntPtr.Zero, 0, UsnBuffer, BufferSize, out outBytesReturned, IntPtr.Zero);
+            if (retOK==false)
             {
                 throw new Exception();
             }

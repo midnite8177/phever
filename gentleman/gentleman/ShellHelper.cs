@@ -29,16 +29,16 @@ namespace gentleman
 
         public static void ImageFiles()
         {
-            CChangeJournal mft = new CChangeJournal();
-            mft.EnumerateVolume("c:", out FileDB, new string[] { ".jpg", ".gif", ".bmp", ".jpeg", ".png" });
-            FolderDB = mft._directories;
+            //CChangeJournal mft = new CChangeJournal();
+            //mft.EnumerateVolume("c:", new string[] { ".jpg", ".gif", ".bmp", ".jpeg", ".png" });
+            //FolderDB = mft._directories;
 
-            foreach (var file in FileDB)
-            {
-                string path = GetFullPath(file.Key);
-                path = path.Replace("\\\\.\\c:\\\\", @"c:\");
-                if (path.Length < 260 && !System.IO.File.Exists(path)) throw new Exception();
-            }
+            //foreach (var file in FileDB)
+            //{
+            //    string path = GetFullPath(file.Key);
+            //    path = path.Replace("\\\\.\\c:\\\\", @"c:\");
+            //    if (path.Length < 260 && !System.IO.File.Exists(path)) throw new Exception();
+            //}
         }
     }
 
