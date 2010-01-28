@@ -24,7 +24,7 @@ namespace gentleman
         public Form1()
         {
             InitializeComponent();
-            Tagtoo.CChangeJournal.SelfTest();
+            USN.PathDBController x = new gentleman.USN.PathDBController();
             //ShellHelper.ImageFiles();
 
         }

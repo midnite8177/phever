@@ -102,7 +102,9 @@
     <Compile Include="ThumbDbCom.cs" />
     <Compile Include="ThumbHelper.cs" />
     <Compile Include="USN\CChangeJournal.cs" />
+    <Compile Include="USN\CJOld.cs" />
     <Compile Include="USN\MFT.cs" />
+    <Compile Include="USN\PathDB.cs" />
     <Compile Include="USN\PInvokeWin32.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,7 +13,23 @@ namespace Tagtoo
         public const UInt32 GENERIC_WRITE = 0x40000000;
         public const UInt32 FILE_SHARE_READ = 0x00000001;
         public const UInt32 FILE_SHARE_WRITE = 0x00000002;
+
+        public const UInt32 FILE_ATTRIBUTE_READONLY = 0x00000001;
+        public const UInt32 FILE_ATTRIBUTE_HIDDEN = 0x00000002;
+        public const UInt32 FILE_ATTRIBUTE_SYSTEM = 0x00000004;
         public const UInt32 FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
+        public const UInt32 FILE_ATTRIBUTE_ARCHIVE = 0x00000020;
+        public const UInt32 FILE_ATTRIBUTE_DEVICE = 0x00000040;
+        public const UInt32 FILE_ATTRIBUTE_NORMAL = 0x00000080;
+        public const UInt32 FILE_ATTRIBUTE_TEMPORARY = 0x00000100;
+        public const UInt32 FILE_ATTRIBUTE_SPARSE_FILE = 0x00000200;
+        public const UInt32 FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400;
+        public const UInt32 FILE_ATTRIBUTE_COMPRESSED = 0x00000800;
+        public const UInt32 FILE_ATTRIBUTE_OFFLINE = 0x00001000;
+        public const UInt32 FILE_ATTRIBUTE_NOT_CONTENT_INDEXED = 0x00002000;
+        public const UInt32 FILE_ATTRIBUTE_ENCRYPTED = 0x00004000;
+        public const UInt32 FILE_ATTRIBUTE_VIRTUAL = 0x00010000;
+
         public const UInt32 OPEN_EXISTING = 3;
         public const UInt32 FILE_FLAG_BACKUP_SEMANTICS = 0x02000000;
         public const Int32 INVALID_HANDLE_VALUE = -1;
@@ -25,28 +41,28 @@ namespace Tagtoo
         public const UInt32 FSCTL_READ_USN_JOURNAL = 590011;
         public const UInt32 FSCTL_READ_FILE_USN_DATA = 590059;
 
-        public const UInt32 DataOverwrite = 0x00000001;
-        public const UInt32 DataExtend = 0x00000002;
-        public const UInt32 DataTruncation = 0x00000004;
+        public const UInt32 USN_REASON_DATA_OVERWRITE = 0x00000001;
+        public const UInt32 USN_REASON_DATA_EXTEND = 0x00000002;
+        public const UInt32 USN_REASON_DATA_TRUNCATION = 0x00000004;
         //public const UInt32 0x00000008=             0x00000008;
-        public const UInt32 NamedDataOverwrite = 0x00000010;
-        public const UInt32 NamedDataExtend = 0x00000020;
-        public const UInt32 NamedDataTruncation = 0x00000040;
+        public const UInt32 USN_REASON_NAME_DATA_OVERWRITE = 0x00000010;
+        public const UInt32 USN_REASON_NAMED_DATA_EXTEND = 0x00000020;
+        public const UInt32 USN_REASON_NAMED_DATA_TRUNCATION = 0x00000040;
         //public const UInt32 0x00000080=             0x00000080;
-        public const UInt32 FileCreate = 0x00000100;
-        public const UInt32 FileDelete = 0x00000200;
-        public const UInt32 PropertyChange = 0x00000400;
-        public const UInt32 SecurityChange = 0x00000800;
-        public const UInt32 RenameOldName = 0x00001000;
-        public const UInt32 RenameNewName = 0x00002000;
-        public const UInt32 IndexableChange = 0x00004000;
-        public const UInt32 BasicInfoChange = 0x00008000;
-        public const UInt32 HardLinkChange = 0x00010000;
-        public const UInt32 CompressionChange = 0x00020000;
-        public const UInt32 EncryptionChange = 0x00040000;
-        public const UInt32 ObjectIdChange = 0x00080000;
-        public const UInt32 ReparsePointChange = 0x00100000;
-        public const UInt32 StreamChange = 0x00200000;
+        public const UInt32 USN_REASON_FILE_CREATE = 0x00000100;
+        public const UInt32 USN_REASON_FILE_DELETE = 0x00000200;
+        public const UInt32 USN_REASON_EA_CHANGE = 0x00000400;
+        public const UInt32 USN_REASON_SECURITY_CHANGE = 0x00000800;
+        public const UInt32 USN_REASON_RENAME_OLD_NAME = 0x00001000;
+        public const UInt32 USN_REASON_RENAME_NEW_NAME = 0x00002000;
+        public const UInt32 USN_REASON_INDEXABLE_CHANGE = 0x00004000;
+        public const UInt32 USN_REASON_BASIC_INFO_CHANGE = 0x00008000;
+        public const UInt32 USN_REASON_HARD_LINK_CHANGE = 0x00010000;
+        public const UInt32 USN_REASON_COMPRESSION_CHANGE = 0x00020000;
+        public const UInt32 USN_REASON_ENCRYPTION_CHANGE = 0x00040000;
+        public const UInt32 USN_REASON_OBJECT_ID_CHANGE = 0x00080000;
+        public const UInt32 USN_REASON_REPARSE_POINT_CHANGE = 0x00100000;
+        public const UInt32 USN_REASON_STREAM_CHANGE = 0x00200000;
         //public const UInt32 0x00400000=            // 0x00400000
         //public const UInt32 0x00800000=            // 0x00800000
         ///public const UInt32 0x01000000=            // 0x01000000
@@ -56,7 +72,7 @@ namespace Tagtoo
         //public const UInt32 0x10000000=            // 0x10000000
         //public const UInt32 0x20000000=            // 0x20000000
         //public const UInt32 0x40000000=            // 0x40000000
-        public const UInt32 Close = 0x80000000;
+        public const UInt32 USN_REASON_CLOSE = 0x80000000;
 
         static string[] Reasons ={
             "DataOverwrite",         // 0x00000001
@@ -219,8 +235,6 @@ namespace Tagtoo
             private const int FileNameOffset_OFFSET = 58;
             private const int FileName_OFFSET = 60;
 
-
-
             public USN_RECORD(IntPtr p)
             {
                 this.RecordLength = (UInt32)Marshal.ReadInt32(p, RecordLength_OFFSET);
@@ -240,6 +254,11 @@ namespace Tagtoo
                 this.FileName = Marshal.PtrToStringUni(new IntPtr(p.ToInt32() + this.FileNameOffset), this.FileNameLength / sizeof(char));
             }
         }
+
+        public const int SizeOf_USN_RECORD = 60;
+        public const int SizeOf_READ_USN_JOURNAL_DATA = 40;
+        public const int SizeOf_USN_JOURNAL_DATA = 56;
+        public const int SizeOf_MFT_ENUM_DATA = 24;
 
         #endregion
     }
