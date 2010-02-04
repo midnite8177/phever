@@ -82,33 +82,93 @@ namespace gentleman.USN
             //        writer.WriteLine(string.Format("{0}#{1}", item.Key, item.Value));
             //    }
             //}
-            SQLiteConnection connect = new SQLiteConnection("Data Source=Folder.db;Version=3;");
-            connect.Open();
-            using (SQLiteTransaction dbTrans = connect.BeginTransaction())
+
+            if (!File.Exists("Folder.db"))
             {
-                using (SQLiteCommand cmd = connect.CreateCommand())
+                SQLiteConnection.CreateFile("Folder.db");
+                using (SQLiteConnection connect = new SQLiteConnection("Data Source=Folder.db;Version=3;"))
                 {
-                    cmd.CommandText = "INSERT INTO FolderPath('frn', 'name', 'parent_frn') VALUES(?, ? ,?)";
-                    SQLiteParameter field_frn = cmd.CreateParameter();
-                    SQLiteParameter field_name = cmd.CreateParameter();
-                    SQLiteParameter field_parent_frn = cmd.CreateParameter();
-
-                    cmd.Parameters.Add(field_frn);
-                    cmd.Parameters.Add(field_name);
-                    cmd.Parameters.Add(field_parent_frn);
-
-                    foreach (var item in FolderDB)
-                    {
-                        field_frn.Value= item.Key;
-                        field_name.Value = item.Value.Name;
-                        field_parent_frn.Value = item.Value.ParentFrn;
-
-                        cmd.ExecuteNonQuery();
-                    }
+                    connect.Open();
+                    SQLiteCommand cmd = connect.CreateCommand();
+                    cmd.CommandText = @"CREATE TABLE [FolderPath] (
+                                        [frn] bigint NOT NULL UNIQUE ON CONFLICT REPLACE,
+                                        [name] text NOT NULL,
+                                        [parent_frn] bigint NOT NULL
+                                        );";
+                    cmd.ExecuteNonQuery();
                 }
-                dbTrans.Commit();
             }
-        }
+            if (!File.Exists("File.db"))
+            {
+                SQLiteConnection.CreateFile("File.db");
+                using (SQLiteConnection connect = new SQLiteConnection("Data Source=File.db;Version=3;"))
+                {
+                    connect.Open();
+                    SQLiteCommand cmd = connect.CreateCommand();
+                    cmd.CommandText = @"CREATE TABLE [main].[FilePath] (
+                                        [frn] bigint NOT NULL UNIQUE ON CONFLICT REPLACE,
+                                        [name] text NOT NULL,
+                                        [parent_frn] bigint NOT NULL);";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            using (SQLiteConnection connect = new SQLiteConnection("Data Source=Folder.db;Version=3;"))
+            {
+                connect.Open();
+                using (SQLiteTransaction dbTrans = connect.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = connect.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO FolderPath('frn', 'name', 'parent_frn') VALUES(?, ? ,?)";
+                        SQLiteParameter field_frn = cmd.CreateParameter();
+                        SQLiteParameter field_name = cmd.CreateParameter();
+                        SQLiteParameter field_parent_frn = cmd.CreateParameter();
+
+                        cmd.Parameters.Add(field_frn);
+                        cmd.Parameters.Add(field_name);
+                        cmd.Parameters.Add(field_parent_frn);
+
+                        foreach (var item in FolderDB)
+                        {
+                            field_frn.Value = item.Key;
+                            field_name.Value = item.Value.Name;
+                            field_parent_frn.Value = item.Value.ParentFrn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    dbTrans.Commit();
+                }
+            }
+            using (SQLiteConnection connect = new SQLiteConnection("Data Source=File.db;Version=3;"))
+            {
+                connect.Open();
+                using (SQLiteTransaction dbTrans = connect.BeginTransaction())
+                {
+                    using (SQLiteCommand cmd = connect.CreateCommand())
+                    {
+                        cmd.CommandText = "INSERT INTO FilePath('frn', 'name', 'parent_frn') VALUES(?, ? ,?)";
+                        SQLiteParameter field_frn = cmd.CreateParameter();
+                        SQLiteParameter field_name = cmd.CreateParameter();
+                        SQLiteParameter field_parent_frn = cmd.CreateParameter();
+
+                        cmd.Parameters.Add(field_frn);
+                        cmd.Parameters.Add(field_name);
+                        cmd.Parameters.Add(field_parent_frn);
+
+                        foreach (var item in FileDB)
+                        {
+                            field_frn.Value = item.Key;
+                            field_name.Value = item.Value.Name;
+                            field_parent_frn.Value = item.Value.ParentFrn;
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    dbTrans.Commit();
+                }
+            }
+        }                
     }
 
     public class PathDBController
@@ -121,7 +181,7 @@ namespace gentleman.USN
         public PathDBController()
         {
             mdb = new PathDB();
-            mft = new CChangeJournal("d:");
+            mft = new CChangeJournal("c:");
 
             bool cached = mdb.Load(".");
 
@@ -145,14 +205,14 @@ namespace gentleman.USN
                     mdb.FolderDB[item.FileReferenceNumber] = new FileNameAndFrn(item.FileName, item.ParentFileReferenceNumber);
                 else
                 {
-                    var ext = System.IO.Path.GetExtension(item.FileName);
-                    if (ExtFilters.Contains(ext.ToLower()))
-                        mdb.FileDB[item.FileReferenceNumber] = new FileNameAndFrn(item.FileName, item.ParentFileReferenceNumber);
+                    //var ext = System.IO.Path.GetExtension(item.FileName);
+                    //if (ExtFilters.Contains(ext.ToLower()))
+                    mdb.FileDB[item.FileReferenceNumber] = new FileNameAndFrn(item.FileName, item.ParentFileReferenceNumber);
                 }
                 lastitem = item;
             }
 
-            mdb.LastUsn["d:"] = lastitem.Usn;
+            mdb.LastUsn["c:"] = lastitem.Usn;
 
             mdb.Save(".");
         }
