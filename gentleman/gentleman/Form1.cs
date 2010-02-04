@@ -25,6 +25,7 @@ namespace gentleman
         {
             InitializeComponent();
             USN.PathDBController x = new gentleman.USN.PathDBController();
+            //x.Build();
             //ShellHelper.ImageFiles();
 
         }

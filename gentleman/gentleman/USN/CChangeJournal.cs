@@ -5,6 +5,8 @@ using System.Text;
 using System.Runtime.InteropServices;  
 using System.IO;  
 using System.ComponentModel;
+
+
 // http://www.microsoft.com/msj/1099/journal2/journal2.aspx
 // http://www.microsoft.com/msj/0999/journal/journal.aspx
 namespace Tagtoo
@@ -56,7 +58,7 @@ namespace Tagtoo
         private IntPtr ChangeJournalRootHandle = IntPtr.Zero;
         
         public CChangeJournal(string drive)
-        {
+        {           
             Drive = drive;
 
             string vol = string.Concat("\\\\.\\", drive);

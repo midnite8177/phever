@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using Tagtoo;
 using System.IO;
+using System.Data.SQLite;
+//http://www.sqlite.org/cvstrac/wiki?p=SqliteWrappers SQLite with C#
+//http://sqlite.phxsoftware.com/forums/t/76.aspx  Sample Code
 
 namespace gentleman.USN
 {
@@ -18,7 +21,7 @@ namespace gentleman.USN
         {
             FileDB = new Dictionary<ulong, FileNameAndFrn>();
             FolderDB = new Dictionary<ulong, FileNameAndFrn>();
-            LastUsn = new Dictionary<string, ulong>();
+            LastUsn = new Dictionary<string, ulong>();            
         }
 
         public bool Load(string folderpath)
@@ -58,26 +61,52 @@ namespace gentleman.USN
         }
         public void Save(string folderpath)
         {
-            using (StreamWriter writer = new StreamWriter("Files.db"))
+            //using (StreamWriter writer = new StreamWriter("Files.db"))
+            //{
+            //    foreach (var item in FileDB)
+            //    {
+            //        writer.WriteLine(string.Format("{0}#{1}#{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
+            //    }
+            //}
+            //using (StreamWriter writer = new StreamWriter("Folders.db"))
+            //{
+            //    foreach (var item in FileDB)
+            //    {
+            //        writer.WriteLine(string.Format("{0}#{1}#{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
+            //    }
+            //}
+            //using (StreamWriter writer = new StreamWriter("LastUsn.db"))
+            //{
+            //    foreach (var item in LastUsn)
+            //    {
+            //        writer.WriteLine(string.Format("{0}#{1}", item.Key, item.Value));
+            //    }
+            //}
+            SQLiteConnection connect = new SQLiteConnection("Data Source=Folder.db;Version=3;");
+            connect.Open();
+            using (SQLiteTransaction dbTrans = connect.BeginTransaction())
             {
-                foreach (var item in FileDB)
+                using (SQLiteCommand cmd = connect.CreateCommand())
                 {
-                    writer.WriteLine(string.Format("{0}#{1}#{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
+                    cmd.CommandText = "INSERT INTO FolderPath('frn', 'name', 'parent_frn') VALUES(?, ? ,?)";
+                    SQLiteParameter field_frn = cmd.CreateParameter();
+                    SQLiteParameter field_name = cmd.CreateParameter();
+                    SQLiteParameter field_parent_frn = cmd.CreateParameter();
+
+                    cmd.Parameters.Add(field_frn);
+                    cmd.Parameters.Add(field_name);
+                    cmd.Parameters.Add(field_parent_frn);
+
+                    foreach (var item in FolderDB)
+                    {
+                        field_frn.Value= item.Key;
+                        field_name.Value = item.Value.Name;
+                        field_parent_frn.Value = item.Value.ParentFrn;
+
+                        cmd.ExecuteNonQuery();
+                    }
                 }
-            }
-            using (StreamWriter writer = new StreamWriter("Folders.db"))
-            {
-                foreach (var item in FileDB)
-                {
-                    writer.WriteLine(string.Format("{0}#{1}#{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
-                }
-            }
-            using (StreamWriter writer = new StreamWriter("LastUsn.db"))
-            {
-                foreach (var item in LastUsn)
-                {
-                    writer.WriteLine(string.Format("{0}#{1}", item.Key, item.Value));
-                }
+                dbTrans.Commit();
             }
         }
     }
@@ -85,14 +114,14 @@ namespace gentleman.USN
     public class PathDBController
     {
         private PathDB mdb;
-        private CChangeJournal mft;
+        private CChangeJournal mft;        
 
         public static List<String> ExtFilters = new List<string>() { ".jpg", ".gif", ".jpeg", ".png", ".bmp" };
 
         public PathDBController()
         {
             mdb = new PathDB();
-            mft = new CChangeJournal("c:");
+            mft = new CChangeJournal("d:");
 
             bool cached = mdb.Load(".");
 
@@ -105,10 +134,7 @@ namespace gentleman.USN
         }
 
         public void Build()
-        {
-            
-
-            
+        {                        
             var root = mft.GetRootFrn();
             mdb.FolderDB[root.Key] = root.Value;
 
@@ -126,8 +152,9 @@ namespace gentleman.USN
                 lastitem = item;
             }
 
-            mdb.LastUsn["c:"] = lastitem.Usn;
+            mdb.LastUsn["d:"] = lastitem.Usn;
 
+            mdb.Save(".");
         }
         public void Update()
         {
