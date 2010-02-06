@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using ThumbLib;
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 using Microsoft.WindowsAPICodePack.Shell;
 
 namespace gentleman
@@ -24,10 +26,8 @@ namespace gentleman
         public Form1()
         {
             InitializeComponent();
-            USN.PathDBController x = new gentleman.USN.PathDBController();
-            //x.Build();
-            //ShellHelper.ImageFiles();
-
+            USN.PathDB p = new gentleman.USN.PathDB();
+            p.Build();
         }
 
         public Dictionary<string, PMetaData> ScanFolder(string folder)
