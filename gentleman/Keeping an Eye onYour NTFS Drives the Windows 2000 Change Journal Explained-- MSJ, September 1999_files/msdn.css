@@ -1,0 +1,102 @@
+/*** MSDN Online ***/
+
+	TD, TH { font-size:68%;    font-family:verdana,arial,helvetica; }
+
+	A:link { color:#003399; }
+	A:visited { color:#660099; }
+	A:hover { color:#FF3300; }
+
+	A.small
+	{
+		font-size: 95%;
+		text-decoration:underline;
+	}
+
+	H1
+	{
+		font-size:165%;
+		margin:0;
+	}
+
+	H2
+	{
+		font-size:125%;
+		margin-top:1em; margin-bottom:0px;
+	}
+
+	H3
+	{
+		font-size:115%;
+		margin-bottom:0px;
+	}
+
+	H4, H5, H6
+	{
+		font-size:100%;
+		margin-bottom:0px;
+	}
+
+	P
+	{
+	    font-family:verdana,arial,helvetica;
+		margin-top:0.5em; margin-bottom:1.0em;
+	}
+
+	PRE
+	{
+		background:#EEEEEE;
+		margin-top:1em; margin-bottom:1em; margin-left:0px;
+		padding:5pt;
+	}
+
+
+
+	HR
+	{
+		color:#CCCCCC;
+		height:1px;
+	}
+
+	UL { margin-left:25px; margin-top:10px; margin-bottom:10px; }
+	OL { margin-left:25px; margin-top:10px; margin-bottom:10px; }
+	UL LI
+	{
+		line-height:1.5em;
+		margin-bottom:0.5em;
+	}
+	UL LI LI { list-style-type: disc; }
+	OL LI { margin-bottom:0.7em; }
+
+/*** MSDN eyebrow***/
+
+.eyebrow
+{
+	background-color: #FFFFFF;
+	border-color: #999999;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	font-family: Verdana, Arial, Helvetica;
+	font-size:xx-small;
+	color:#003399;
+}
+
+.downleveleyebrow
+{
+	background-color: #FFFFFF;
+	border-color: #999999;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	font-family: Verdana, Arial, Helvetica;
+	color:#003399;
+}
+
+A.EyeBrowLink
+{
+	font-family:Verdana;
+	font-size:x-small;
+	font-style:normal;
+	color:#003399;
+	cursor:hand;
+	margin-left:0px;
+	margin-right:0px;
+}

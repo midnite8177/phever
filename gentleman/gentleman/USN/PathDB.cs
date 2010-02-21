@@ -14,9 +14,11 @@ namespace gentleman.USN
     {
         private const string FolderDBPath = @"C:\var\phever\trunk\gentleman\gentleman\bin\Debug\folder.mdf";
         private const string FileDBPath = @"C:\var\phever\trunk\gentleman\gentleman\bin\Debug\file.mdf";
+
         private FolderDBDataContext FolderConnect;
         private FileDBDataContext FileConnect;
-        private CChangeJournal mft;        
+        private CChangeJournal mft;
+        private UInt64 LastUsn;
         
         public PathDB()
         {
@@ -47,7 +49,26 @@ namespace gentleman.USN
             FolderConnect.SubmitChanges();
             FileConnect.SubmitChanges();
         }
-             
+        public void Update()
+        {
+
+        }
+
+
+        public string ConvertPath(FileDB fileinfo)
+        {
+            List<string> Paths = new List<string>();
+            Paths.Add(fileinfo.name);
+            FolderDB Parent = FolderConnect.FolderDBs.Single(p => p.frn == fileinfo.parent_frn);
+            Paths.Insert(0,Parent.name);
+
+            do {
+                Parent = FolderConnect.FolderDBs.Single(p => p.frn == Parent.parent_frn);
+                Paths.Insert(0,Parent.name);
+            } while(Parent.parent_frn != 0);
+
+            return string.Join("//", Paths);
+        }
     }
 
     //public class PathDBController

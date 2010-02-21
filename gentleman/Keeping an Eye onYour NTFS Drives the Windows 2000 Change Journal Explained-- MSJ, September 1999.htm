@@ -1,0 +1,483 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0054)http://www.microsoft.com/msj/0999/journal/journal.aspx -->
+<HTML><STYLE>/**
+ * Copyright 2010 Google Inc. All Rights Reserved.
+ *
+ * Google Dictionary Chrome extension content script CSS.
+ *
+ * @author sadovsky@google.com (Adam Sadovsky)
+ */
+
+/**
+ * Added after testing on:
+ * http://earthcode.com/blog/2006/01/css_floats_programmatically.html
+ */
+.gd-bubble a:after,
+.gd-bubble a[href^="http"]:after {
+  content: '';
+}
+</STYLE><HEAD><META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Keeping an Eye onYour NTFS Drives:the Windows 2000 Change Journal Explained-- MSJ, September 1999</TITLE>
+<META name="Description" content="The Windows 2000 Change Journal is a database that contains a list of every change made to the files or directories on an NTFS 5.0 volume. Each volume has its own Change Journal database that contains records reflecting the changes occurring to that volume&#39;s files and directories.">
+	<META http-equiv="PICS-Label" content="(PICS-1.1 &quot;http://www.rsac.org/ratingsv01.html&quot; l comment &quot;RSACi North America Server&quot; by &quot;inet@microsoft.com&quot; r (n 0 s 0 v 0 l 0))">
+	<META name="Robots" content="all">
+	<META name="MS.LOCALE" content="en-us">
+	<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msdnmag.css">
+	<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msdn.css">
+	<SCRIPT language="javascript" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msdnmag.js"></SCRIPT>
+	<SCRIPT type="text/javascript" language="Javascript" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/menujs"></SCRIPT>
+<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/css.aspx">
+<META http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><LINK rel="stylesheet" type="text/css" href="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/css(1).aspx"><SCRIPT language="JavaScript">var doImage=doImage;var TType=TType;var defaultSearchLable;
+function mhHover(tbl,idx,cls){var t,d;if(document.getElementById)t=document.getElementById(tbl);else t=document.all(tbl);if(t==null)return;if(t.getElementsByTagName)d=t.getElementsByTagName("TD");else d=t.all.tags("TD");if(d==null)return;if(d.length<=idx)return;d[idx].className=cls;}
+function footerjs(doc){if(doImage==null){var tt=TType==null?"PV":TType;doc.write('<layer visibility="hide"><div style="display:none"><img src="http://c.microsoft.com/trans_pixel.asp?source=www&TYPE=' + tt + '&p=msj_0999_journal&URI=%2fmsj%2f0999%2fjournal%2fjournal.aspx&GUID=1F4FC18C-F71E-47FB-8FC9-612F8EE59C61&r=http%3a%2f%2fwww.microsoft.com%2fmsj%2f1099%2fjournal2%2fjournal2.aspx&lc=en-us" width=0 height=0 hspace=0 vspace=0 border=0 alt=""/></div></layer>');}}
+var rsltextbox = 'msviLSBtbox'; var wtflag = false;
+function stripSymbols () { var objrslttextbox = getObjectById(rsltextbox); if (objrslttextbox) { var form = objrslttextbox.form; var s = objrslttextbox.value; filteredValues = "<>!@^*"; var i; var returnString = ""; for (i = 0; i < s.length; i++) { var c = s.charAt(i); if (filteredValues.indexOf(c) == -1) { returnString += c; } else { returnString += " "; } } objrslttextbox.value = returnString; } if(!wtflag) { trackLSB("Site"); } } 
+function addSubmitEvent() { defaultSearchLable=document.getElementById("msviLSBtbox").value;var objrslttextbox = getObjectById(rsltextbox); if (objrslttextbox) { var form = objrslttextbox.form; if (window.attachEvent) { form.attachEvent("onsubmit",stripSymbols); } else { form.addEventListener("submit",stripSymbols,false); } } } 
+function getObjectById(elid) { if (document.getElementById) { return document.getElementById(elid); } else if (document.all) { return document.all[elid]; } else if (document.layers) { return document.layers[elid]; } } 
+if (window.attachEvent) { window.attachEvent("onload",addSubmitEvent); } else { window.addEventListener("load",addSubmitEvent,false); } 
+function trackLSB(type) { clearDefaultSearchLable();if (typeof dcsMultiTrack == "function") { var qu = document.getElementById("msviLSBtbox").value; var dcsuri = "results.aspx"; var dcssip, ti; if (type == "Site") { dcssip = "search.microsoft.com"; ti = "SearchButton: OnSite"; } else if (type == "Web") { dcssip = "bing.com"; ti = "SearchButton: Web"; } dcsMultiTrack("DCS.dcsuri", dcsuri, "DCS.dcssip", dcssip, "WT.ti", ti, "WT.dl", "2", "WT.z_srch_t", qu, "DCS.dcsqry", "", "WT.ad", "", "WT.mc_id", ""); wtflag = true; DCS.dcsuri=DCS.dcssip=DCS.dcsqry=WT.ti=WT.z_srch_t="";} }
+
+var isInputqu = false;
+var searchBoxWidthWithKievLogo = 0;
+var searchBoxWidthWithoutKievLogo = 0;
+function clearDefaultSearchLable()
+{var searchBox = document.getElementById("msviLSBtbox");
+if(!isInputqu){searchBox.value = "";}}
+var kievImageWidth = 0;
+
+function searchBoxFocused(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value == defaultSearchLabel)
+    {
+        searchBoxInput.value = '';
+        if(kievImageWidth == 0)
+        {
+            kievImageWidth = kievImage.clientWidth;
+        }
+        searchBoxInput.style.fontStyle = '';
+        searchBoxInput.style.color='#000000';
+        kievImage.style.width = '1px';
+        if(searchBoxWidthWithKievLogo == 0)
+        {
+            searchBoxWidthWithKievLogo = searchBoxInput.style.width;
+            searchBoxWidthWithoutKievLogo = searchBoxInput.clientWidth + (kievImageWidth - 1);
+        }
+        searchBoxInput.style.width = searchBoxWidthWithoutKievLogo;
+    }
+}
+
+function searchBoxBlur(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value.replace(/(^\s*)|(\s*$)/g, '')=='') 
+    {
+        searchBoxInput.value=defaultSearchLabel;searchBoxInput.style.fontStyle ='Italic';
+        searchBoxInput.style.color = "#a1a1a1";
+        kievImage.style.width = kievImageWidth;
+        
+        searchBoxInput.style.width = searchBoxWidthWithKievLogo;
+        isInputqu = false;
+     }
+     else
+     {
+        isInputqu = true;
+     }
+}</SCRIPT><META name="WT.sp" content="_msj_"><SCRIPT language="JavaScript" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/broker.js"></SCRIPT>
+	</HEAD><BODY leftmargin="0" topmargin="0" rightmargin="5" bgcolor="#ffffff">
+		
+		<!--NOINDEX_START--><SCRIPT language="Javascript">
+				if (self.name == "MNPMainFrame") top.location.href = self.location.href;
+			</SCRIPT><DIV id="msviMasthead"><TABLE cellpadding="0" cellspacing="0" width="100%" border="0"><TBODY><TR><TD width="100%"><TABLE cellpadding="0" cellspacing="0" width="100%" height="22" border="0"><TBODY><TR><TD id="msviMarketing" bgcolor="#FFFFFF" nowrap=""><A href="http://go.microsoft.com/fwlink/?LinkID=92799">Click Here to Install Silverlight</A></TD><TD width="100%" bgcolor="#3568CC"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/gradient.aspx" width="250" height="22" alt="*" title=""></TD></TR></TBODY></TABLE></TD><TD id="msviGlobalToolbar" bgcolor="#3568CC" height="22" nowrap="" dir="ltr" align="left"><TABLE cellpadding="0" cellspacing="0" border="0"><TBODY><TR><TD id="msviRegionId" nowrap="">United States</TD><TD id="msviRegionSelector" nowrap=""><A href="http://www.microsoft.com/worldwide">Change</A></TD><TD class="gtsep">|</TD><TD id="msviSiteMap" nowrap=""><A href="http://www.microsoft.com/en/us/sitemap.aspx">All Microsoft Sites</A></TD><TD class="msviPPSpace"></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><TABLE cellpadding="0" cellspacing="0" width="100%" border="0"><TBODY><TR valign="top"><TD><TABLE cellpadding="0" cellspacing="0" width="100%" height="42" border="0" style="height:expression(parentElement.parentElement.parentElement.parentElement.offsetHeight)"><TBODY><TR valign="top"><TD id="msviBrandBanner" bgcolor="FFFFFF"><A href="http://msdn.microsoft.com/"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msdn_masthead_ltr.gif" width="225" height="42" alt="MSDN" title="" border="0"></A></TD></TR></TBODY></TABLE></TD><TD id="msviGlobalSearch" width="100%" bgcolor="#6799FF"><DIV class="msviLSBsform"><FORM id="msviLSBForm" action="http://www.microsoft.com/library/toolbar/3.0/search.aspx" target="_top"><DIV id="msKiev"><INPUT type="hidden" name="View" value="en-us"><INPUT type="hidden" name="charset" value="iso-8859-1"><INPUT id="msviLSBtbox" style="font-style:italic; color:#a1a1a1" onkeydown="if(event.keyCode == 13)searchBoxBlur(&#39;Search Microsoft.com&#39;)" onfocus="searchBoxFocused(&#39;Search Microsoft.com&#39;)" onblur="searchBoxBlur(&#39;Search Microsoft.com&#39;)" type="text" name="qu" value="Search Microsoft.com" autocomplete="off"><SPAN id="msviLSBlogo" class="msviLSBlogo" title="Results by Bing"></SPAN><INPUT id="msviLSBssearch" title="Search Microsoft.com" type="image" name="site" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/Search_icon.gif" align="absmiddle" onclick="trackLSB(&#39;Site&#39;)"></DIV><INPUT id="msviLSBWeb" title="Search the Web" name="sweb" type="submit" value="" onclick="trackLSB(&#39;Web&#39;)" align="absmiddle"></FORM></DIV></TD></TR></TBODY></TABLE><DIV id="msviLocalToolbar"><TABLE cellpadding="0" cellspacing="0" width="100%" height="19" border="0"><TBODY><TR><TD nowrap="" id="msviHomePageLink"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/default.aspx">MSDN Home</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 2, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 2, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/developercenters/">Developer Centers</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 4, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 4, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/library/default.asp">Library</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 6, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 6, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/downloads/">Downloads</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 8, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 8, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/code/">Code Center</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 10, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 10, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/subscriptions/">Subscriptions</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 12, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 12, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/worldwide.aspx">MSDN Worldwide</A></TD><TD width="100%"></TR></TBODY></TABLE></DIV></DIV>
+			<TABLE cellpadding="0" cellspacing="0" border="0" width="100%" dir="LTR">
+				<TBODY><TR valign="top">
+		<TD height="100%" style="overflow-x: hidden" width="181">
+  <TABLE cellpadding="0" cellspacing="0" border="0" width="100%"><TBODY><TR><TD class="mnpQuickSearch" style="background: #CCCCCC; color: #000000" dir="LTR"><FORM style="margin: 0px" action="http://msdn.microsoft.com/msdn-online/shared/components/mscomsearch30.aspx"><NOBR><FONT color="#000000">Search for</FONT><BR><INPUT class="mnpSearchBox" type="text" id="qu" name="qu" maxlength="255" style="width: 165px"><BR><TABLE cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 2px"><TBODY><TR><TD width="100%" class="mnpQuickSearch" style="padding: 0px"><SELECT class="mnpSearchScopes" style="width: 137px" name="SearchScope"><OPTION value="1">All of MSDN</OPTION><OPTION value="2">All Library</OPTION><OPTION value="3">Code &amp; Downloads</OPTION><OPTION value="7" selected="">MSDN Magazine</OPTION><OPTION value="5">Support &amp; KB</OPTION></SELECT></TD><TD><INPUT class="mnpSearchButton" type="submit" value="Go"><BR></TD></TR></TBODY></TABLE><A href="http://search.microsoft.com/search/search.aspx?View=msdn&st=a" style="color: #000000" onmouseover="style.color=&#39;#0033CC&#39;;" onmouseout="style.color=&#39;#000000&#39;;">Advanced Search</A></NOBR></FORM></TD></TR></TBODY></TABLE>
+  <DIV id="mnpMenuTop" class="mnpMenuTop" style="overflow-x: hidden; width: 181px" url="/msj/0999/journal/journal.aspx" dir="LTR" parent="/msj/0999/default.aspx"><DIV class="mnpInherit"><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/default.aspx">MSJ Home</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #999999; width: 153px; overflow-x: hidden" menu="m23cf375bd0846ad9ec3680ce4de2b9a2"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/0999/default.aspx">September 1999</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/find/default.aspx">Search</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden" menu="m3fd9abd6d4e6b1d47da1677743a69def"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/code.aspx">Source Code</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden" menu="m0e5c80cdf8bdd73274e5171bd96f4ed9"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/backissues.aspx">Back Issues</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/Subscribe.aspx">Subscribe</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/service.aspx">Reader Services</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/write.aspx">Write to Us</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/default.aspx">MSDN Magazine</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/mind/default.asp">MIND Archive</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://msdn.microsoft.com/newsgroups/topic.aspx?url=/msdn-files/028/201/133/topic.xml">Magazine Newsgroup</A></DIV><DIV class="mnpMenuBorder" style="width: 180px; margin-bottom: 0px"></DIV></DIV></DIV>
+  <DIV class="mnpAds" style="width: 181px; height: 100%; padding-bottom: 20px; background: #F1F1F1; border-style: solid; border-color: #999999; border-width: 0px 1px 0px 0px">
+    <CENTER><SCRIPT type="text/javascript" src=""></SCRIPT></CENTER>
+  </DIV>
+</TD>
+          <TD width="100%" dir="LTR">
+        <!--NOINDEX_STOP-->
+
+<TABLE class="downleveleyebrow" width="100%" height="24px"><TBODY><TR><TD>
+<SPAN id="ctl00_eb" style="COLOR: #003399;width: 100%;height: 24px;padding-top:4px;padding-left:14px;"><A href="http://www.microsoft.com/msj/0999/journal/isapi/gomsdn.asp?TARGET=/">MSDN Home</A>&nbsp;&gt;&nbsp;<A href="http://www.microsoft.com/msj/">MSJ</A>&nbsp;&gt;&nbsp;<A href="http://www.microsoft.com/msj/0999/default.aspx">September 1999</A></SPAN>
+
+</TD></TR></TBODY></TABLE>
+
+	<!----------------->
+	<!--BEGIN_CONTENT-->
+	<!----------------->
+
+<!--TOOLBAR_START-->
+
+<!--TOOLBAR_EXEMPT-->
+
+<!--TOOLBAR_END-->
+
+<CENTER><FONT size="3" color="ff0080" face="verdana, arial, helv"><B><A href="http://www.microsoft.com/msj/0999/default.aspx">September     1999</A></B></FONT></CENTER><P>
+</P><CENTER><A href="http://www.microsoft.com/msj/default.asp"><IMG border="0" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msjheader02.gif" width="399" height="33" alt="Microsoft Systems Journal Homepage"></A></CENTER>
+<HR color="000080" width="300">
+
+
+<CENTER>
+<TABLE width="380">
+<TBODY><TR><TD>
+<CENTER>
+<FONT size="5" face="verdana, arial, helvetica" color="000080"><B>Keeping an Eye on
+Your NTFS Drives:
+the Windows 2000 Change Journal Explained
+
+</B></FONT></CENTER>
+
+
+ <P></P></TD></TR></TBODY></TABLE>
+</CENTER>
+<CENTER><FONT>Jeffrey Cooperstein and Jeffrey Richter
+
+</FONT></CENTER><P>
+</P><CENTER>
+<TABLE width="300"><TBODY><TR><TD><FONT size="2" color="008080" face="verdana, arial, helvetica"><B><CENTER>The Windows 2000 Change Journal is a database that contains a list of every change made to the files or directories on an NTFS 5.0 volume. Each volume has its own Change Journal database that contains records reflecting the changes occurring to that volume's files and directories.</CENTER></B></FONT></TD></TR></TBODY></TABLE></CENTER>
+<P>
+</P><CENTER>
+<TABLE border="0" width="380" bgcolor="cccccc"><TBODY><TR><TD align="center">
+<FONT size="1" face="verdana, arial, helv" color="000000"><B>This article assumes you're familiar with Windows NT, Platform SDK</B></FONT></TD></TR></TBODY></TABLE></CENTER>
+<P>
+
+</P><CENTER><FONT size="2">Code for this article: <A href="http://download.microsoft.com/download/0/6/7/0678184e-905e-4783-9511-d4dca1f492b4/ChangeJournal.exe">ChangeJournal.exe</A> (4KB)</FONT></CENTER>
+
+
+<CENTER>
+<TABLE border="0" width="380"><TBODY><TR><TD>
+
+
+<CENTER><FONT size="2">
+<I>Jeffrey Cooperstein is an author, trainer, and Windows programming consultant. He can be reached at <A href="http://www.cooperstein.com/">http://www.cooperstein.com</A>. Jeffrey Richter wrote </I>Advanced Windows, Third Edition<I> (Microsoft Press, 1997) and </I>Windows 95: A Developer's Guide<I> (M&amp;T Books, 1995). Jeff is a consultant and teaches Win32 programming courses (<A href="http://www.solsem.com/">http://www.solsem.com</A>). He can be reached at <A href="http://www.jeffreyrichter.com/">http://www.JeffreyRichter.com</A>.<BR></I></FONT></CENTER>
+</TD></TR></TBODY></TABLE></CENTER><BR>
+
+<CENTER>
+<TABLE width="380"><TBODY><TR><TD>
+
+<FONT size="4" face="verdana, arial, helv" color="770000"><B>Windows  2000 </B></FONT><FONT size="2">  is packed with new and exciting technologies, and the Change Journal is one of them. The Change Journal
+is going to open up a whole new world of features in future Windows-based applications, and it will provide the opportunity for dramatic performance improvements in many of today's applications. Everything from enterprise-class applications to your personal virus scanner will make use of the Change Journal.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">We will explain the technology, its implementation, and introduce the API used to access the Change Journal. Our sample application will get you started with examining the features of the Change Journal. In a future article, we'll cover all the subtleties of programming the Change Journal and provide a full-fledged Change Journal sample that can be used as a template for your own application.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">In simple terms, the Change Journal is a database that contains a list of every change made to the files or directories on an NTFS 5.0 volume. When any file or directory is written to, NTFS guarantees that a record will be added to the Change Journal. Each volume has its own Change Journal database that contains records reflecting the changes occurring to that volume's files and directories. If you have more than one NTFS volume, each one will have its own journal. Of course, FAT volumes do not maintain a Change Journal.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The Change Journal is fairly easy to use. The Change Journal will be used most often by services, but there is nothing to prevent normal applications from reading it. It is accessed though documented functions, making it available to any application running on Windows 2000.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Any number of applications or services can have simultaneous access to this information. A backup service can read the journal to find out what files need to be backed up. At the same time, a security program might be watching to make sure no one tampers with the files in the system directory. On Windows NT 4.0, these tasks were accomplished with functions like FindFirstChangeNotification and ReadDirectoryChangesW. Anyone who has attempted to use these functions knows how limited they can be. The Change Journal provides a new level of detailed information for applications that need to monitor changes on an NTFS volume.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The Change Journal can also reduce the need for applications to walk the entire hard drive (full rescans). Many utilities rely on full rescans to occasionally gather up-to-date information. Now an application can do a full rescan just once and then rely on the Change Journal to tell it exactly what files or directories have changed and when.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Implementation Details
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The Change Journal is actually a special file on an NTFS volume. The system hides this file so that you cannot view it using familiar tools like the Explorer and the CMD shell. Whenever the file system makes a change to a file or directory, it appends a record to the journal. The record identifies the file name, the time of the change, and what type of change occurred. The actual data that changed is not kept in the journal, so don't get your hopes up about being able to roll back changes—this keeps the size of the journal as small as possible.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The Change Journal is initially an empty file on the disk volume. As changes occur to the volume, records are appended to the end of this
+file. Each record is assigned a 64-bit identifier called an
+Update Sequence Number (USN). When Microsoft was first developing the Change Journal, it was internally called the USN Journal. That's why the structures and defines in the winioctl.h header file refer to the Change Journal as the USN Journal. When a record is added to the journal, it is assigned a USN. USNs are generated in increasing order, so that you can compare USNs to find out the order of events (lower USNs are older events). USNs are not contiguous, so it's possible that the first USN record might be 0 and the second USN record might be 128.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The Change Journal always writes new records to the end of the file, so the implementors chose to use the file offset of a record as its USN. This makes querying the journal fast since the system can simply seek the desired record using the USN. Since records include a file name they vary in length, so you'll notice varying distances between USNs of adjacent records. A typical record might be 100 bytes long. For performance, the system writes to the journal in 4KB blocks that contain groups of 30 or 40 records (as defined by USN_PAGE_SIZE in winioctl.h). The system will not allow a single record to span the boundaries of a page, so you'll sometimes see a gap in USNs where empty space was used to pad the end of a block.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">On an NTFS volume, file and directory information is stored in the Master File Table (MFT). Each record in the MFT describes a file or directory's name, location, size, attributes, and more. With NTFS 5.0, each file's MFT entry records the Last USN generated for that file. This is also true for directories. As records are appended to the Change Journal, the file system updates the MFT's Last USN value for the changed file or directory. In our next article, we'll show how this information is useful with a technique that can quickly scan the MFT for all files that changed over a range of time.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">If the journal file gets too big (as defined by the MaximumSize parameter), the system will purge the oldest records at the start of the file. Traditionally, truncating data at the start of a file requires lots of file I/O. The end of the file must be copied to a new location, which is a time-consuming task. Fortunately, NTFS 5.0 supports sparse files, a mechanism that allows unneeded portions of a file to be deleted while retaining the logical offsets of the remaining data. The Change Journal is a sparse file, allowing the purging of records without any performance penalty. In addition, remaining records can still be quickly located using the USN since they remain at the same logical offset. For more information on sparse files see the article "<A href="http://www.microsoft.com/msj/1198/ntfs/ntfs.htm">A File System for the 21st Century: Previewing the Windows NT 5.0 File System</A>" by Jeffrey Richter and Luis Felipe Cabrera in the November 1998 issue of <I>MSJ</I>.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">A Change Journal can be disabled on a given volume, preventing the system from logging file and directory changes. By default, an NTFS volume will have its Change Journal disabled. Some application must explicitly activate the journal. Also note that any application can activate or disable the volume's journal at any time. An application must be able to gracefully handle the situation when a journal is disabled while the first application is still using the journal. We'll describe how applications can handle this in a future article. When an application disables the Change Journal for a volume, the system will also purge any existing records to prevent recovery of the information. This prevents applications from inadvertently reading unreliable records. The journal will only contain records as long as the journal is continuously active.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">In the current implementation of the Change Journal, the journal file on disk is actually deleted when the Change Journal is disabled. A new journal file is created the next time an application activates the Change Journal. Although applications should not care about this implementation detail, it is why the terms "creating" and "deleting" the journal are used in the Platform SDK. We prefer to think of a Change Journal as being active or disabled since it describes the Change Journal as a service provided by the system. Terms such as "create" and "delete" are useful when trying to understand the implementation of the Change Journal as a file on disk. We've found that thinking about the Change Journal as active or disabled helps in understanding how it is used by applications.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Change Journals are assigned a unique 64-bit Journal ID (not to be confused with a USN number). The system will change a journal's ID when there is a chance that file or directory changes were not logged in the journal. For example, if a volume's journal is disabled, then activated, the Journal ID will be changed. As long as the Journal ID does not change, applications can be assured that the Change Journal has recorded every file and directory change. Even if the system is rebooted, the Journal ID will typically not need to change. In other words, if the Journal ID does not change after a reboot, the system has recorded all file and directory changes throughout the shutdown and boot sequence. Observant developers may discover that Journal IDs are actually standard 64-bit UTC time stamps generated from the system time. Applications should not derive any meaning from this (and remember, Microsoft may change how Journal IDs are generated before Windows 2000 ships).
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Windows NT 4.0 Service Pack 4 provides limited access to NTFS 5.0 volumes. Unfortunately, the Change Journal cannot be accessed and changes to the volume will not be recorded. On dual boot systems, a boot to Windows NT 4.0 will cause all Journal IDs to be changed when Windows 2000 is restarted. Again, this allows applications running on Windows 2000 to know that they may have missed some file or directory changes.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Usage
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">All features of the Change Journal are accessed via the DeviceIoControl function.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> BOOL DeviceIoControl(
+   HANDLE hDevice,          // handle to device/file/
+                            // directory
+   DWORD dwIoControlCode,   // control code of operation
+                            // to perform
+   LPVOID lpInBuffer,       // pointer to buffer of
+                            // input data
+   DWORD nInBufferSize,     // size, in bytes, of input
+                            // buffer
+   LPVOID lpOutBuffer,      // pointer to buffer for
+                            // output data
+   DWORD nOutBufferSize,    // size, in bytes, of output
+                            // buffer
+   LPDWORD lpBytesReturned, // receives number of bytes
+                            // written to lpOutBuffer
+   LPOVERLAPPED lpOverlapped// for asynchronous
+                            // operation
+ );</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">The first parameter is a handle to a file, directory, or device obtained by calling CreateFile. DeviceIoControl is a common method used to pass device-specific requests to the driver managing hDevice. The parameter dwIoControlCode specifies what operation to perform and defines the structure of input/output buffers. If CreateFile is called with FILE_FLAG_OVERLAPPED, DeviceIoControl will operate asynchronously in the same way as ReadFile/WriteFile.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The NTFS driver manages the Change Journal. To communicate with a volume about its Change Journal, call DeviceIoControl with a handle to the volume. Call CreateFile as shown to get a volume's handle:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> // Get a handle to access the Change Journal on the
+ // 'C' volume
+ HANDLE hcj = CreateFile("\\\\.\\C:", GENERIC_READ,
+    FILE_SHARE_READ | FILE_SHARE_WRITE,
+    NULL, OPEN_EXISTING, 0, NULL);</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">Access to this volume handle is restricted to the system and members of the Administrators group, so typical users will not be able to run Change Journal applications. This means that these applications will most likely be services or utilities run by administrators.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The control codes that are supported for Change Journals are documented in the Platform SDK. They can be located in the index, but are not listed directly in the documentation for DeviceIoControl. The best way to locate the documentation is to search for "Change Journal."<BR>
+
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Change Journal Statistics
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">An application can query a volume for Change Journal statistics by calling DeviceIoControl and passing the FSCTL_QUERY_USN_JOURNAL code. If DeviceIoControl returns TRUE, the USN_JOURNAL_DATA structure shown in <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig1');"><B>Figure 1</B></A> is filled in. If DeviceIoControl returns FALSE, GetLastError may return one of the codes shown in <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig2');"><B>Figure 2</B></A>.<BR>
+
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Change Journal Records
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Let's take a closer look at the information stored in a single Change Journal record.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Applications deal with records using the USN_RECORD structure. This is not the on-disk structure of a record, but it contains all of the information that is available from a single record.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> // Version 2.0 USN_RECORD structure
+ typedef struct {
+     DWORD         RecordLength;
+     WORD          MajorVersion;
+     WORD          MinorVersion;
+     DWORDLONG     FileReferenceNumber;
+     DWORDLONG     ParentFileReferenceNumber;
+     USN Usn;
+     LARGE_INTEGER TimeStamp;
+     DWORD         Reason;
+     DWORD         SourceInfo;
+     DWORD         SecurityId;
+     DWORD         FileAttributes;
+     WORD          FileNameLength;
+     WORD          FileNameOffset;
+     WCHAR         FileName[1];
+ } USN_RECORD, *PUSN_RECORD;</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">Applications will never have to fill in this structure. Instead, the system populates an output buffer with USN_
+RECORDs when an application reads from the journal.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">RecordLength is the total length of the record, in bytes, including the file name. Multiple records will be provided in an output buffer, so RecordLength should be used to calculate the location of the next record.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> PUSN_RECORD pNext;
+ pNext = (PUSN_RECORD) (((PBYTE) pRecord) +
+     pRecord-&gt;RecordLength);</FONT></PRE>
+</TD></TR></TBODY></TABLE></CENTER>
+<P>
+</P><CENTER><TABLE width="380"><TBODY><TR><TD>
+<CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Major Version and MinorVersion
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">It is easy to ignore the importance of version checking, but even easier to make a careless error that will infuriate users. Anyone who installed software on Windows NT 4.0 and received the message "Requires Windows NT 3.5 or greater" will testify to the disasters caused by the misuse of the GetVersion function! GetVersionEx was added to help clarify the versioning mess for developers, but even that was not enough. Windows 2000 has added VerifyVersionInfo to provide an even safer method for what should be a simple procedure.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">For the sake of this article, we don't really care about what version of Windows is running, but the Change Journal has its own version control. There aren't any fancy functions to help you out, so it's all the more important that you take the time to understand this information. (We only mention VerifyVersionInfo as a public service announcement. If you want more information, see the current Platform SDK documentation.)
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The initial release of Windows 2000 is expected to use version 2.0 Change Journal records (MajorVersion is 2, MinorVersion is 0). As we are writing this article, the Platform SDK contains only the version 2.0 definition of the USN_RECORD structure (defined in winioctl.h). Your application is responsible for knowing the version of the structure that was used at compile time. Winioctl.h does not currently provide any defined constants that have this information, so the best bet is to look in this header file for comments. For safety, it is a good idea to create your own compile-time constants and perform a runtime check to verify that newer structure definitions were not inadvertently included.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> #include &lt;winioctl.h&gt;
+ #define CJ_MAJOR_VERSION_EXPECTED       2
+ #define CJ_MINOR_VERSION_EXPECTED       0
+ #define CJ_SIZEOF_USN_RECORD_EXPECTED  64
+ void RunTimeSanityCheck() {
+    if (sizeof(USN_RECORD) !=
+        CJ_SIZEOF_USN_RECORD_EXPECTED) {
+       // YIKES! Someone probably updated winioctl.h
+       // or changed the default structure packing.
+       // Any code placed here will run if we are
+       // compiling with a different size USN_RECORD
+       // than when we wrote this module. We'd better
+       // take a look at it!
+    }
+ }</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">At runtime, applications examine the MajorVersion and MinorVersion of journal records to determine compatibility with the information. If a change in MajorVersion is detected, the USN_RECORD structure has changed dramatically and the only members you can still use are Record-
+Length, MajorVersion, and MinorVersion. Unfortunately, the system does not provide any ability to negotiate a compatible version at runtime. In other words, if the system fills an output buffer with records using a different MajorVersion than expected, the information cannot be used at all! Change Journal records with a MajorVersion of 1 existed on earlier betas of Windows 2000, but they are no longer supported.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">If a change in the MinorVersion is detected, new members have been added after the penultimate member of the older structure. Applications can assume that USN_
+RECORD structure members are valid up to the penultimate member of the older version. For example, consider the hypothetical version 2.3 USN_RECORD structure shown in <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig3');"><B>Figure 3</B></A>. If an application is compiled with today's version 2.0 USN_RECORD, it can still examine a memory buffer filled with the hypothetical version 2.3 USN_RECORD. It can reference all the members up to and including the FileNameOffset member. (We'll discuss the proper way to access FileName later.) On the other hand, imagine an application is compiled using version 2.3 USN_RECORD. If an output buffer has version 2.1 records, the version 2.3 USN_RECORD structure can still be used for members up to and including the ExtraInfo1 member (the penultimate member of version 2.1).
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Even though the record version information is provided in every record, an application only has to check it once each time it is started. The version number will not vary between volumes on the same physical machine, and will only change during a system reboot after a service pack is installed with new Change Journal software.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Does this sound like a lot of work? Maybe, but consider the consequences if you incorrectly read a buffer provided by the system. Since most likely your software will be running as a service, an access violation will bring down
+the service! Fortunately, only version 2.0 structures currently exist.<BR>
+
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> FileNameLength, FileNameOffset, and FileName
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">A journal record describes a change to a particular file or directory on the volume. For convenience, "full path of a record" refers to the full path of the file or directory whose change is described by the record. The full path of a record is not stored in the record itself. To save space, the file or directory's name is stored without path information. Three members of USN_RECORD provide access to this name (see <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig4');"><B>Figure 4</B></A>).
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Here's the proper method to copy the name from a USN_RECORD to another buffer so that you'll have a zero-terminated string to work with:
+<PRE><FONT size="1"> WCHAR szName[MAX_PATH];
+ CopyMemory(szName,
+     ((PBYTE) pRecord) + pRecord-&gt;FileNameOffset,
+      pRecord-&gt;FileNameLength);
+ // Let's zero-terminate it
+ szName[pRecord-&gt;FileNameLength/sizeof(WCHAR)] = 0;
+</FONT></PRE>
+<P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> FileReferenceNumber and ParentFileReferenceNumber
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The file or directory name is pretty useless without knowing what directory it was found in. ParentFileReferenceNumber specifies this directory. A File Reference Number (FRN) is a 64-bit ID that uniquely identifies any file or directory on an NTFS volume. Here's what we want to do to find the full path of the record (assuming szName already contains the file or directory name of the record):
+</FONT></FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> TCHAR szFullPath[MAX_PATH];
+ // Fill in the path of the parent directory
+ PathFromParentFRN(pRecord-&gt;ParentFileReferenceNumber,
+                   szFullPath);
+
+ // Append name to path using the Win32 function PathAppend
+ PathAppend(szFullPath, szName);</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">Unfortunately, the function PathFromParentFRN does not exist. In fact, there is no currently exposed API that directly converts a FRN to a full path. A large portion of our next article will be devoted to doing just this.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">You may now be wondering about the FileReferenceNumber member. If we could convert this FRN to a full path, it would be the full path of the record we are trying to find (and we would never need to discuss FileNameOffset, FileNameLength, or ParentFileReferenceNumber). It turns out that finding the full path from a directory FRN is much easier than finding the full path from a file FRN. The FileReferenceNumber may be either a file or directory FRN (depending on whether the record describes a change to a file or directory), but the ParentFileReferenceNumber will always be a directory FRN. Because of this, the easiest way to find the full path of a record is to examine the ParentFileReferenceNumber and append the name using the FileNameOffset and FileNameLength members.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Usn, TimeStamp, and Reason
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">As you might guess, the Usn member tells you the USN of the record. TimeStamp is a standard UTC time stamp of this record, in 64-bit format. The Reason member tells you what sorts of changes have occurred to the file or directory. <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig5');"><B>Figure 5</B></A> shows the types of changes (reason codes) that generate entries in the Change Journal. The Reason member may have one or more of the reason codes set. To interpret this member, let's go over how the system decides to write a record to the journal.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The system keeps track of a Reason variable for every open file. When the system first opens a file, it sets the Reason variable to zero. No record is added to the journal when a file is opened, even if it is opened with write access. If a change actually does occur, the system checks whether the reason code is already marked in the Reason variable. If this is a new reason code, the code bit is set in the Reason variable and a record is added to the Change Journal (the Reason variable is copied to the Reason member of the record). It is possible for more than one application to be modifying a file or directory, and the Reason variable will accumulate the reason codes for all changes to the file. The Reason variable continues to accumulate the list of change reason bits until all handles to the file are closed. At that point, a final record is added to the Change Journal with the accumulated reason
+codes and the USN_REA-SON_CLOSE code. <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig6');"><B>Figure 6</B></A> illustrates this process.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">It is possible to tell the
+system to clear the Reason variable of an open file using the FSCTL_WRITE_USN_
+CLOSE_RECORD code. The DeviceIoControl function is called using the handle of an open file (not the volume handle as with other journal functions), and a close record will be generated for that
+file immediately.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> DWORD cb;
+ USN usn;
+ // Force a close record for
+ // the open file specified
+ // by 'hFile'
+ DeviceIoControl(hFile, FSCTL_WRITE_USN_CLOSE_RECORD,
+ NULL, 0, &amp;usn, sizeof(usn), &amp;cb, NULL);</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">There is no input buffer, and the output buffer will be filled with sizeof(USN) bytes of data representing the USN of the generated close record. When this is done, the system immediately writes a record to the journal with the accumulated reason codes and the USN_REASON_CLOSE code, but it does not actually close the file. The Reason variable is reset to zero, and it will start accumulating changes all over again. If the Reason variable is zero when FSCTL_WRITE_USN_CLOSE_RECORD is used, it will still generate a journal record; this means you will see a record with only the USN_REASON_CLOSE code.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The only reason code that does not follow the previous rules is the USN_REASON_RENAME_OLD_NAME code. When a file is renamed, two records are added to the journal. First, the USN_REASON_RENAME_OLD_NAME code is added to the Reason variable, and a record is created. The members FileNameOffset and FileNameLength will specify the original name, and ParentFileReferenceNumber will specify the original directory. (Moving a file or directory to another location on the same volume is considered a rename.)
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Next, the USN_REASON_RENAME_OLD_NAME flag is removed from the Reason variable and replaced with USN_REASON_RENAME_NEW_NAME. A second record is generated with the new file name and new ParentFileReferenceNumber. Up through the next close record for the file or directory, the Reason member will continue to have the USN_REASON_RENAME_NEW_NAME code, but not the USN_REASON_RENAME_OLD_NAME code. The FileReferenceNumber of a file or directory will not change if it is renamed or moved to another location on the same volume.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Suppose you rename and move the file D:\dir1\before.txt to D:\dir2\after.txt with the command:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> move D:\dir1\before.txt D:\dir2\after.txt</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">You'll see the following three records in the journal:</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"><B>
+FileNameOffset/  Parent FRN  Reason
+Length           points to</B>
+before.txt          D:\dir1       Rename Old Name
+after.txt           D:\dir2       Rename New Name
+after.txt           D:\dir2       Rename New Name | Close</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">What happens if you rename a directory that has hundreds of files and subdirectories? Say you rename D:\Program Files to D:\Pfiles. The system will only generate the following three records:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"><B>
+FileNameOffset/  Parent FRN  Reason
+Length           points to</B>
+Program Files       D:\           Rename Old Name
+Pfiles              D:\           Rename New Name
+Pfiles              D:\           Rename New Name | Close</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">There is no need to create records for all the child files or directories since this information can be inferred by following the ParentFileReferenceNumber. For just this reason, you'll find that maintaining a database of files and directories is easier if entries are stored as a name and parent ID. The main drawback occurs when you try to monitor a specific file; you need to monitor all of its parent directories up to the root directory on the volume or you might miss a move or rename.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">When a directory is deleted, you do not have to worry about inferring what child files or directories are affected. The system will not allow a directory to be deleted if it has any children. If you delete a whole tree in Explorer, you'll see delete records for all the children before the delete record for any directory.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">It is important to understand that the Change Journal does not provide a superset of the Change Notification functionality provided through functions like FindFirstChangeNotification or ReadDirectoryChangesW. The Change Journal is designed to report all explicit actions on files or directories. Not all side effects are reported in the journal. For example, if an application calls the SetFileTime function, the Change Journal will report a Basic Information Change. However, if an application writes to a file, the Change Journal reports only the Data Overwrite (the explicit action), but not the time stamp change (the side effect). In a similar scenario, when a file or directory is created, the change to the parent directory's time stamp is not reported in the Change Journal. The Change Notification APIs, on the other hand, are designed to report all changes that they are aware of, even if it is the side effect of some other action.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> SourceInfo, Securityld, and FileAttributes
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">If the SourceInfo member is not zero, it will specify a reason that the file is changing (as opposed to the Reason member, which indicates the reason, or type of change, that caused a record to be generated). The distinction between Reason and SourceInfo is subtle. Consider the statement, "The virus checker removed a macro virus from your document." The virus checker probably opened the file and then overwrote the infected portion. This generates a record with the USN_REASON_DATA_OVERWRITE code. The record exists because of a Data Overwrite (Reason), but
+this was done to Remove a Virus (SourceInfo). An application can use this information to decide what to do about a file or directory change. If the virus program is trusted to leave the document contents intact, the change can probably be ignored.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">This information does not come from the system. It is provided by the application that opened the file. (The discussion of FSCTL_MARK_HANDLE in our next article will explain how an application provides this information). Currently, there are only three flags supported (see <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig7');"><B>Figure 7</B></A>).<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">SecurityId is an identifier that the system uses to identify the security descriptor of a file. It is used along with the FSCTL_SECURITY_ID_CHECK device I/O control code.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">FileAttributes is the same value that would be returned by calling GetFileAttributes for the file or directory. It is useful to have this information because you can easily determine if a USN_RECORD refers to a file or directory by looking for the FILE_ATTRIBUTE_DIRECTORY flag.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Reading from the Change Journal
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">We're finally ready to read records from the journal. First, we need two things: the volume handle and a valid USN_JOURNAL_DATA structure retrieved by using the FSCTL_QUERY_USN_JOURNAL code. Let's say these are in the following variables:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> HANDLE hcj;
+ USN_JOURNAL_DATA ujd;</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">To read some records, we call DeviceIoControl with the FSCTL_READ_USN_JOURNAL code. The input buffer must point to the following structure:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> typedef struct {
+     USN StartUsn;
+     DWORD ReasonMask;
+     DWORD ReturnOnlyOnClose;
+     DWORDLONG Timeout;
+     DWORDLONG BytesToWaitFor;
+     DWORDLONG UsnJournalID;
+ } READ_USN_JOURNAL_DATA, *PREAD_USN_JOURNAL_DATA;</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">Set StartUsn to the USN of the first record you want to read. It must be either zero, the USN of an existing record in the journal, or the USN of the next record that will be written to the journal. If StartUsn is zero, the system will start reading from the first record available. If StartUsn is the USN of an existing record, the system will start reading at that location. If it's the USN of the next record that will be written (such as ujd.NextUsn), the system waits for more data to appear in the journal, as
+specified by the Timeout/BytesToWaitFor members we'll describe later.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Since there is no way to know if the record identified by StartUsn will match the filter criteria (see our discussion of ReasonMask/ReturnOnlyOnClose), the output buffer may not contain that specific record. Applications must examine the Usn member of returned USN_
+RECORD structures to find out the USNs of the records actually returned.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Since the system writes to the journal in 4KB blocks (USN_PAGE_SIZE), all 4KB aligned values from ujd.FirstUsn to ujd.NextUsn are guaranteed to be the USN of a record in the journal. Therefore, these are valid values for StartUsn. Other than that, the only way to get a valid
+value for StartUsn is through Change Journal APIs that return USNs.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> ReasonMask and ReturnOnlyOnClose
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The system will only return journal records that have at least one of the reason codes specified by ReasonMask. In other words, you can filter the amount of information you need to process by specifying only the reason codes you care about. Records that do not contain the specified codes are not returned in the output buffer.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The system uses the following logic to determine whether to return a record:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> // This function will return
+ // TRUE if it meets the filter
+ // criteria specified by the
+ // ReasonMask member of the
+ // READ_USN_JOURNAL_DATA structure
+ BOOL ReturnRecord(PREAD_USN_JOURNAL_DATA prujd,
+    PUSN_RECORD precord) {
+
+    if ((prujd-&gt;ReasonMask &amp; precord-&gt;Reason) != 0)
+       return TRUE; // The user wants this record
+    return FALSE; // Skip it
+ }</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">ReturnOnlyOnClose is another member that allows you to filter which records will be put in the output buffer. If this value is nonzero, only records with the USN_REASON_
+CLOSE code will be returned. This works in tandem with the ReasonMask member (both conditions must be satisfied). To retrieve just the close records, set ReasonMask to reason codes of interest, and ReturnOnlyOnClose to 1. The system will return just close records, and only close records with one or more of the reason codes specified by ReasonMask. The ReturnRecord function really looks like <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig8');"><B>Figure 8</B></A>.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> Timeout and BytesToWaitFor
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Timeout is a value for use with the BytesToWaitFor member. It does not guarantee that DeviceIoControl will return after the specified timeout, but rather it specifies how often the system should check whether requested data is available. This member is not like other conventional Win32¨ timeout parameters that use milliseconds. Instead, this member uses the same resolution as the Win32 FILETIME structure (100-nanosecond intervals—one second has ten million intervals). A value of zero specifies no timeout (or infinite). A fixed timeout is specified using negative values (even though this is an unsigned variable). For example, a timeout of 25 seconds can be expressed as (DWORDLONG)(-2500000000). The Timeout member is ignored if DeviceIoControl is called with an asynchronous request.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Don't confuse the BytesToWaitFor member with the output buffer size or the count of bytes returned by DeviceIoControl. If this member is set to zero, the function will return immediately, even if it found no matching records
+in the journal. If this member is nonzero, the system will not return until it has found at least one record to return. BytesToWaitFor specifies how often the system will recheck the journal to see whether any matching records have been created. For example, if you specify 16384, the system will only examine the journal for new records after a new 16KB block of raw data has been added. This prevents a process from using too many resources when many records are being added. If the Timeout and BytesToWaitFor members are both nonzero, the system also checks records if the timeout period expires before the journal has grown by the specified number of bytes.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">If BytesToWaitFor is nonzero, but records are found that match the user's request, the DeviceIoControl function will return immediately; that is, the BytesToWaitFor and TimeOut members only have an effect when there are not any existing records that fulfill the ReasonMask/ReturnOnlyOnClose requirements.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> UsnJournalID
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The UsnJournalID should be set to ujd.UsnJournalID. If the Journal ID of the active journal has been changed by the system, the call to DeviceIoControl will fail. This protects applications from reading journal records if there is a chance that some data is missing.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The purpose of FSCTL_READ_USN_JOURNAL is to fill the output buffer with an array of zero or more records that match the criteria specified by ReasonMask and ReturnOnClose. There is no way to know how many matching records will be found, so the system will just fill your output buffer with as many as possible. The function's behavior depends on the number of records found, the size of the output buffer, and the BytesToWaitFor and Timeout members. The output buffer specified by lpOutBuffer and nOutBufferSize must be at least sizeof(USN) bytes long, and aligned on a 32-bit boundary; otherwise DeviceIoControl will fail. If DeviceIoControl succeeds, lpOutBuffer will be filled in with a USN in the first sizeof(USN) bytes, followed by an array of zero or more records. See <B>Figure 9</B> for the layout of the output buffer from the call
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1"> DeviceIOControl(hcj, FSCTL_READ_USN_JOURNAL, &amp;InBuf,
+     sizeof(InBuf), pOut, cbOut, &amp;cbReturned, NULL);</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The USN returned at the start of the buffer is the USN of the next record following the last record returned. This is used to walk journal records without knowing exactly how much space is required. Use this USN as StartUsn on the next call to DeviceIoControl with the FSCTL_READ_USN_
+JOURNAL code. <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig10');"><B>Figure 10</B></A>     shows how to get all the data between two USNs, as well as how to walk the records in the output buffer.
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE>
+<TBODY><TR>
+<TD bgcolor="ffffff">
+<IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/journalfig09.gif" width="330" height="275" alt="Figure 9  Output Buffer Data"></TD></TR>
+<TR>
+<TD>
+<IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4"><FONT size="1" face="verdana, arial, helv"><B>Figure 9  Output Buffer Data</B>
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+</P><CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+<FONT size="2"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The code in <A target="_self" href="javascript:OpenUrl('journaltextfigs.htm#fig10');"><B>Figure 10</B></A>      should be used to read records that are known to exist in the journal. The usnStart and usnEnd parameters should be between or equal to the values StartUsn and NextUsn determined by FSCTL_QUERY_
+USN_JOURNAL.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> The Sample Application
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The sample application CJDump uses everything we've discussed so far to dump the contents of the Change Journal. Since each volume may have its own Change Journal, CJDump just uses the current drive letter when picking a volume to examine. CJDump is a console application, and all the work is done in the main function.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">The first thing that CJDump will do is print the information returned by using the FSCTL_QUERY_USN_JOURNAL code. CJDump will then read all available records from the Change Journal and print the USN, the reason code, and the file name of each record. CJDump can be easily modified to show other members of the USN_RECORD structure, or you can look at them in the debugger.
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">Since you'll want to look at a volume that has an active Change Journal, use a machine that has the Indexing service started. This service lets you perform full text searches across all the documents on your hard drives. It uses the Change Journal on NTFS volumes to monitor when documents are created, deleted, or moved. The Indexing service is available on both Windows 2000 Professional and Windows 2000 Server. For more information, see the Windows 2000 help files.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B> What's Coming Up
+</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">In our next article, we'll build a fully functional Change Journal application. We'll cover the correct programmatic ways to activate or disable the Change Journal, how to receive notification of journal changes, and how to use the information in journal records to maintain an accurate database of the files and directories on disk. In addition, we'll show how an application can persist information to disk when it is shut down and use the Change Journal to find out what's changed the next time it is launched. We'll also show how to convert file reference numbers to full paths by using the Change Journal itself to maintain a database of all the directories on a volume.<BR><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/indent.gif" width="10" height="4">As you can see, the Change Journal provides a powerful new capability for applications to monitor changes to an NTFS volume without resorting to the costly process of full rescans. Applications such as virus checkers, search engines, and backup software can obviously benefit from this information. Perhaps the Change Journal will encourage the development of new classes of applications that we haven't even considered. We hope that this information is useful to you as you come up with your own killer app.<BR>
+<IMG align="right" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/end.gif" width="12" height="12">
+
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+</P><CENTER>
+<TABLE width="382" cellpadding="5"> <TBODY><TR>
+	<TD><!--bgcolor=ccccff-->
+<CENTER><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/msdn2.gif" width="380" height="31"><BR>
+<FONT size="1" face="verdana, arial, helv">
+For related information see: <BR> For related information see the <I>NTFS File System</I> page at <A href="http://www.microsoft.com/isapi/gomsdn.asp?target=/library/sdkdoc/winbase/fsys_538t.htm">http://msdn.microsoft.com/library/sdkdoc/winbase/fsys_538t.htm</A>.<BR>Also check <A href="http://www.microsoft.com/isapi/gomsdn.asp?target=/">http://msdn.microsoft.com</A> for daily updates on developer programs, resources and events.
+</FONT></CENTER></TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<P>
+</P><CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+<FONT size="2">
+<CENTER><FONT size="2" color="#000000"><I>From the September 1999 issue of <A href="http://www.microsoft.com/msj/default.asp">Microsoft Systems Journal</A>.
+ Get it at your local newsstand, or better yet, </I><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/subscribe.asp"><I>subscribe</I></A>.<BR></FONT>
+</CENTER>
+
+</FONT></TD></TR>
+</TBODY></TABLE>
+</CENTER>
+
+
+
+
+
+
+<!--Footer-->
+<CENTER>
+<TABLE>
+<TBODY><TR><TD width="380">
+
+<HR>
+
+<CENTER>
+<FONT size="1" color="000000"><I>© 1999 Microsoft Corporation. All rights reserved.<BR> <A href="http://www.microsoft.com/info/cpyright.htm">Terms of Use</A> &nbsp;&nbsp; &nbsp;  <A href="http://www.microsoft.com/info/privacy.htm">Privacy Policy</A>.<BR></I></FONT><I>
+</I></CENTER><I>
+</I></TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+
+
+
+	<!----------------->
+	<!--END_CONTENT-->
+	<!----------------->
+		
+					</TD>
+		
+				</TR>
+			</TBODY></TABLE>
+		<!--NOINDEX_START-->
+<BR clear="all" style="line-height: 1px; overflow: hidden"><TABLE id="msviFooter" width="100%" cellpadding="0" cellspacing="0"><TBODY><TR valign="bottom"><TD id="msviFooter2" style="filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=&#39;#FFFFFF&#39;, endColorStr=&#39;#669AFF&#39;, gradientType=&#39;1&#39;)"><DIV id="msviLocalFooter"><NOBR><A href="http://go.microsoft.com/?linkid=317027" target="_top">Manage Your Profile</A> |</NOBR><WBR><NOBR><A href="http://www.microsoft.com/legal/" target="_parent">Legal</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=2028439" target="_parent">Contact us</A> |</NOBR><WBR><NOBR><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/flash/" target="_parent">MSDN Flash Newsletter</A></NOBR></DIV><DIV id="msviGlobalFooter"><SPAN dir="ltr">© 2010 Microsoft Corporation. All rights reserved.&nbsp;</SPAN><NOBR><A href="http://support.microsoft.com/contactus/?ws=mscom" target="_parent">Contact Us</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412892" target="_parent">Terms of Use</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412893" target="_parent">Trademarks</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412894" target="_parent">Privacy Statement</A></NOBR></DIV></TD><TD bgcolor="#669AFF" width="105"><IMG src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/text.aspx" width="105" height="29" alt="Microsoft" title="" border="0"></TD></TR></TBODY></TABLE><DIV style="display:none"><SCRIPT type="text/javascript">var gDomain="m.webtrends.com";var gDcsId="dcsjwb9vb00000c932fd0rjc7_5p3t";var gFpc="WT_FPC";if(document.cookie.indexOf(gFpc+"=")==-1){document.write("<SCR"+"IPT TYPE='text/javascript' SRC='"+"http"+(window.location.protocol.indexOf('https:')==0?'s':'')+"://"+gDomain+"/"+gDcsId+"/wtid.js"+"'><\/SCR"+"IPT>");}</SCRIPT><SCRIPT src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/wt.js" type="text/javascript"></SCRIPT><NOSCRIPT></NOSCRIPT></DIV><LAYER visibility="hide"><DIV style="display:none"><IMG alt="" width="0" height="0" border="0" hspace="0" vspace="0" src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/trans_pixel.asp"></DIV></LAYER>
+	
+<SCRIPT src="./Keeping an Eye onYour NTFS Drives the Windows 2000 Change Journal Explained-- MSJ, September 1999_files/broker-config.js"></SCRIPT></BODY></HTML>

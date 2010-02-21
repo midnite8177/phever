@@ -1,0 +1,110 @@
+
+
+function mnpMenuDir()
+{
+	return "LTR";
+}
+
+function mnpMenuCT()
+{
+	
+	return false;
+	
+}
+
+function md0621c1cb57b22ba79465bd75751170e()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('Writing OLTP Apps with Visual Basic, Microsoft Transaction Server, and SQL Server 7.0', '/msj/1099/mtsvb/mtsvb.aspx', '', '', '_S2_Node1_S1_Node1');
+	this.items[n++] = new mnpPage('Introducing the Terminal Services APIs for Windows NT Server and Windows 2000', '/msj/1099/terminal/terminal.aspx', '', '', '_S2_Node1_S1_Node2');
+	this.items[n++] = new mnpPage('Keeping an Eye on Your NTFS Drives, Part II: Building a Change Journal Application', '/msj/1099/journal2/journal2.aspx', '', '', '_S2_Node1_S1_Node3');
+	this.items[n++] = new mnpPage('Editor\'s Note', '/msj/1099/ednote1099.aspx', '', '', '_S2_Node1_S1_Node4');
+	this.items[n++] = new mnpPage('C++ Q&amp;A', '/msj/1099/c/c1099.aspx', '', '', '_S2_Node1_S1_Node5');
+	this.items[n++] = new mnpPage('Bugslayer', '/msj/1099/bugslayer/bugslayer1099.aspx', '', '', '_S2_Node1_S1_Node6');
+	this.items[n++] = new mnpPage('Visual Programmer', '/msj/1099/Visualprog/visualprog1099.aspx', '', '', '_S2_Node1_S1_Node7');
+	this.items[n++] = new mnpPage('Win32', '/msj/1099/win32/win321099.aspx', '', '', '_S2_Node1_S1_Node8');
+}
+
+function m3fd9abd6d4e6b1d47da1677743a69def()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('Source Code', '/msj/code.aspx', '', '', '_S3_Node2_S1_Node1');
+	this.items[n++] = new mnpPage('Code Updates', '/msj/codeupdates.aspx', '', '', '_S3_Node2_S1_Node2');
+}
+
+function m0e5c80cdf8bdd73274e5171bd96f4ed9()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('Back Issues 2000', '/msj/backissues00.aspx', '', 'm254a8ab1fec1c3abe032b83539b0a85a', '_S3_Node3_S1_Node1');
+	this.items[n++] = new mnpPage('Back Issues 1999', '/msj/backissues99.aspx', '', 'm085a11d8d8c493672ca085058be5eee9', '_S3_Node3_S1_Node2');
+	this.items[n++] = new mnpPage('Back Issues 1998', '/msj/backissues98.aspx', '', 'mf5861268d8d1944be2378e16b41c244b', '_S3_Node3_S1_Node3');
+	this.items[n++] = new mnpPage('Back Issues 1997', '/msj/backissues97.aspx', '', 'm767f9468c3e41b3e6b74ae9bd687115a', '_S3_Node3_S1_Node4');
+	this.items[n++] = new mnpPage('Back Issues 1995-1996', '/msj/backissues96.aspx', '', '', '_S3_Node3_S1_Node5');
+	this.items[n++] = new mnpPage('Back Issues 1986-1994', '/msj/backissues86.aspx', '', '', '_S3_Node3_S1_Node6');
+}
+
+function m254a8ab1fec1c3abe032b83539b0a85a()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('February 2000', '/msj/0200/default.aspx', '', '', '_S3_Node3_S1_Node1_S1_Node1');
+	this.items[n++] = new mnpPage('January 2000', '/msj/0100/default.aspx', '', '', '_S3_Node3_S1_Node1_S1_Node2');
+}
+
+function m085a11d8d8c493672ca085058be5eee9()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('December 1999', '/msj/1299/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node1');
+	this.items[n++] = new mnpPage('November 1999', '/msj/1199/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node2');
+	this.items[n++] = new mnpPage('October 1999', '/msj/1099/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node3');
+	this.items[n++] = new mnpPage('September 1999', '/msj/0999/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node4');
+	this.items[n++] = new mnpPage('August 1999', '/msj/0899/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node5');
+	this.items[n++] = new mnpPage('July 1999', '/msj/0799/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node6');
+	this.items[n++] = new mnpPage('June 1999', '/msj/0699/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node7');
+	this.items[n++] = new mnpPage('May 1999', '/msj/0599/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node8');
+	this.items[n++] = new mnpPage('April 1999', '/msj/0499/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node9');
+	this.items[n++] = new mnpPage('March 1999', '/msj/0399/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node10');
+	this.items[n++] = new mnpPage('February 1999', '/msj/0299/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node11');
+	this.items[n++] = new mnpPage('January 1999', '/msj/0199/default.aspx', '', '', '_S3_Node3_S1_Node2_S1_Node12');
+}
+
+function mf5861268d8d1944be2378e16b41c244b()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('December 1998', '/msj/1298/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node1');
+	this.items[n++] = new mnpPage('November 1998', '/msj/1198/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node2');
+	this.items[n++] = new mnpPage('October 1998', '/msj/1098/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node3');
+	this.items[n++] = new mnpPage('September 1998', '/msj/0998/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node4');
+	this.items[n++] = new mnpPage('August 1998', '/msj/0898/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node5');
+	this.items[n++] = new mnpPage('July 1998', '/msj/0798/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node6');
+	this.items[n++] = new mnpPage('June 1998', '/msj/0698/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node7');
+	this.items[n++] = new mnpPage('May 1998', '/msj/0598/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node8');
+	this.items[n++] = new mnpPage('April 1998', '/msj/0498/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node9');
+	this.items[n++] = new mnpPage('March 1998', '/msj/0398/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node10');
+	this.items[n++] = new mnpPage('February 1998', '/msj/0298/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node11');
+	this.items[n++] = new mnpPage('January 1998', '/msj/0198/default.aspx', '', '', '_S3_Node3_S1_Node3_S1_Node12');
+}
+
+function m767f9468c3e41b3e6b74ae9bd687115a()
+{
+	this.items = new Array();
+	var n = 0;
+	this.items[n++] = new mnpPage('December 1997', '/msj/1297/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node1');
+	this.items[n++] = new mnpPage('November 1997', '/msj/1197/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node2');
+	this.items[n++] = new mnpPage('October 1997', '/msj/1097/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node3');
+	this.items[n++] = new mnpPage('September 1997', '/msj/0997/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node4');
+	this.items[n++] = new mnpPage('August 1997', '/msj/0897/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node5');
+	this.items[n++] = new mnpPage('July 1997', '/msj/0797/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node6');
+	this.items[n++] = new mnpPage('June 1997', '/msj/0697/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node7');
+	this.items[n++] = new mnpPage('May 1997', '/msj/0597/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node8');
+	this.items[n++] = new mnpPage('April 1997', '/msj/0497/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node9');
+	this.items[n++] = new mnpPage('March 1997', '/msj/0397/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node10');
+	this.items[n++] = new mnpPage('February 1997', '/msj/0297/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node11');
+	this.items[n++] = new mnpPage('January 1997', '/msj/0197/default.aspx', '', '', '_S3_Node3_S1_Node4_S1_Node12');
+}
+

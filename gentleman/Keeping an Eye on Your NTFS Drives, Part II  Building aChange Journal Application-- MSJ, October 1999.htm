@@ -1,0 +1,549 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0056)http://www.microsoft.com/msj/1099/journal2/journal2.aspx -->
+<HTML><STYLE>/**
+ * Copyright 2010 Google Inc. All Rights Reserved.
+ *
+ * Google Dictionary Chrome extension content script CSS.
+ *
+ * @author sadovsky@google.com (Adam Sadovsky)
+ */
+
+/**
+ * Added after testing on:
+ * http://earthcode.com/blog/2006/01/css_floats_programmatically.html
+ */
+.gd-bubble a:after,
+.gd-bubble a[href^="http"]:after {
+  content: '';
+}
+</STYLE><HEAD><META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Keeping an Eye on Your NTFS Drives, Part II: Building aChange Journal Application-- MSJ, October 1999</TITLE>
+<META name="Description" content="The Change Journal can be either active or disabled on an NTFS volume. If the Change Journal is active, the Device?Io?Con?trol function will return TRUE. Any app that wants to use the Change Journal can activate it if it is disabled. The system can perform this operation very quickly. ">
+	<META http-equiv="PICS-Label" content="(PICS-1.1 &quot;http://www.rsac.org/ratingsv01.html&quot; l comment &quot;RSACi North America Server&quot; by &quot;inet@microsoft.com&quot; r (n 0 s 0 v 0 l 0))">
+	<META name="Robots" content="all">
+	<META name="MS.LOCALE" content="en-us">
+	<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msdnmag.css">
+	<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msdn.css">
+	<SCRIPT language="javascript" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msdnmag.js"></SCRIPT>
+	<SCRIPT type="text/javascript" language="Javascript" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/menujs"></SCRIPT>
+<LINK type="text/css" rel="Stylesheet" href="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/css.aspx">
+<META http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><LINK rel="stylesheet" type="text/css" href="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/css(1).aspx"><SCRIPT language="JavaScript">var doImage=doImage;var TType=TType;var defaultSearchLable;
+function mhHover(tbl,idx,cls){var t,d;if(document.getElementById)t=document.getElementById(tbl);else t=document.all(tbl);if(t==null)return;if(t.getElementsByTagName)d=t.getElementsByTagName("TD");else d=t.all.tags("TD");if(d==null)return;if(d.length<=idx)return;d[idx].className=cls;}
+function footerjs(doc){if(doImage==null){var tt=TType==null?"PV":TType;doc.write('<layer visibility="hide"><div style="display:none"><img src="http://c.microsoft.com/trans_pixel.asp?source=www&TYPE=' + tt + '&p=msj_1099_journal2&URI=%2fmsj%2f1099%2fjournal2%2fjournal2.aspx&GUID=1F4FC18C-F71E-47FB-8FC9-612F8EE59C61&r=http%3a%2f%2fwww.microsoft.com%2fmsj%2f1099%2fjournal2%2fjournal2.aspx&lc=en-us" width=0 height=0 hspace=0 vspace=0 border=0 alt=""/></div></layer>');}}
+var rsltextbox = 'msviLSBtbox'; var wtflag = false;
+function stripSymbols () { var objrslttextbox = getObjectById(rsltextbox); if (objrslttextbox) { var form = objrslttextbox.form; var s = objrslttextbox.value; filteredValues = "<>!@^*"; var i; var returnString = ""; for (i = 0; i < s.length; i++) { var c = s.charAt(i); if (filteredValues.indexOf(c) == -1) { returnString += c; } else { returnString += " "; } } objrslttextbox.value = returnString; } if(!wtflag) { trackLSB("Site"); } } 
+function addSubmitEvent() { defaultSearchLable=document.getElementById("msviLSBtbox").value;var objrslttextbox = getObjectById(rsltextbox); if (objrslttextbox) { var form = objrslttextbox.form; if (window.attachEvent) { form.attachEvent("onsubmit",stripSymbols); } else { form.addEventListener("submit",stripSymbols,false); } } } 
+function getObjectById(elid) { if (document.getElementById) { return document.getElementById(elid); } else if (document.all) { return document.all[elid]; } else if (document.layers) { return document.layers[elid]; } } 
+if (window.attachEvent) { window.attachEvent("onload",addSubmitEvent); } else { window.addEventListener("load",addSubmitEvent,false); } 
+function trackLSB(type) { clearDefaultSearchLable();if (typeof dcsMultiTrack == "function") { var qu = document.getElementById("msviLSBtbox").value; var dcsuri = "results.aspx"; var dcssip, ti; if (type == "Site") { dcssip = "search.microsoft.com"; ti = "SearchButton: OnSite"; } else if (type == "Web") { dcssip = "bing.com"; ti = "SearchButton: Web"; } dcsMultiTrack("DCS.dcsuri", dcsuri, "DCS.dcssip", dcssip, "WT.ti", ti, "WT.dl", "2", "WT.z_srch_t", qu, "DCS.dcsqry", "", "WT.ad", "", "WT.mc_id", ""); wtflag = true; DCS.dcsuri=DCS.dcssip=DCS.dcsqry=WT.ti=WT.z_srch_t="";} }
+
+var isInputqu = false;
+var searchBoxWidthWithKievLogo = 0;
+var searchBoxWidthWithoutKievLogo = 0;
+function clearDefaultSearchLable()
+{var searchBox = document.getElementById("msviLSBtbox");
+if(!isInputqu){searchBox.value = "";}}
+var kievImageWidth = 0;
+
+function searchBoxFocused(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value == defaultSearchLabel)
+    {
+        searchBoxInput.value = '';
+        if(kievImageWidth == 0)
+        {
+            kievImageWidth = kievImage.clientWidth;
+        }
+        searchBoxInput.style.fontStyle = '';
+        searchBoxInput.style.color='#000000';
+        kievImage.style.width = '1px';
+        if(searchBoxWidthWithKievLogo == 0)
+        {
+            searchBoxWidthWithKievLogo = searchBoxInput.style.width;
+            searchBoxWidthWithoutKievLogo = searchBoxInput.clientWidth + (kievImageWidth - 1);
+        }
+        searchBoxInput.style.width = searchBoxWidthWithoutKievLogo;
+    }
+}
+
+function searchBoxBlur(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value.replace(/(^\s*)|(\s*$)/g, '')=='') 
+    {
+        searchBoxInput.value=defaultSearchLabel;searchBoxInput.style.fontStyle ='Italic';
+        searchBoxInput.style.color = "#a1a1a1";
+        kievImage.style.width = kievImageWidth;
+        
+        searchBoxInput.style.width = searchBoxWidthWithKievLogo;
+        isInputqu = false;
+     }
+     else
+     {
+        isInputqu = true;
+     }
+}</SCRIPT><META name="WT.sp" content="_msj_"><SCRIPT language="JavaScript" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/broker.js"></SCRIPT>
+	</HEAD><BODY leftmargin="0" topmargin="0" rightmargin="5" bgcolor="#ffffff">
+		
+		<!--NOINDEX_START--><SCRIPT language="Javascript">
+				if (self.name == "MNPMainFrame") top.location.href = self.location.href;
+			</SCRIPT><DIV id="msviMasthead"><TABLE cellpadding="0" cellspacing="0" width="100%" border="0"><TBODY><TR><TD width="100%"><TABLE cellpadding="0" cellspacing="0" width="100%" height="22" border="0"><TBODY><TR><TD id="msviMarketing" bgcolor="#FFFFFF" nowrap=""><A href="http://go.microsoft.com/fwlink/?LinkID=92799">Click Here to Install Silverlight</A></TD><TD width="100%" bgcolor="#3568CC"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/gradient.aspx" width="250" height="22" alt="*" title=""></TD></TR></TBODY></TABLE></TD><TD id="msviGlobalToolbar" bgcolor="#3568CC" height="22" nowrap="" dir="ltr" align="left"><TABLE cellpadding="0" cellspacing="0" border="0"><TBODY><TR><TD id="msviRegionId" nowrap="">United States</TD><TD id="msviRegionSelector" nowrap=""><A href="http://www.microsoft.com/worldwide">Change</A></TD><TD class="gtsep">|</TD><TD id="msviSiteMap" nowrap=""><A href="http://www.microsoft.com/en/us/sitemap.aspx">All Microsoft Sites</A></TD><TD class="msviPPSpace"></TR></TBODY></TABLE></TD></TR></TBODY></TABLE><TABLE cellpadding="0" cellspacing="0" width="100%" border="0"><TBODY><TR valign="top"><TD><TABLE cellpadding="0" cellspacing="0" width="100%" height="42" border="0" style="height:expression(parentElement.parentElement.parentElement.parentElement.offsetHeight)"><TBODY><TR valign="top"><TD id="msviBrandBanner" bgcolor="FFFFFF"><A href="http://msdn.microsoft.com/"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msdn_masthead_ltr.gif" width="225" height="42" alt="MSDN" title="" border="0"></A></TD></TR></TBODY></TABLE></TD><TD id="msviGlobalSearch" width="100%" bgcolor="#6799FF"><DIV class="msviLSBsform"><FORM id="msviLSBForm" action="http://www.microsoft.com/library/toolbar/3.0/search.aspx" target="_top"><DIV id="msKiev"><INPUT type="hidden" name="View" value="en-us"><INPUT type="hidden" name="charset" value="iso-8859-1"><INPUT id="msviLSBtbox" style="font-style:italic; color:#a1a1a1" onkeydown="if(event.keyCode == 13)searchBoxBlur(&#39;Search Microsoft.com&#39;)" onfocus="searchBoxFocused(&#39;Search Microsoft.com&#39;)" onblur="searchBoxBlur(&#39;Search Microsoft.com&#39;)" type="text" name="qu" value="Search Microsoft.com" autocomplete="off"><SPAN id="msviLSBlogo" class="msviLSBlogo" title="Results by Bing"></SPAN><INPUT id="msviLSBssearch" title="Search Microsoft.com" type="image" name="site" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/Search_icon.gif" align="absmiddle" onclick="trackLSB(&#39;Site&#39;)"></DIV><INPUT id="msviLSBWeb" title="Search the Web" name="sweb" type="submit" value="" onclick="trackLSB(&#39;Web&#39;)" align="absmiddle"></FORM></DIV></TD></TR></TBODY></TABLE><DIV id="msviLocalToolbar"><TABLE cellpadding="0" cellspacing="0" width="100%" height="19" border="0"><TBODY><TR><TD nowrap="" id="msviHomePageLink"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/default.aspx">MSDN Home</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 2, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 2, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/developercenters/">Developer Centers</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 4, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 4, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/library/default.asp">Library</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 6, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 6, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/downloads/">Downloads</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 8, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 8, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/code/">Code Center</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 10, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 10, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/subscriptions/">Subscriptions</A></TD><TD><SPAN class="ltsep">|</SPAN></TD><TD class="lt0" nowrap="" onmouseover="mhHover(&#39;msviLocalToolbar&#39;, 12, &#39;lt1&#39;)" onmouseout="mhHover(&#39;msviLocalToolbar&#39;, 12, &#39;lt0&#39;)"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/worldwide.aspx">MSDN Worldwide</A></TD><TD width="100%"></TR></TBODY></TABLE></DIV></DIV>
+			<TABLE cellpadding="0" cellspacing="0" border="0" width="100%" dir="LTR">
+				<TBODY><TR valign="top">
+		<TD height="100%" style="overflow-x: hidden" width="181">
+  <TABLE cellpadding="0" cellspacing="0" border="0" width="100%"><TBODY><TR><TD class="mnpQuickSearch" style="background: #CCCCCC; color: #000000" dir="LTR"><FORM style="margin: 0px" action="http://msdn.microsoft.com/msdn-online/shared/components/mscomsearch30.aspx"><NOBR><FONT color="#000000">Search for</FONT><BR><INPUT class="mnpSearchBox" type="text" id="qu" name="qu" maxlength="255" style="width: 165px"><BR><TABLE cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top: 2px"><TBODY><TR><TD width="100%" class="mnpQuickSearch" style="padding: 0px"><SELECT class="mnpSearchScopes" style="width: 137px" name="SearchScope"><OPTION value="1">All of MSDN</OPTION><OPTION value="2">All Library</OPTION><OPTION value="3">Code &amp; Downloads</OPTION><OPTION value="7" selected="">MSDN Magazine</OPTION><OPTION value="5">Support &amp; KB</OPTION></SELECT></TD><TD><INPUT class="mnpSearchButton" type="submit" value="Go"><BR></TD></TR></TBODY></TABLE><A href="http://search.microsoft.com/search/search.aspx?View=msdn&st=a" style="color: #000000" onmouseover="style.color=&#39;#0033CC&#39;;" onmouseout="style.color=&#39;#000000&#39;;">Advanced Search</A></NOBR></FORM></TD></TR></TBODY></TABLE>
+  <DIV id="mnpMenuTop" class="mnpMenuTop" style="overflow-x: hidden; width: 181px" url="/msj/1099/journal2/journal2.aspx" dir="LTR" parent="/msj/1099/default.aspx"><DIV class="mnpInherit"><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/default.aspx">MSJ Home</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #999999; width: 153px; overflow-x: hidden" menu="md0621c1cb57b22ba79465bd75751170e"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/1099/default.aspx">October 1999</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/find/default.aspx">Search</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden" menu="m3fd9abd6d4e6b1d47da1677743a69def"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/code.aspx">Source Code</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden" menu="m0e5c80cdf8bdd73274e5171bd96f4ed9"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/msj/backissues.aspx">Back Issues</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/Subscribe.aspx">Subscribe</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/service.aspx">Reader Services</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/write.aspx">Write to Us</A></DIV><DIV class="mnpMenuBorder" style="width: 180px"></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/default.aspx">MSDN Magazine</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://www.microsoft.com/mind/default.asp">MIND Archive</A></DIV><DIV class="mnpMenuRow" style="border-color: #F1F1F1; background: #F1F1F1; width: 153px; overflow-x: hidden"><IMG width="4" height="7" border="0" alt="*" title="" class="mnpMenuArrow" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/arrowLTR.gif" style="left: 166px; visibility: hidden"><A href="http://msdn.microsoft.com/newsgroups/topic.aspx?url=/msdn-files/028/201/133/topic.xml">Magazine Newsgroup</A></DIV><DIV class="mnpMenuBorder" style="width: 180px; margin-bottom: 0px"></DIV></DIV></DIV>
+  <DIV class="mnpAds" style="width: 181px; height: 100%; padding-bottom: 20px; background: #F1F1F1; border-style: solid; border-color: #999999; border-width: 0px 1px 0px 0px">
+    <CENTER><SCRIPT type="text/javascript" src=""></SCRIPT></CENTER>
+  </DIV>
+</TD>
+          <TD width="100%" dir="LTR">
+        <!--NOINDEX_STOP-->
+
+<TABLE class="downleveleyebrow" width="100%" height="24px"><TBODY><TR><TD>
+<SPAN id="ctl00_eb" style="COLOR: #003399;width: 100%;height: 24px;padding-top:4px;padding-left:14px;"><A href="http://www.microsoft.com/msj/1099/journal2/isapi/gomsdn.asp?TARGET=/">MSDN Home</A>&nbsp;&gt;&nbsp;<A href="http://www.microsoft.com/msj/">MSJ</A>&nbsp;&gt;&nbsp;<A href="http://www.microsoft.com/msj/1099/default.aspx">October 1999</A></SPAN>
+
+</TD></TR></TBODY></TABLE>
+
+	<!----------------->
+	<!--BEGIN_CONTENT-->
+	<!----------------->
+
+<!--TOOLBAR_START-->
+
+<!--TOOLBAR_EXEMPT-->
+
+<!--TOOLBAR_END-->
+
+<CENTER><FONT size="3" color="ff0080" face="verdana, arial, helv"><B><A href="http://www.microsoft.com/msj/1099/default.aspx">October      1999</A></B></FONT></CENTER><P>
+</P><CENTER><A href="http://www.microsoft.com/msj/default.asp"><IMG border="0" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msjheader02.gif" width="399" height="33" alt="Microsoft Systems Journal Homepage"></A></CENTER>
+<HR color="000080" width="300">
+
+
+<CENTER>
+<TABLE width="380">
+<TBODY><TR><TD>
+<CENTER>
+<FONT size="5" face="verdana, arial, helvetica" color="000080"><B>Keeping an Eye on Your NTFS Drives, Part II: Building a
+Change Journal Application
+</B></FONT></CENTER>
+
+
+ <P></P></TD></TR></TBODY></TABLE>
+</CENTER>
+<CENTER><FONT>Jeffrey Cooperstein and Jeffrey Richter
+</FONT></CENTER><P>
+</P><CENTER>
+<TABLE width="300"><TBODY><TR><TD><FONT size="2" color="008080" face="verdana, arial, helvetica"><B><CENTER>The Change Journal can be either active or disabled on an NTFS volume. If the Change Journal is active, the Device­Io­Con­trol function will return TRUE. Any app that wants to use the Change Journal can activate it if it is disabled. The system can perform this operation very quickly. </CENTER></B></FONT></TD></TR></TBODY></TABLE></CENTER>
+<P>
+</P><CENTER>
+<TABLE border="0" width="380" bgcolor="cccccc"><TBODY><TR><TD align="center">
+<FONT size="1" face="verdana, arial, helv" color="000000"><B>This article assumes you're familiar with Windows NT, Platform SDK </B></FONT></TD></TR></TBODY></TABLE></CENTER>
+<P>
+</P><CENTER><FONT size="2">Code for this article: <A href="http://download.microsoft.com/download/0/6/7/0678184e-905e-4783-9511-d4dca1f492b4/changejournal2.exe">ChangeJournal2.exe</A> (22KB)</FONT></CENTER>
+
+<CENTER>
+<TABLE border="0" width="380"><TBODY><TR><TD>
+
+
+<CENTER><FONT size="2">
+<I>Jeffrey Cooperstein is an author, trainer, and Windows programming consultant. He can be reached at <A href="http://www.cooperstein.com/">www.cooperstein.com</A>. Jeffrey Richter wrote </I>Advanced Windows, Third Edition<I> (Microsoft Press, 1997) and </I>Windows 95: A Developer's Guide<I> (M&amp;T Books, 1995). Jeff is a consultant and teaches Win32 programming courses (<A href="http://www.solsem.com/">www.solsem.com</A>). He can be reached at <A href="http://www.jeffreyrichter.com/">www.JeffreyRichter.com</A>.<BR></I></FONT></CENTER>
+</TD></TR></TBODY></TABLE></CENTER><BR>
+
+<CENTER>
+<TABLE width="380"><TBODY><TR><TD>
+
+<FONT size="4" face="verdana, arial, helv" color="770000"><B>Last month</B></FONT><FONT size="2"> (<A href="http://www.microsoft.com/msj/0999/journal/journal.aspx">September 1999</A>) we introduced you to the new Change Journal functionality of Windows® 2000. We explained its implementation, and provided enough information to dump the contents of the Change Journal on an NTFS 5.0 volume. This month we'll cover the rest of what you need to know to write a fully functional Change Journal application. The sample application, CJTest, will demonstrate all the techniques described in this article, and can be used as a template for your own application.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>Change Journal States</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Last month we explained that the Change Journal could be either active or disabled on each NTFS volume. The FSCTL_QUERY_USN_JOURNAL code was used with the DeviceIoControl function to determine the state of the journal. If the Change Journal is active, the DeviceIoControl function will return TRUE. If the DeviceIoControl function returns FALSE, the GetLastError function will provide additional information about the state of the journal. If the GetLastError function returns ERROR_JOURNAL_NOT_
+ACTIVE, an application can activate the Change Journal using DeviceIoControl, passing the FSCTL_CREATE_USN_
+JOURNAL code. The input buffer must point to the following structure:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ typedef struct {
+     DWORDLONG MaximumSize;
+     DWORDLONG AllocationDelta;
+ } CREATE_USN_JOURNAL_DATA, *PCREATE_USN_JOURNAL_DATA;
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The MaximumSize member is the maximum number of bytes the journal should use on the volume. It should be some small percentage of the size of the volume, and is limited to 4GB. For example, a reasonable size for a 9GB drive is an 8MB Change Journal. The AllocationDelta member specifies the number of bytes the journal file should expand when needed. This should be an even multiple of the volume's cluster size, and approximately one-eighth to one-quarter the value of MaximumSize. The AllocationDelta is also the number of bytes that will be purged from the start of the file if the file grows past MaximumSize. The system is lazy about enforcing the MaximumSize of a journal. It is possible that the journal can temporarily grow past this limit, but eventually the system will purge the old records.<BR>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">If a Change Journal already exists on a volume, calls to FSCTL_CREATE_USN_JOURNAL will still succeed, and it will update the journal's MaximumSize and AllocationDelta parameters. This allows you to expand the number of records that an active journal maintains without having to disable it.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Any application that wants to use the Change Journal can activate it if it is disabled. Fortunately, the system can perform this operation very quickly. On the other hand, disabling (or deleting) an active journal can be quite time-consuming because the system must walk all the records in the master file table (MFT) and set the Last USN attribute to zero. This process can take several minutes, and will continue across reboots of the system if necessary. During this process, the journal is not considered active, but it is also not disabled (see <B>Figure 1</B>).
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE>
+<TBODY><TR>
+<TD bgcolor="ffffff">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/journal2fig01.gif" width="400" height="170" alt="Figure 1  Possible Change Journal States"></TD></TR>
+<TR>
+<TD>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4"><FONT size="1" face="verdana, arial, helv"><B>Figure 1  Possible Change Journal States</B>
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+
+
+<FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">While the system is disabling the journal, it cannot be accessed and all journal operations return ERROR_
+JOURNAL_DELETE_IN_PROGRESS. Applications should never disable an active journal because it will adversely affect other applications using the journal. However, if you really want to disable a journal you can do it by calling DeviceIoControl, passing the FSCTL_
+DELETE_USN_JOURNAL code to it. The following structure must also be supplied:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ typedef struct {
+     DWORDLONG UsnJournalID;
+     DWORD DeleteFlags;
+ } DELETE_USN_JOURNAL_DATA, *PDELETE_USN_JOURNAL_DATA;
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">UsnJournalID should be zero unless the USN_DELETE_FLAG_DELETE flag is specified in the DeleteFlags member—in this particular case, it must be set to the ID of the active journal.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The DeleteFlags member can be either USN_DELETE_
+FLAG_DELETE or USN_DELETE_FLAG_NOTIFY. If the USN_DELETE_FLAG_DELETE flag is specified alone, the system will disable the active journal. DeviceIoControl will return immediately—it does not wait for the journal to be disabled. The journal must be active and UsnJournalID must be set to its ID or the call will fail. If the USN_
+DELETE_FLAG_NOTIFY flag is specified in addition to USN_DELETE_FLAG_DELETE, DeviceIoControl returns only after the journal is fully disabled.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The USN_DELETE_FLAG_NOTIFY flag can be specified alone to wait for the journal to become available after receiving ERROR_JOURNAL_DELETE_IN_PROGRESS from any of the Change Journal functions. The following code fragment illustrates how you can wait for a journal to be disabled:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ // Call this if you get
+ // ERROR_JOURNAL_DELETE_IN_PROGRESS
+ void WaitForJournalAvailablity(HANDLE hcj,
+   LPOVERLAPPED po) {
+    DWORD cb;
+    DELETE_USN_JOURNAL_DATA dujd = { 0,
+        USN_DELETE_FLAG_NOTIFY };
+
+ // If the journal is active, this call will still succeed
+// and return immediately. It will not disable the journal.
+    BOOL fOk = DeviceIoControl(hcj,
+	FSCTL_DELETE_USN_JOURNAL,
+	&amp;dujd, sizeof(dujd),   NULL, 0, &amp;cb, po);
+
+ // Wait for asynchronous I/O to complete if needed
+    if (!fOk &amp;&amp; (ERROR_IO_PENDING == GetLastError()) &amp;&amp;
+        (po != NULL))
+        GetOverlappedResult(
+          hcj, po, &amp;cb,
+          TRUE)
+ }
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Be aware that if the USN_
+DELETE_FLAG_NOTIFY flag is used with asynchronous I/O, DeviceIoControl might return while the journal is still disabling. In this case, DeviceIoControl returns FALSE, GetLastError returns ERROR_IO_PENDING, and any journal operations will return ERROR_JOURNAL_DELETE_IN_PROGRESS. You can wait on the device handle or the OVERLAPPED structure's event handle to become signaled, indicating that the journal is now available.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The fact that applications cannot gain exclusive access to the Change Journal has some interesting repercussions. Consider the following pseudocode, which disables the journal and waits for it to become available:
+<PRE><FONT size="1"> // Pseudocode to guarantee the journal is disabled
+ void DisableAndWait() {
+    // See if the journal is active
+    if (QueryUsnJournal() returns some error)
+       return; // if Query fails, the journal is
+               // disabled
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">
+    // The query succeeded, it must have
+    // given us an ID. Disable the journal
+    // using the ID, and wait for it
+    // to finish
+    DisableUsnJournal(id,
+       USN_DELETE_FLAG_DELETE | USN_DELETE_FALG_NOTIFY);
+ }</FONT></PRE><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">
+There are two mistakes in this code. First, QueryUsnJournal could return ERROR_JOURNAL_DELETE_
+IN_PROGRESS. In this case, DisableUsnJournal must be called using only the USN_DELETE_FLAG_NOTIFY flag in order to wait for the journal to be available. The second mistake is that the DisableUsnJournal call itself may return ERROR_JOURNAL_DELETE_IN_PROGRESS. Imagine the case where QueryUsnJournal successfully returns the active journal's ID, but another application immediately starts to disable it. The call to DisableUsnJournal will return ERROR_
+JOURNAL_DELETE_IN_
+PROGRESS, and the journal will not be available. The following pseudocode will be more successful:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ void DisableAndWait() {
+    DWORD dwErr = QueryUsnJournal();
+    if (dwErr is success) {
+       // A journal exists and we now have its ID.
+       // Tell the system to disable it
+       DisableUsnJournal(id, USN_DELETE_FLAG_DELETE);
+    } else if (dwErr is not
+       ERROR_JOURNAL_DELETE_IN_PROGRESS)
+       return; // the journal is disabled with no delete
+// pending
+
+    // Either we tried to disable the journal or it is
+    // in the disabling state (delete-in-progress)
+    // In either case, wait for it to finish. Use
+    // journal ID=0
+    DisableUsnJournal(0, USN_DELETE_FALG_NOTIFY);
+ }
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">As you can see, a simple operation like disabling the journal is still not straightforward. Even the pseudocode is difficult to read. Consider everything an application has to do when it starts—open the volume handle, wait if the journal is currently being deleted, activate the journal if it is disabled, and, finally, query for the journal's information. Even worse, at any step of the way, another application can be trying to activate or disable the journal. To simplify things, it helps to create a single function that doesn't return until the journal is active.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The flow chart in <B>Figure 2</B> illustrates a robust process that will fill in a USN_JOURNAL_DATA structure. It is robust since it will do everything possible to ensure that the journal is active.
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE>
+<TBODY><TR>
+<TD bgcolor="ffffff">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/journal2fig02.gif" width="450" height="306" alt="Figure 2  Filling a USN_JOURNAL_DATA Structure"></TD></TR>
+<TR>
+<TD>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4"><FONT size="1" face="verdana, arial, helv"><B>Figure 2  Filling a USN_JOURNAL_DATA Structure</B>
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+</P><CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+<CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>New Record Notification</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Last month we showed how to dump existing records in the Change Journal. After processing all available records, an application will want to wait for new records to be available. A simple solution would be to poll the journal's NextUsn parameter using the FSCTL_QUERY_USN_
+JOURNAL code. Fortunately, there are more elegant solutions that don't require the polling technique.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The following code shows how to wait for a specified USN to exist in the journal. It does not return the record. It is assumed that the specified USN does not currently exist in the journal, but the function will just return immediately if it does exist.
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ BOOL WaitForNextUsn(HANDLE hcj, DWORDLONG journalId,
+     USN usn) {
+     READ_USN_JOURNAL_DATA rujd;
+     rujd.StartUsn          = usn;
+     rujd.ReasonMask        = 0xFFFFFFFF; // All bits
+     rujd.ReturnOnlyOnClose = FALSE; // All entries
+     rujd.Timeout           = 0; // No timeout
+     rujd.BytesToWaitFor    = 1; // Wait for this
+                                 // USN to exist
+     rujd.UsnJournalID      = journalId; // The journal
+                            // we expect to read from
+     DWORD cbRead;
+     USN usn;
+     // This function does not return until the USN
+     // record exits
+     BOOL fOk = DeviceIoControl(hcj,
+         FSCTL_READ_USN_JOURNAL,
+         &amp;rujd, sizeof(rujd), &amp;usn, sizeof(usn),
+         &amp;cbRead, NULL);
+     return fOk;
+ }
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">An application can obtain the USN of the next record that will be written to the journal by looking at the NextUsn value returned with the FSCTL_QUERY_USN_JOURNAL code. If this is used with the previous code, the function will return as soon as a new record is written to the journal.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Another way an application can use the WaitForNextUsn function is after it has processed all existing records in the journal. In last month's code, we walked all available records using repetitive calls to DeviceIoControl with the FSCTL_
+READ_USN_JOURNAL code. We assumed that all records were processed when DeviceIoControl returned only sizeof(USN) bytes in the output buffer. When this happens, the first sizeof(USN) bytes of the output buffer will actually contain the same value as the StartUsn member specified in the input buffer. This means that you've read all available records and the USN returned will be the USN of the next record that will be created. The application can wait for more data to become available by using this USN in a call to the WaitForNextUsn function defined earlier.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">If an application uses the WaitForNextUsn function, it should probably sleep for a short period of time before processing the new records. If another application is performing multiple disk operations, a short delay will allow several journal records to be created before they are processed. Otherwise, the Change Journal application will be competing for system resources with the application making the changes. In addition, the Change Journal application may find that it is processing many small chunks of records as another application is doing its work.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Another way to avoid this problem is to specify BytesToWaitFor or Timeout values. This allows an application to process journal entries only after a large number of new records are generated (or a specified time has passed). If you used the following values in the function defined earlier,
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ rujd.Timeout = (DWORDLONG)
+     (-2500000000);  // 25 seconds
+ rujd.BytesToWaitFor = 16384; // 16 KB
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">the function would not return immediately when the specified USN is created. Instead, as soon as the USN is created, it will wait until an additional 16KB of raw journal data is available—or every 25 seconds it checks to see if any records exist past the specified USN, then will return. The BytesToWaitFor and Timeout members are particularly useful if you specify filter conditions with the ReasonMask and ReturnOnlyOnClose members. Instead of processing all new records as they appear in the journal, the system will wait until it has at least one record that passes the filter conditions before returning.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>Examining the MFT for Last USN</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">It is possible to enumerate the MFT entries on a volume to examine the Last USN attribute of each file or directory. This tells you when the last time a file or directory changed, even if the USN record was purged from the journal. The FSCTL_
+ENUM_USN_DATA control code will let you find all files or directories with a Last USN in a specified range. The input buffer points to the MFT_ENUM_DATA structure:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ typedef struct {
+     DWORDLONG StartFileReferenceNumber;
+     USN LowUsn;
+     USN HighUsn;
+ } MFT_ENUM_DATA, *PMFT_ENUM_DATA;
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The LowUsn and HighUsn members are the USNs used to limit the search. The first time this function is called, the StartFileReferenceNumber member should be set to zero. The output buffer will be filled with as much information as it can hold. The MFT is enumerated from lowest FRN to highest FRN. If more data is available, the first eight bytes of the output buffer will be the FRN to use in the next call to DeviceIoControl with the FSCTL_ENUM_USN_DATA code. If you've enumerated all the data, this FRN will be higher than the highest FRN in use by the MFT; the next call using the FSCTL_ENUM_USN_DATA code will then return FALSE, and GetLastError will return ERROR_
+HANDLE_EOF.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Following the first eight bytes of the output buffer is an array of USN_RECORD structures. The FileReferenceNumber and Usn members specify the Last USN of the file. Although the output buffer is very similar to FSCTL_READ_
+USN_JOURNAL, it is not returning records from the journal. Instead, it is just using the USN_RECORD structure as a convenient way to return the Last USN data.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4"> <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig3');"><B>Figure 3</B></A> illustrates how you can list all files that do not have valid journal data. In this case, it will be listing all files with a Last USN below the FirstUsn that is available in the journal.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The FSCTL_ENUM_USN_DATA code is intended to give applications an easy way to recover from situations where journal data is purged before it can be processed. Imagine the series of events shown in <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig4');"><B>Figure 4</B></A>. Your application shuts down after it has processed USN 512. A call using the FSCTL_
+QUERY_USN_JOURNAL code will show that the NextUsn member contains 640. When your application is restarted, it queries the journal again, but finds out that the FirstUsn in the journal is 1152. Since records from 640 up to, but not including, 1152 were lost, your application might have to throw out all cached information. For some applications, the information you get from the FSCTL_ENUM_USN_
+DATA code is enough to reconstruct missing events.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Specifying a LowUsn of 640 and a HighUsn of 1152 will return the following information.
+</FONT></TD></TR></TBODY></TABLE></CENTER>
+<CENTER><TABLE width="300">
+
+<TBODY><TR>
+<TD><FONT size="2"><B>USN<BR></B></FONT></TD>
+<TD><FONT size="2"><B>File<BR></B></FONT></TD>
+<TD><FONT size="2"><B>Last USN<BR></B></FONT></TD></TR>
+
+<TR><TD><FONT size="2">128<BR></FONT></TD>
+<TD><FONT size="2">File2<BR></FONT></TD>
+<TD><FONT size="2">768<BR></FONT></TD></TR>
+
+<TR><TD><FONT size="2">256<BR></FONT></TD>
+<TD><FONT size="2">File5<BR></FONT></TD>
+<TD><FONT size="2">1024<BR></FONT></TD></TR></TBODY></TABLE>
+
+</CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">This will let the application know that something happened to File2, and you'll discover the newly created File5. Unfortunately, you won't know that File1 was deleted (it's not in the MFT any more, so there's no Last USN), or that File3 changed (you'll see that File3 changed at USN 1152, but you won't know that it changed twice while you were shut down). Depending on the type of application, this may be enough information, or it may help in deciding which files or directories need to be reexamined.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The FSCTL_READ_FILE_USN_DATA code can be used to get Change Journal-related information about a specific file or directory. The DeviceIoControl function is called with the handle to an open file or directory (not a volume handle as is the case with other Change Journal functions), and the output buffer will be filled with a single USN_
+RECORD structure:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ BYTE buffer[4096]; // buffer to hold single record
+ USN_RECORD *pRecord = (USN_RECORD *)buffer;
+ DWORD cb;
+ // Get journal related information regarding the open
+ // file or directory specified by 'hFile'
+ DeviceIoControl(hFile, FSCTL_READ_FILE_USN_DATA,
+     NULL, 0, buffer, sizeof(buffer), &amp;cb, NULL);
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ // Examine pRecord for journal information about the
+ // file
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">If the call succeeds, the following members of the returned USN_RECORD structure will be valid: RecordLength, MajorVersion, MinorVersion, FileReferenceNumber, ParentFileReferenceNumber, Usn, SecurityId, FileNameOffset, and FileNameLength. The TimeStamp, Reason, and SourceInfo members will not contain valid information. The Usn member represents the Last USN written to the journal for this file or directory. The actual last record can be read (unless it has already been purged) by specifying the Usn member as the StartUsn in a subsequent call using the FSCTL_READ_
+USN_JOURNAL code.<BR>
+
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>File Name from File Reference Number</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">As we mentioned last month, there is no easy way to take an FRN and convert it to a full path. If you want to do this, your applications must keep an internal database of all directories (not all files) on a volume and their FRNs. (Yes, this is a lot of extra code you'll have to write, but we'll explain the benefit of doing this at the end of this section.) It is up to you to implement the database functionality. We'll show you how to populate the database, use it to get the full path from a journal record, and how to keep it up to date while your application is running.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Developers familiar with the Windows 2000 DDK may be aware of kernel mode APIs or undocumented NTDLL APIs that will convert FRNs to path names directly, but we don't recommend this since Microsoft may change the format of these functions in future releases.<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Let's go over two methods to initially gather all the directory names and their FRNs. For both methods, the directory database will represent every directory on a volume. Each record in the directory database will have the FRN of the directory, the FRN of the parent directory, and the name of the directory (stored as a short name, like system32—not as the full path).
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Here's the first method. The function GetFileInformationByHandle will let you find the FRN as long as you have a handle to a file or directory. The nFileIndexHigh and nFileIndexLow members of BY_HANDLE_FILE_INFORMATION provide the high 32 bits and low 32 bits of the FRN. To convert a directory name to an FRN, you need to open a handle to it. <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig5');"><B>Figure 5</B></A> shows how to do this.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Using the standard FindFirstFile/FindNextFile functions, all the directories on the hard drive can be scanned to build the directory database. Code to do this is provided in the sample application. You don't need to store the FRN of every file on the disk, since journal records contain the file or directory name and parent FRN (which is always a directory). This is why we said last month that the USN_RECORD's members FileNameOffset, FileNameLength, and ParentFileReferenceNumber are more useful than the FileReferenceNumber member alone.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">There is an alternative way to build the directory database using the FSCTL_ENUM_
+USN_DATA code. When the journal is active, enumerating the range 0 to NextUsn (as returned using the FSCTL_
+QUERY_USN_JOURNAL code) will enumerate every file and directory on the volume. All files on a volume must have a Last USN below the journal's NextUsn value—this is why the system must reset all file and directory Last USN values to zero when the Change Journal is disabled. You can find all directories on the volume by examining the FileAttributes member of the USN_RECORD structure. The USN_RECORD structure will also tell you the name of the directory and its parent's FRN.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">We already showed how to use the FSCTL_ENUM_USN_
+DATA code, and the sample code demonstrates how to store the information in the directory database. (The database stores the object's name, FRN, and parent's FRN for every record returned that has the FILE_ATTRIBUTE_
+DIRECTORY flag set in the FileAttributes member.) Once the directory database has been constructed, you can convert the FRN of any directory to a full path by walking the chain of parent FRNs up to the FRN of the root directory. <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig6');"><B>Figure 6</B></A>      shows how to accomplish this. (The function requires the FRN of the root directory, but this can be found by calling the FRNFromPath function described earlier with "D:\".)<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>Maintaining the Directory Database</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">After an application populates the directory database, it will be necessary to keep it up to date as changes occur. Fortunately, the Change Journal will tell you exactly what you need to know to keep the directory database accurate. Again, the sample code shows one implementation of the directory database, but you can come up with your own way of managing it.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Assuming you've chosen to store just the FRN, parent FRN, and name in your directory database, you can use the logic shown in <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig7');"><B>Figure 7</B></A> to maintain it.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">It is very important to process create, rename/new name, and then delete in that order, since more than one can show up in a record. In other words, you might find a record that has rename/new name and delete both set. You must process both of these to maintain your database, and if you do them out of order you'll corrupt your data. Also, note that the rename/new name reason can give you a new parent FRN (the file or directory was moved to another directory), so your ChangeRecord function must take both the new name and new parent FRN as parameters.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Be careful about storing the full path in your directory database (just store the short name, like system32). If a parent is renamed, you will only get one journal record. By storing just the name, you can reconstruct the current path on demand. To understand this, consider what would happen when you rename Program Files to Pfiles. You'll receive one journal record and modify the appropriate record in your database. If you were storing full paths, you would need to look at every other record in the directory database and adjust Program Files to Pfiles.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">As long as you process all the Change Journal records, the directory database will remain accurate. Applications will only have to repopulate the database if the journal's ID changes, or if you miss some records before they are purged. When your application exits, it can store the database on disk. The next time your application is run, it can reload the data and bring it up to date by walking the journal. This may seem like a lot of overhead, but it actually provides one benefit you'd never get from the operating system. When a directory is destroyed, the MFT no longer keeps a record of its FRN. When querying the journal, the FRNs may belong to directories that no longer exist. If the operating
+system provided a simple FRN-to-path name function, it would fail for records when their
+directory is removed, and it would be inaccurate after a directory
+is renamed.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">If you maintain your directory database in tandem with processing records, you can accurately recover the full path from records. The best approach when populating or maintaining the directory database is to take advantage of all the information in the journal. Here's the logic:
+<UL><LI>Query the journal for the available FirstUsn.
+</LI><LI>Use the second method above to populate the database, but limit the enumeration with a LowUsn of zero and a HighUsn of the journal's FirstUsn. This returns just the directories that changed before the first available journal entry. (You don't have records older than this, so you don't have to worry about directories that were deleted or renamed before this point.)
+</LI><LI>Process the available journal records—maintain the directory database as you read each record.</LI></UL>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">By following these steps, you can calculate the correct full path for each record, even after directories are moved or deleted. Again, the sample source code demonstrates how to do all of this correctly.<BR>
+</FONT><P></P><CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>Supplying Source Information</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Some apps modify files without intending to disturb the contents. For example, a service might want to use a private named stream on a file to store information, but users or other applications should not care that the file has changed. The SourceInfo member described last month for the USN_RECORD structure is how Change Journal applications find out the reason for a change. The FSCTL_MARK_
+HANDLE code is used by applications to provide this information. The DeviceIoControl function is called with the handle to an open file or directory—not a volume handle, as with other Change Journal functions. The input buffer points to the following structure:
+</FONT></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><PRE><FONT size="1">
+ typedef struct {
+     DWORD UsnSourceInfo;
+     HANDLE VolumeHandle;
+     DWORD HandleInfo;
+   } MARK_HANDLE_INFO,
+       *PMARK_HANDLE_INFO;
+</FONT></PRE></TD></TR></TBODY></TABLE></CENTER><CENTER><TABLE width="380"><TBODY><TR><TD><FONT size="2">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The UsnSourceInfo member uses the same constants defined for the SourceInfo member of USN_RECORD. The VolumeHandle member is created the same way as for Change Journal operations. By requiring a volume handle, only applications with administrative privileges can add source information to Change Journal records. The HandleInfo member is currently reserved, and must be zero. <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig8');"><B>Figure 8</B></A> illustrates the way a service should use this functionality to add private information in a named stream.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">It is perfectly OK to use the FSCTL_MARK_HANDLE code even if the journal is disabled. The source information is actually associated internally with the file, not the Change Journal, so the information persists when the journal is disabled.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">If you want to store data in a private stream, it is a good idea to generate your private stream name from a GUID. This prevents accidentally using a name that someone else is using. A good example of a private stream is the new thumbnail view in Explorer (see <B>Figure 9</B>). Instead or calculating thumbnails every time you open a folder, it stores them in a private stream on each file. Microsoft generated a GUID that Explorer uses as the stream name, so it will never conflict with other applications that access the file.
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE>
+<TBODY><TR>
+<TD bgcolor="ffffff">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/journal2fig09.gif" width="300" height="358" alt="Figure 9 Windows Explorer Thumbnail View"></TD></TR>
+<TR>
+<TD>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4"><FONT size="1" face="verdana, arial, helv"><B>Figure 9 Windows Explorer Thumbnail View</B>
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+</P><CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+
+
+<CENTER><FONT size="4" color="000080" face="verdana, arial, helv"><B>Wrap-up</B></FONT></CENTER><FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">The sample application, CJTest (see <A target="_self" href="javascript:OpenUrl('journal2textfigs.htm#fig10');"><B>Figure 10</B></A>), monitors the Change Journal and dumps information about records to the screen as they are created. It also lets you dump the current Change Journal statistics or delete the Change Journal on the current volume. <B>Figure 11</B> shows CJTest as it would display a dump of the current journal information, a file being moved from C:\Directory1 to C:\Directory2, and the directory C:\Directory1 being deleted.
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<CENTER>
+<TABLE>
+<TBODY><TR>
+<TD bgcolor="ffffff">
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/journal2fig11.gif" width="400" height="300" alt="Figure 11 CJTest in Action"></TD></TR>
+<TR>
+<TD>
+<IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4"><FONT size="1" face="verdana, arial, helv"><B>Figure 11 CJTest in Action</B>
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+
+
+<FONT size="2">
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">CJTest uses just about every technique described in our two articles. First, it ensures that the Change Journal is always active. It populates a directory database, maintains it with the Change Journal, and persists it to disk between sessions. CJTest monitors the journal for changes, and displays new records as they arrive. CJTest also gracefully recovers from situations where the journal ID changes or the journal is disabled by another application. To test this, a Delete Journal button is provided. CJTest will automatically activate the journal as soon as possible. (It uses FSCTL_DELETE_USN_JOURNAL to be notified when the journal is available if it ever receives ERROR_JOURNAL_DELETE_IN_PROGRESS.) When CJTest starts, it uses the Change Journal, if possible, to bring its cached directory database up to date. Since each volume may have its own Change Journal, CJTest just uses the current drive letter when picking a volume to examine.
+<BR><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/indent.gif" width="10" height="4">Before you begin writing your own code, play around with CJTest and see how the system behaves. You should now have the tools to create a useful Change Journal app.           <IMG align="right" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/end.gif" width="12" height="12">
+
+</FONT>
+</TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+</P><CENTER>
+<TABLE width="382" cellpadding="5"> <TBODY><TR>
+	<TD><!--bgcolor=ccccff-->
+<CENTER><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/msdn2.gif" width="380" height="31"><BR>
+<FONT size="1" face="verdana, arial, helv">For related information see:
+<I>NTFS Change Journal</I> at:  <A href="http://www.microsoft.com/isapi/gomsdn.asp?target=/library/sdkdoc/winbase/fsys_3xrg.htm">http://msdn.microsoft.com/library/sdkdoc/winbase/fsys_3xrg.htm</A>.
+</FONT><P><FONT size="1" face="verdana, arial, helv">&nbsp;
+Also check <A href="http://www.microsoft.com/isapi/gomsdn.asp?target=/">http://msdn.microsoft.com</A> for daily updates on developer programs, resources and events.
+</FONT></P></CENTER></TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+<P>
+</P><CENTER>
+<TABLE width="380">
+<TBODY><TR>
+<TD>
+<FONT size="2">
+<CENTER><FONT size="2" color="#000000"><I>From the October 1999 issue of <A href="http://www.microsoft.com/msj/default.asp">Microsoft Systems Journal</A>.
+ Get it at your local newsstand, or better yet, </I><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/msdnmag/subscribe.asp"><I>subscribe</I></A>.<BR></FONT>
+</CENTER>
+
+</FONT></TD></TR>
+</TBODY></TABLE>
+</CENTER>
+
+
+
+
+
+
+<!--Footer-->
+<CENTER>
+<TABLE>
+<TBODY><TR><TD width="380">
+
+<HR>
+
+<CENTER>
+<FONT size="1" color="000000"><I>© 1999 Microsoft Corporation. All rights reserved.<BR> <A href="http://www.microsoft.com/info/cpyright.htm">Terms of Use</A> &nbsp;&nbsp; &nbsp;  <A href="http://www.microsoft.com/info/privacy.htm">Privacy Policy</A>.<BR></I></FONT><I>
+</I></CENTER><I>
+</I></TD>
+</TR>
+</TBODY></TABLE>
+</CENTER>
+
+
+
+
+	<!----------------->
+	<!--END_CONTENT-->
+	<!----------------->
+		
+					</TD>
+		
+				</TR>
+			</TBODY></TABLE>
+		<!--NOINDEX_START-->
+<BR clear="all" style="line-height: 1px; overflow: hidden"><TABLE id="msviFooter" width="100%" cellpadding="0" cellspacing="0"><TBODY><TR valign="bottom"><TD id="msviFooter2" style="filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=&#39;#FFFFFF&#39;, endColorStr=&#39;#669AFF&#39;, gradientType=&#39;1&#39;)"><DIV id="msviLocalFooter"><NOBR><A href="http://go.microsoft.com/?linkid=317027" target="_top">Manage Your Profile</A> |</NOBR><WBR><NOBR><A href="http://www.microsoft.com/legal/" target="_parent">Legal</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=2028439" target="_parent">Contact us</A> |</NOBR><WBR><NOBR><A href="http://www.microsoft.com/isapi/gomsdn.asp?TARGET=/flash/" target="_parent">MSDN Flash Newsletter</A></NOBR></DIV><DIV id="msviGlobalFooter"><SPAN dir="ltr">© 2010 Microsoft Corporation. All rights reserved.&nbsp;</SPAN><NOBR><A href="http://support.microsoft.com/contactus/?ws=mscom" target="_parent">Contact Us</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412892" target="_parent">Terms of Use</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412893" target="_parent">Trademarks</A> |</NOBR><WBR><NOBR><A href="http://go.microsoft.com/?linkid=4412894" target="_parent">Privacy Statement</A></NOBR></DIV></TD><TD bgcolor="#669AFF" width="105"><IMG src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/text.aspx" width="105" height="29" alt="Microsoft" title="" border="0"></TD></TR></TBODY></TABLE><DIV style="display:none"><SCRIPT type="text/javascript">var gDomain="m.webtrends.com";var gDcsId="dcsjwb9vb00000c932fd0rjc7_5p3t";var gFpc="WT_FPC";if(document.cookie.indexOf(gFpc+"=")==-1){document.write("<SCR"+"IPT TYPE='text/javascript' SRC='"+"http"+(window.location.protocol.indexOf('https:')==0?'s':'')+"://"+gDomain+"/"+gDcsId+"/wtid.js"+"'><\/SCR"+"IPT>");}</SCRIPT><SCRIPT src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/wt.js" type="text/javascript"></SCRIPT><NOSCRIPT></NOSCRIPT></DIV><LAYER visibility="hide"><DIV style="display:none"><IMG alt="" width="0" height="0" border="0" hspace="0" vspace="0" src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/trans_pixel.asp"></DIV></LAYER>
+	
+<SCRIPT src="./Keeping an Eye on Your NTFS Drives, Part II  Building aChange Journal Application-- MSJ, October 1999_files/broker-config.js"></SCRIPT></BODY></HTML>

@@ -1,0 +1,169 @@
+PRE
+{
+    COLOR: #000000;
+    font-size:90%;
+}
+PRE.clsCode
+{
+    COLOR: #000000;
+    font-size:80%;
+}
+A:link
+{
+    COLOR: #003399;
+    TEXT-DECORATION: none
+}
+A:visited
+{
+    COLOR: #6699cc;
+    TEXT-DECORATION: none
+}
+
+/*** from file***/
+A.clsBackTop,
+A.clsBackTop:visited {
+	margin-top:10; margin-bottom:0;
+	padding-bottom:0;
+	font-size:90%;
+	color:003399;
+}
+A.clsIncCpyRt {
+	color:#ffffff;
+	font-size:95%;
+}
+SPAN.clsFrom
+{
+    COLOR: #000000;
+    font:normal 100%;
+}
+
+/*** article classes ***/
+.articletext 
+{
+    font-family:verdana,arial,helvetica;
+    FONT-SIZE: 80%;
+}
+.articletextplain
+{
+    font-family:verdana,arial,helvetica;
+}
+SPAN.dropcap
+{
+    font-family:verdana,arial,helvetica;
+    FONT-SIZE: 225%;
+    COLOR: #cc3300;
+    FONT-STYLE: bold;
+    FONT-VARIANT: normal;
+    FONT-WEIGHT: bold;
+    LINE-HEIGHT: 100%;
+}
+SPAN.QAcap
+{
+    font-family:verdana,arial,helvetica;
+    FONT-SIZE: 140%;
+    COLOR: #cc3300;
+    FONT-STYLE: bold;
+    FONT-VARIANT: normal;
+    FONT-WEIGHT: bold;
+    LINE-HEIGHT: 100%;
+}
+SPAN.clsLevel
+{
+    COLOR: #ffffff;
+    font:bold 100%;
+}
+SPAN.clsSum
+{
+    COLOR: #000080;
+    FONT-WEIGHT: bold;
+}
+SPAN.clsSumText
+{
+    COLOR: #000000;
+    font:normal 100% verdana,arial,helvetica;
+}
+SPAN.clsSubhead
+{
+    COLOR: #000080;
+    font:bold 100% verdana,arial,helvetica;
+}
+SPAN.clsInfo
+{
+    font:normal 90% verdana,arial,helvetica;
+}
+SPAN.clsBio
+{
+    COLOR: #000000;
+    font:normal 90%;
+}
+
+.clsGloss {
+	color:#000080;
+	font:bold 85% verdana,arial,helvetica;
+}
+.clsBodyTxt
+{
+}
+
+/*** default pages ***/
+TD.clsLND
+{
+    COLOR: red;
+    LINE-HEIGHT: 1
+}
+SPAN.functionbartext
+{
+    COLOR: #ffffff;
+}
+SPAN.st
+{
+    FONT-STYLE: normal;
+    FONT-VARIANT: normal;
+    FONT-WEIGHT: bold;
+    LINE-HEIGHT: 100%;
+}
+SPAN.category
+{
+    COLOR: #ffffff;
+    FONT-STYLE: normal;
+    FONT-VARIANT: normal;
+    FONT-WEIGHT: bold;
+    LINE-HEIGHT: normal;
+    VERTICAL-ALIGN:top;
+}
+SPAN.pd
+{
+    COLOR: #008080;
+}
+.infobar
+{
+    border: 1px outset #99CCFF;
+}
+
+/*** Figure Tags ***/
+.clsFigs {
+	font:bold 85% verdana,arial,helvetica;
+}
+.clsField
+{
+    COLOR: #000000;
+    font:bold 85% verdana,arial,helvetica;
+}
+.clsTable
+{
+    COLOR: #000000;
+    font:normal 80% verdana,arial,helvetica;
+}
+
+.clsFigure {
+	font:bold 100% verdana,arial,helvetica;
+
+}
+.clsCap {
+	font:bold 85% verdana,arial,helvetica;
+	color:#000080
+}
+.clsCaptxt {
+	font:normal 85% verdana,arial,helvetica;
+	color:#000080
+}
