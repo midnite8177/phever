@@ -13,3 +13,4 @@ C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Sh
 C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell.dll
 C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\obj\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
 C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll.config
+C:\var\phever\trunk\gentleman\gentleman\WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.Shell.XML

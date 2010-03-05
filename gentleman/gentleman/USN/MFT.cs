@@ -148,7 +148,7 @@ namespace Tagtoo
         }                 
        
         System.IO.StreamWriter writer = new StreamWriter("files.log");
-        public unsafe List<PInvokeWin32.USN_RECORD> ReadUSN(UInt64 startUsn)
+        public unsafe List<PInvokeWin32.USN_RECORD> ReadUSN(Int64 startUsn)
         {
             int buffersize = sizeof(UInt64) + 65535;
 

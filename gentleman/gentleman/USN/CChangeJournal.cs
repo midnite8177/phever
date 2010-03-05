@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.IO;  
 using System.ComponentModel;
 
-
 // http://www.microsoft.com/msj/1099/journal2/journal2.aspx
 // http://www.microsoft.com/msj/0999/journal/journal.aspx
 namespace Tagtoo
@@ -185,7 +184,7 @@ namespace Tagtoo
 
                     while (outBytesReturned > PInvokeWin32.SizeOf_USN_RECORD)
                     {
-                        PInvokeWin32.USN_RECORD usn = new PInvokeWin32.USN_RECORD(pUsnRecord);
+                        PInvokeWin32.USN_RECORD usn = new PInvokeWin32.USN_RECORD(pUsnRecord);                        
                         yield return usn;
 
                         pUsnRecord = new IntPtr(pUsnRecord.ToInt32() + usn.RecordLength);
@@ -210,11 +209,50 @@ namespace Tagtoo
             // Set READ_USN_JOURNAL_DATA
             PInvokeWin32.READ_USN_JOURNAL_DATA Rujd;
 
-            Rujd.StartUSN = (UInt64)lowUsn;
+            /// Document: 
+            /// http://www.microsoft.com/msj/0999/journal/journal.aspx
+            /// http://www.microsoft.com/msj/1099/journal2/journal2.aspx
+            /// 
+            /// Timeout:
+            /// Timeout is a value for use with the BytesToWaitFor member. 
+            /// It does not guarantee that DeviceIoControl will return after 
+            /// the specified timeout, but rather it specifies how often the 
+            /// system should check whether requested data is available. 
+            /// This member is not like other conventional Win32¨ timeout 
+            /// parameters that use milliseconds. Instead, this member uses 
+            /// the same resolution as the Win32 FILETIME structure 
+            /// (100-nanosecond intervals—one second has ten million intervals). 
+            /// A value of zero specifies no timeout (or infinite). 
+            /// A fixed timeout is specified using negative values 
+            /// (even though this is an unsigned variable). 
+            /// For example, a timeout of 25 seconds can be expressed as 
+            /// (DWORDLONG)(-2500000000). 
+            /// The Timeout member is ignored if DeviceIoControl is 
+            /// called with an asynchronous request. 
+            /// BytesToWaitFor:
+            /// Don't confuse the BytesToWaitFor member with the output buffer 
+            /// size or the count of bytes returned by DeviceIoControl. 
+            /// If this member is set to zero, the function will return immediately, 
+            /// even if it found no matching records in the journal. If this member 
+            /// is nonzero, the system will not return until it has found at least 
+            /// one record to return. BytesToWaitFor specifies how often the system 
+            /// will recheck the journal to see whether any matching records have been 
+            /// created. For example, if you specify 16384, the system will only examine 
+            /// the journal for new records after a new 16KB block of raw data has been 
+            /// added. This prevents a process from using too many resources when many 
+            /// records are being added. If the Timeout and BytesToWaitFor members are 
+            /// both nonzero, the system also checks records if the timeout period expires 
+            /// before the journal has grown by the specified number of bytes. 
+            /// If BytesToWaitFor is nonzero, but records are found that match the user's 
+            /// request, the DeviceIoControl function will return immediately; that is, the 
+            /// BytesToWaitFor and TimeOut members only have an effect when there are not any 
+            /// existing records that fulfill the ReasonMask/ReturnOnlyOnClose requirements.
+
+            Rujd.StartUSN = lowUsn;
             Rujd.ReasonMask = ReasonMask;
             Rujd.UsnJournalID = USNJournalID;
-            Rujd.BytesToWaitFor = (ulong)buffersize;
-            Rujd.Timeout = 0;
+            Rujd.BytesToWaitFor = 1;// (ulong)buffersize;
+            unchecked { Rujd.Timeout = (ulong)-100000000; }
             Rujd.ReturnOnlyOnClose = 0;
 
             IntPtr UsnBuffer = IntPtr.Zero;
@@ -232,14 +270,14 @@ namespace Tagtoo
                 PInvokeWin32.ZeroMemory(pData, buffersize);
                 uint outBytesReturned = 0;
 
-                UInt64 startUsn = (UInt64)lowUsn;
+                Int64 startUsn = lowUsn;
 
                 while (true)
                 {
                     Rujd.StartUSN = startUsn;
                     Rujd.ReasonMask = ReasonMask;
                     Rujd.UsnJournalID = USNJournalID;
-                    Rujd.BytesToWaitFor = (ulong)buffersize;
+                    
                     Marshal.StructureToPtr(Rujd, UsnBuffer, true);
 
                     var retOK = PInvokeWin32.DeviceIoControl(ChangeJournalRootHandle,
@@ -268,7 +306,7 @@ namespace Tagtoo
                         yield return p;
 
                     }
-                    if (startUsn == p.Usn)
+                    if (p == null || startUsn == p.Usn)
                         break;
                     startUsn = p.Usn;
                 }

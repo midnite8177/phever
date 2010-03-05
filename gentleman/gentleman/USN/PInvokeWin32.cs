@@ -44,36 +44,31 @@ namespace Tagtoo
         public const UInt32 USN_REASON_DATA_OVERWRITE = 0x00000001;
         public const UInt32 USN_REASON_DATA_EXTEND = 0x00000002;
         public const UInt32 USN_REASON_DATA_TRUNCATION = 0x00000004;
-        //public const UInt32 0x00000008=             0x00000008;
-        public const UInt32 USN_REASON_NAME_DATA_OVERWRITE = 0x00000010;
-        public const UInt32 USN_REASON_NAMED_DATA_EXTEND = 0x00000020;
+
+        public const UInt32 USN_REASON_NAME_DATA_OVERWRITE  = 0x00000010;
+        public const UInt32 USN_REASON_NAMED_DATA_EXTEND    = 0x00000020;
         public const UInt32 USN_REASON_NAMED_DATA_TRUNCATION = 0x00000040;
-        //public const UInt32 0x00000080=             0x00000080;
+
         public const UInt32 USN_REASON_FILE_CREATE = 0x00000100;
         public const UInt32 USN_REASON_FILE_DELETE = 0x00000200;
         public const UInt32 USN_REASON_EA_CHANGE = 0x00000400;
         public const UInt32 USN_REASON_SECURITY_CHANGE = 0x00000800;
+
         public const UInt32 USN_REASON_RENAME_OLD_NAME = 0x00001000;
         public const UInt32 USN_REASON_RENAME_NEW_NAME = 0x00002000;
         public const UInt32 USN_REASON_INDEXABLE_CHANGE = 0x00004000;
         public const UInt32 USN_REASON_BASIC_INFO_CHANGE = 0x00008000;
+
         public const UInt32 USN_REASON_HARD_LINK_CHANGE = 0x00010000;
         public const UInt32 USN_REASON_COMPRESSION_CHANGE = 0x00020000;
         public const UInt32 USN_REASON_ENCRYPTION_CHANGE = 0x00040000;
         public const UInt32 USN_REASON_OBJECT_ID_CHANGE = 0x00080000;
-        public const UInt32 USN_REASON_REPARSE_POINT_CHANGE = 0x00100000;
-        public const UInt32 USN_REASON_STREAM_CHANGE = 0x00200000;
-        //public const UInt32 0x00400000=            // 0x00400000
-        //public const UInt32 0x00800000=            // 0x00800000
-        ///public const UInt32 0x01000000=            // 0x01000000
-        ///public const UInt32 0x02000000=            // 0x02000000
-        //public const UInt32 0x04000000=            // 0x04000000
-        //public const UInt32 0x08000000=            // 0x08000000
-        //public const UInt32 0x10000000=            // 0x10000000
-        //public const UInt32 0x20000000=            // 0x20000000
-        //public const UInt32 0x40000000=            // 0x40000000
-        public const UInt32 USN_REASON_CLOSE = 0x80000000;
 
+        public const UInt32 USN_REASON_REPARSE_POINT_CHANGE = 0x00100000;
+        public const UInt32 USN_REASON_STREAM_CHANGE = 0x00200000;       
+
+        public const UInt32 USN_REASON_CLOSE                = 0x80000000;
+                                                        
         static string[] Reasons ={
             "DataOverwrite",         // 0x00000001
             "DataExtend",            // 0x00000002
@@ -195,7 +190,7 @@ namespace Tagtoo
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct READ_USN_JOURNAL_DATA
         {
-            public UInt64 StartUSN;
+            public Int64 StartUSN;
             public UInt32 ReasonMask;
             public UInt32 ReturnOnlyOnClose;
             public UInt64 Timeout;
@@ -210,7 +205,7 @@ namespace Tagtoo
             public UInt16 MinorVersion;
             public UInt64 FileReferenceNumber;  // 8
             public UInt64 ParentFileReferenceNumber; // 16
-            public UInt64 Usn; // Need be care
+            public Int64 Usn; // Need be care
             public UInt64 TimeStamp; // Need Be care
             public UInt32 Reason;
             public UInt32 SourceInfo;
@@ -242,7 +237,7 @@ namespace Tagtoo
                 this.MinorVersion = (UInt16)Marshal.ReadInt16(p, MinorVersion_OFFSET);
                 this.FileReferenceNumber = (UInt64)Marshal.ReadInt64(p, FileReferenceNumber_OFFSET);
                 this.ParentFileReferenceNumber = (UInt64)Marshal.ReadInt64(p, ParentFileReferenceNumber_OFFSET);
-                this.Usn = (UInt64)Marshal.ReadInt64(p, Usn_OFFSET);
+                this.Usn = Marshal.ReadInt64(p, Usn_OFFSET);
                 this.TimeStamp = (UInt64)Marshal.ReadInt64(p, TimeStamp_OFFSET);
                 this.Reason = (UInt32)Marshal.ReadInt32(p, Reason_OFFSET);
                 this.SourceInfo = (UInt32)Marshal.ReadInt32(p, SourceInfo_OFFSET);
