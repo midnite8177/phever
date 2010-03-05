@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="PathDB">
+  <DataContextMoniker Name="/PathDBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="6e756bb2-b8d1-4b67-a993-cdf2e14b2a29" absoluteBounds="0.75, 0.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/PathDBDataContext/FileEntry" />
+      <nestedChildShapes>
+        <elementListCompartment Id="67a1bb1d-6ff3-49a3-b7a8-4e5f8742854a" absoluteBounds="0.765, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e45ea213-ee3f-4f0d-a9c3-c9869556a1c0" absoluteBounds="3.75, 0.75, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/PathDBDataContext/UpdateLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="cb61f179-688c-4c1f-92a6-48c2ab55261a" absoluteBounds="3.765, 1.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0e4f3678-ba47-470e-8a4f-d2db84f9206b" absoluteBounds="0.75, 3.75, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/PathDBDataContext/FolderEntry" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e572a58-9281-4b1a-ae1b-b2fbb33b5d4a" absoluteBounds="0.765, 4.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

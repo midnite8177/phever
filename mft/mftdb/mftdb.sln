@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mftdb", "mftdb\mftdb.csproj", "{766D77A5-CE10-4573-8161-292771D3020B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{766D77A5-CE10-4573-8161-292771D3020B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{766D77A5-CE10-4573-8161-292771D3020B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{766D77A5-CE10-4573-8161-292771D3020B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{766D77A5-CE10-4573-8161-292771D3020B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
