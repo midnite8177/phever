@@ -16,7 +16,7 @@ namespace gentleman.USN
 {
     public class PathDB
     {
-        private string DBPATH = @"\PathsT11{0}.mdf";
+        private string DBPATH = @"\PathsT12{0}.mdf";
 
         private PathDBDataContext Connect;
         private CChangeJournal mft;
