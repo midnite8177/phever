@@ -55,6 +55,7 @@ namespace Tagtoo
     {
         public string Drive { get; private set; }
         private IntPtr ChangeJournalRootHandle = IntPtr.Zero;
+        public Int64 CurUsn = 0;
         
         public CChangeJournal(string drive)
         {           
@@ -202,8 +203,12 @@ namespace Tagtoo
                     Marshal.FreeHGlobal(pData);                
             }
             yield break;
-        }
+        }        
         public IEnumerable<PInvokeWin32.USN_RECORD> ReadUSN(ulong USNJournalID, Int64 lowUsn, uint ReasonMask)
+        {
+            return ReadUSN(USNJournalID, lowUsn, ReasonMask, 0, 0);
+        }
+        public IEnumerable<PInvokeWin32.USN_RECORD> ReadUSN(ulong USNJournalID, Int64 lowUsn, uint ReasonMask, ulong TimeOut, ulong ByteToWait)
         {
             int buffersize = sizeof(UInt64) + 65535;            
             // Set READ_USN_JOURNAL_DATA
@@ -251,8 +256,8 @@ namespace Tagtoo
             Rujd.StartUSN = lowUsn;
             Rujd.ReasonMask = ReasonMask;
             Rujd.UsnJournalID = USNJournalID;
-            Rujd.BytesToWaitFor = 1;// (ulong)buffersize;
-            unchecked { Rujd.Timeout = (ulong)-100000000; }
+            Rujd.BytesToWaitFor = ByteToWait; /// Set to 0 for no waiting, otherwise it will notice new record
+            Rujd.Timeout = TimeOut;        /// When BytesToWaitfor is 0, the timeout is ignore
             Rujd.ReturnOnlyOnClose = 0;
 
             IntPtr UsnBuffer = IntPtr.Zero;
@@ -293,9 +298,14 @@ namespace Tagtoo
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error());
                     }
-
+                    
                     /// the first returned USN record
-                    IntPtr pUsnRecord = new IntPtr(pData.ToInt32() + sizeof(Int64)); // skip first gap
+                    /// The first Int64 are next usn number!!
+                    /// If there are no more record, it is the next usn
+                    startUsn = Marshal.ReadInt64(pData);
+                    CurUsn = startUsn;
+
+                    IntPtr pUsnRecord = new IntPtr(pData.ToInt32() + sizeof(Int64)); 
                     PInvokeWin32.USN_RECORD p = null;
                     while (outBytesReturned > 60)
                     {
@@ -307,8 +317,7 @@ namespace Tagtoo
 
                     }
                     if (p == null || startUsn == p.Usn)
-                        break;
-                    startUsn = p.Usn;
+                        break;                    
                 }
             }
             finally
