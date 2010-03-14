@@ -53,15 +53,22 @@ namespace mftdb
  
     class CChangeJournal
     {
-        public string Drive { get; private set; }
+        public char Drive { get; private set; }
         private IntPtr ChangeJournalRootHandle = IntPtr.Zero;
         public Int64 CurUsn = 0;
-        
-        public CChangeJournal(string drive)
+
+        public class VolumnInfo
+        {
+            public char RootLetter;
+            public UInt64 FileReferenceNumber;
+            public uint VolumeSerialNumber;
+        }
+
+        public CChangeJournal(char drive)
         {           
             Drive = drive;
 
-            string vol = string.Concat("\\\\.\\", drive);
+            string vol = string.Format("\\\\.\\{0}:", drive);
 
             ChangeJournalRootHandle = PInvokeWin32.CreateFile(vol,
                  PInvokeWin32.GENERIC_READ | PInvokeWin32.GENERIC_WRITE,
@@ -76,16 +83,10 @@ namespace mftdb
                 throw new IOException("CreateFile() returned invalid handle",
                     new Win32Exception(Marshal.GetLastWin32Error()));
             }
-
-            //Directories = new Dictionary<ulong, FileNameAndFrn>();
-            //Files = new Dictionary<ulong, FileNameAndFrn>();
-
-            //var root = GetRootFrn();
-            //Directories[root.Key] = root.Value;
         }
-        public KeyValuePair<ulong, FileNameAndFrn> GetRootFrn()
+        public VolumnInfo GetRootFrn()
         {            
-            string driveRoot = string.Concat("\\\\.\\", Drive);
+            string driveRoot = string.Format("\\\\.\\{0}:", Drive);
             driveRoot = string.Concat(driveRoot, Path.DirectorySeparatorChar);
             IntPtr hRoot = PInvokeWin32.CreateFile(driveRoot,
                     0,
@@ -100,12 +101,16 @@ namespace mftdb
                 PInvokeWin32.BY_HANDLE_FILE_INFORMATION fi = new PInvokeWin32.BY_HANDLE_FILE_INFORMATION();
                 var bRtn = PInvokeWin32.GetFileInformationByHandle(hRoot, out fi);
                 if (bRtn != false)
-                {
+                {                    
                     UInt64 fileIndexHigh = (UInt64)fi.FileIndexHigh;
                     UInt64 indexRoot = (fileIndexHigh << 32) | fi.FileIndexLow;
 
-                    FileNameAndFrn f = new FileNameAndFrn(driveRoot, 0);
-                    return new KeyValuePair<ulong,FileNameAndFrn>(indexRoot,f);
+                    return new VolumnInfo
+                    {
+                        FileReferenceNumber = indexRoot,
+                        RootLetter = Drive,
+                        VolumeSerialNumber = fi.VolumeSerialNumber
+                    };                    
                 }
                 else
                 {

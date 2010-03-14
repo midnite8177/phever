@@ -28,20 +28,16 @@ namespace mftdb
                 return UpdateLogs.OrderByDescending(a => a.Key).First().Value;
             }
         }
-        private UInt64 DriveID;
-        private string DriveName;
+        private CChangeJournal.VolumnInfo DriveInfo;        
 
         private Dictionary<UInt64, FileNameAndFrn> FolderEntries;
         private Dictionary<UInt64, FileNameAndFrn> FileEntries;
         private Dictionary<DateTime, Int64> UpdateLogs;
 
-        public DBControl(string drive)
+        public DBControl(char drive)
         {
             mft = new CChangeJournal(drive);
-            var root = mft.GetRootFrn();
-            DriveID = root.Key;
-            DriveName = root.Value.Name;
-
+            DriveInfo = mft.GetRootFrn();            
 
             FolderEntries = new Dictionary<ulong, FileNameAndFrn>();
             FileEntries = new Dictionary<ulong, FileNameAndFrn>();
@@ -64,82 +60,97 @@ namespace mftdb
 
         public bool Load()
         {            
-            var FolderPath = string.Format(FOLDER_PATH, DriveID);
-            var FilePath = string.Format(FILE_PATH, DriveID);
-            var LogPath = string.Format(UPDATELOG_PATH, DriveID);
+            var FolderPath = string.Format(FOLDER_PATH, DriveInfo.VolumeSerialNumber);
+            var FilePath = string.Format(FILE_PATH, DriveInfo.VolumeSerialNumber);
+            var LogPath = string.Format(UPDATELOG_PATH, DriveInfo.VolumeSerialNumber);
 
             if (File.Exists(FolderPath) && File.Exists(FilePath) && File.Exists(LogPath))
             {
-                using (StreamReader reader = new StreamReader(FolderPath))
+                using (FileStream stream = new FileStream(FolderPath, FileMode.Open))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8))
                     {
-                        var tokens = line.Split('/');
-                        ulong frn = Convert.ToUInt64(tokens[0]);
-                        string name = tokens[1];
-                        ulong parent_frn = Convert.ToUInt64(tokens[2]);
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            ulong frn = reader.ReadUInt64();
+                            string name = reader.ReadString();
+                            ulong parent_frn = reader.ReadUInt64();
 
-                        FolderEntries[frn] = new FileNameAndFrn(name, parent_frn);
+                            FolderEntries[frn] = new FileNameAndFrn(name, parent_frn);
+                        }                        
                     }
                 }
-                using (StreamReader reader = new StreamReader(FilePath))
+                using (FileStream stream = new FileStream(FilePath, FileMode.Open))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8))
                     {
-                        var tokens = line.Split('/');
-                        ulong frn = Convert.ToUInt64(tokens[0]);
-                        string name = tokens[1];
-                        ulong parent_frn = Convert.ToUInt64(tokens[2]);
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            ulong frn = reader.ReadUInt64();
+                            string name = reader.ReadString();
+                            ulong parent_frn = reader.ReadUInt64();
 
-                        FileEntries[frn] = new FileNameAndFrn(name, parent_frn);
+                            FileEntries[frn] = new FileNameAndFrn(name, parent_frn);
+                        }
                     }
                 }
-                using (StreamReader reader = new StreamReader(LogPath))
+                using (FileStream stream = new FileStream(LogPath, FileMode.Open))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    using (BinaryReader reader = new BinaryReader(stream, Encoding.UTF8))
                     {
-                        var tokens = line.Split(';');
-                        DateTime time = Convert.ToDateTime(tokens[0]);
-                        Int64 USN = Convert.ToInt64(tokens[1]);
+                        while (reader.BaseStream.Position != reader.BaseStream.Length)
+                        {
+                            long ticks = reader.ReadInt64();                            
+                            Int64 usn = reader.ReadInt64();
 
-                        UpdateLogs[time] = USN;
+                            UpdateLogs[new DateTime(ticks)] = usn;
+                        }
                     }
-                }                
+                }      
                 return true;
             }            
             return false;
         }
         public void Save()
         {
-            var FolderPath = string.Format(FOLDER_PATH, DriveID);
-            var FilePath = string.Format(FILE_PATH, DriveID);
-            var LogPath = string.Format(UPDATELOG_PATH, DriveID);
+            var FolderPath = string.Format(FOLDER_PATH, DriveInfo.VolumeSerialNumber);
+            var FilePath = string.Format(FILE_PATH, DriveInfo.VolumeSerialNumber);
+            var LogPath = string.Format(UPDATELOG_PATH, DriveInfo.VolumeSerialNumber);
 
-            using (StreamWriter writer = new StreamWriter(FolderPath))
+            using (FileStream stream = new FileStream(FolderPath, FileMode.Create))
             {
-                foreach (var item in FolderEntries)
+                using(BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8))
                 {
-                    writer.WriteLine(string.Format("{0}/{1}/{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
-                }                
+                    foreach(var item in FolderEntries) {
+                        writer.Write(item.Key);
+                        writer.Write(item.Value.Name);
+                        writer.Write(item.Value.ParentFrn);
+                    }
+                }
             }
-            using (StreamWriter writer = new StreamWriter(FilePath))
+            using (FileStream stream = new FileStream(FilePath, FileMode.Create))
             {
-                foreach (var item in FileEntries)
+                using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8))
                 {
-                    writer.WriteLine(string.Format("{0}/{1}/{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
-                }                
+                    foreach (var item in FileEntries)
+                    {
+                        writer.Write(item.Key);
+                        writer.Write(item.Value.Name);
+                        writer.Write(item.Value.ParentFrn);
+                    }
+                }
             }
-            using (StreamWriter writer = new StreamWriter(LogPath))
+            using (FileStream stream = new FileStream(LogPath, FileMode.Create))
             {
-                foreach (var item in UpdateLogs)
+                using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8))
                 {
-                    writer.WriteLine(string.Format("{0};{1}", item.Key, item.Value));
-                }                
+                    foreach (var item in UpdateLogs)
+                    {
+                        writer.Write(item.Key.Ticks);
+                        writer.Write(item.Value);                     
+                    }
+                }
             }
-
         }
 
         public void Dump(UInt64 frn)
@@ -166,7 +177,7 @@ namespace mftdb
         public void Build()
         {            
             /// Add Drive Info
-            FolderEntries[DriveID] = new FileNameAndFrn(DriveName, 0);
+            FolderEntries[DriveInfo.FileReferenceNumber] = new FileNameAndFrn(DriveInfo.RootLetter.ToString(), 0);
 
             var q = mft.Query();            
 
