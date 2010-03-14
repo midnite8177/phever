@@ -14,7 +14,7 @@ namespace mftdb
         public Form1()
         {     
             InitializeComponent();
-            DBControl c = new DBControl("c:");
+            DBControl c = new DBControl("d:");
         }
     }
 }

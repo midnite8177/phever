@@ -127,7 +127,7 @@ namespace mftdb
             }
             using (StreamWriter writer = new StreamWriter(FilePath))
             {
-                foreach (var item in FolderEntries)
+                foreach (var item in FileEntries)
                 {
                     writer.WriteLine(string.Format("{0}/{1}/{2}", item.Key, item.Value.Name, item.Value.ParentFrn));
                 }                
