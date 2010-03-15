@@ -12,9 +12,19 @@ namespace mftdb
     public partial class Form1 : Form
     {        
         public Form1()
-        {     
-            InitializeComponent();
-            DBControl c = new DBControl('d');
+        {
+            try
+            {
+                InitializeComponent();
+                DBControl c = new DBControl('c');
+            }
+            catch(Exception e)
+            {
+                using (System.IO.StreamWriter writer = new System.IO.StreamWriter(@"c:\debug.log"))
+                {
+                    writer.WriteLine(e.ToString());
+                }
+            }
         }
     }
 }

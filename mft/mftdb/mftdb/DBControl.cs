@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data.Common;
@@ -25,7 +25,13 @@ namespace mftdb
         {
             get
             {
-                return UpdateLogs.OrderByDescending(a => a.Key).First().Value;
+                DateTime LastDate = DateTime.MinValue;
+                foreach (var item in UpdateLogs)
+                {
+                    if (item.Key > LastDate)                    
+                        LastDate = item.Key;                    
+                }
+                return UpdateLogs[LastDate];
             }
         }
         private CChangeJournal.VolumnInfo DriveInfo;        
@@ -196,7 +202,7 @@ namespace mftdb
         public void Update()
         {
             /// 1. Find Out Last USN
-            var lastlog = UpdateLogs.OrderByDescending(a => a.Key).First();
+            var lastlog = LastUsn;
 
             var q = mft.Query();
             
