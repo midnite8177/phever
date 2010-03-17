@@ -32,3 +32,5 @@ C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.csproj.GenerateResou
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.exe
 C:\var\phever\trunk\gentleman\gentleman\obj\Debug\gentleman.pdb
 C:\var\phever\trunk\gentleman\gentleman\bin\Debug\gentleman.pdb
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\mftdb.exe
+C:\var\phever\trunk\gentleman\gentleman\bin\Debug\mftdb.pdb

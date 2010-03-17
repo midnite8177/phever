@@ -10,7 +10,6 @@ using System.Data.Common;
 
 namespace mftdb
 {
-
     /// <summary>
     ///  Using In Memory DB right now
     /// </summary>
@@ -159,7 +158,7 @@ namespace mftdb
             }
         }
 
-        public void Dump(UInt64 frn)
+        public void Trace(UInt64 frn)
         {
             var q = mft.Query();
 
@@ -183,7 +182,7 @@ namespace mftdb
         public void Build()
         {            
             /// Add Drive Info
-            FolderEntries[DriveInfo.FileReferenceNumber] = new FileNameAndFrn(DriveInfo.RootLetter.ToString(), 0);
+            FolderEntries[DriveInfo.FileReferenceNumber] = new FileNameAndFrn(string.Format("{0}:",DriveInfo.RootLetter), 0);
 
             var q = mft.Query();            
 
@@ -239,6 +238,27 @@ namespace mftdb
             UpdateLogs[DateTime.Now] = mft.CurUsn;            
         }
 
+        public IEnumerable<string> Query(Converter<string, bool> query, bool IncludeFolder)
+        {
+            if (IncludeFolder)
+            {
+                foreach (var item in FolderEntries)
+                {
+                    if (query(item.Value.Name))
+                        yield return GetFolderPath(item.Key);
+                }
+            }
+            foreach (var item in FileEntries)
+            {
+                if (query(item.Value.Name))
+                    yield return GetFilePath(item.Key);
+            }
+        }
+        public IEnumerable<string> Query(string query, bool IncludeFolder)
+        {
+            return Query(a => a.ToLower() == query.ToLower(), IncludeFolder);                    
+        }        
+
         public string GetFolderPath(ulong Frn)
         {
             List<String> PathCache = new List<string>();
@@ -248,11 +268,11 @@ namespace mftdb
                 Frn = FolderEntries[Frn].ParentFrn;
             } while (Frn != 0);
 
-            return string.Join("//", PathCache.ToArray());
+            return string.Join(@"\", PathCache.ToArray());
         }
         public string GetFilePath(ulong Frn)
         {            
-            return GetFolderPath(FileEntries[Frn].ParentFrn) + "//" + FileEntries[Frn].Name;
+            return GetFolderPath(FileEntries[Frn].ParentFrn) + @"\" + FileEntries[Frn].Name;
         }
     }
 }

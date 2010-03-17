@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>WindowsAPICodePack\WindowsAPICodePack\Shell\bin\Debug\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -74,24 +75,17 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GHelper.cs" />
+    <Compile Include="ImageDB.cs" />
     <Compile Include="Interop.cs" />
-    <Compile Include="JPGHelper.cs" />
-    <Compile Include="PathDB.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PathDB.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="PictureThumb.cs" />
+    <Compile Include="Image\JPGHelper.cs" />
+    <Compile Include="Image\PictureThumb.cs" />
     <Compile Include="PMetaData.cs" />
-    <Compile Include="PicasaHelper.cs" />
+    <Compile Include="Image\PicasaHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="PathDB.dbml.layout">
-      <DependentUpon>PathDB.dbml</DependentUpon>
-    </None>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -102,11 +96,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.config" />
-    <None Include="PathDB.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>PathDB.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -116,17 +105,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ShellHelper.cs" />
-    <Compile Include="ThumbDbCom.cs" />
-    <Compile Include="ThumbHelper.cs" />
-    <Compile Include="USN\CChangeJournal.cs" />
-    <Compile Include="USN\CJOld.cs" />
-    <Compile Include="USN\MFT.cs" />
-    <Compile Include="USN\PathDB.cs" />
-    <Compile Include="USN\PInvokeWin32.cs" />
+    <Compile Include="Image\ThumbDbCom.cs" />
+    <Compile Include="Image\ThumbHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\mft\mftdb\mftdb\mftdb.csproj">
+      <Project>{766D77A5-CE10-4573-8161-292771D3020B}</Project>
+      <Name>mftdb</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

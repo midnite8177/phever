@@ -128,6 +128,54 @@ namespace mftdb
             if(ChangeJournalRootHandle.ToInt32() != PInvokeWin32.INVALID_HANDLE_VALUE)
                 PInvokeWin32.CloseHandle(ChangeJournalRootHandle);
         }
+
+        public bool Create()
+        {
+            //DWORD cb;
+            /// If you specify zero for MaximumSize and AllocationDelta, the system chooses a default value based on the volume size.
+            /// http://msdn.microsoft.com/en-us/library/aa363871(VS.85).aspx
+            PInvokeWin32.CREATE_USN_JOURNAL_DATA cujd;
+            cujd.MaximumSize = 0;
+            cujd.AllocationDelta = 0;
+            IntPtr medBuffer = Marshal.AllocHGlobal(PInvokeWin32.SIZEOF_CREATE_USN_JOURNAL_DATA);
+            PInvokeWin32.ZeroMemory(medBuffer, PInvokeWin32.SIZEOF_CREATE_USN_JOURNAL_DATA);
+            Marshal.StructureToPtr(cujd, medBuffer, true);
+            uint outBytesReturned = 0;
+
+            var fOk = PInvokeWin32.DeviceIoControl(ChangeJournalRootHandle,
+                PInvokeWin32.FSCTL_CREATE_USN_JOURNAL,
+                medBuffer,
+                PInvokeWin32.SIZEOF_CREATE_USN_JOURNAL_DATA,
+                IntPtr.Zero,
+                0,
+                out outBytesReturned,
+                IntPtr.Zero);
+               
+            return (fOk);
+        }
+        public bool Delete()
+        {
+            var q = Query();
+            PInvokeWin32.DELETE_USN_JOURNAL_DATA dujd;
+            dujd.UsnJournalID = q.UsnJournalID;
+            dujd.DeleteFlags = PInvokeWin32.USN_DELETE_FLAG_DELETE;
+
+            IntPtr medBuffer = Marshal.AllocHGlobal(PInvokeWin32.SIZEOF_DELETE_USN_JOURNAL_DATA);
+            PInvokeWin32.ZeroMemory(medBuffer, PInvokeWin32.SIZEOF_DELETE_USN_JOURNAL_DATA);
+            Marshal.StructureToPtr(dujd, medBuffer, true);
+            uint outBytesRetured = 0;
+
+            var fOk = PInvokeWin32.DeviceIoControl(ChangeJournalRootHandle,
+                PInvokeWin32.FSCTL_DELETE_USN_JOURNAL,
+                medBuffer,
+                PInvokeWin32.SIZEOF_DELETE_USN_JOURNAL_DATA,
+                IntPtr.Zero,
+                0,
+                out outBytesRetured,
+                IntPtr.Zero);
+                               
+            return (fOk);
+        }
         public PInvokeWin32.USN_JOURNAL_DATA Query()
         {
             PInvokeWin32.USN_JOURNAL_DATA ujd = new PInvokeWin32.USN_JOURNAL_DATA();
@@ -138,16 +186,24 @@ namespace mftdb
                 IntPtr.Zero,                // In Buffer  
                 0,                          // In Buffer Size  
                 out ujd,                    // Out Buffer  
-                PInvokeWin32.SizeOf_USN_JOURNAL_DATA,        // Size Of Out Buffer  
+                PInvokeWin32.SIZEOF_USN_JOURNAL_DATA,        // Size Of Out Buffer  
                 out bytesReturned,          // Bytes Returned  
                 IntPtr.Zero);               // lpOverlapped  
 
             if (!bOk)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                switch (Marshal.GetLastWin32Error())
+                {
+                    case (int)PInvokeWin32.ERROR_JOURNAL_DELETE_IN_PROGRESS:
+                        /// Wait Delete To finish                        
+                        break;
+                    case (int)PInvokeWin32.ERROR_JOURNAL_NOT_ACTIVE:
+                        Create();
+                        break;
+                    default:
+                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                }                
             }
-
-
             return ujd;
         }
 
@@ -163,8 +219,8 @@ namespace mftdb
 
             try
             {
-                medBuffer = Marshal.AllocHGlobal(PInvokeWin32.SizeOf_MFT_ENUM_DATA);
-                PInvokeWin32.ZeroMemory(medBuffer, PInvokeWin32.SizeOf_MFT_ENUM_DATA);
+                medBuffer = Marshal.AllocHGlobal(PInvokeWin32.SIZEOF_MFT_ENUM_DATA);
+                PInvokeWin32.ZeroMemory(medBuffer, PInvokeWin32.SIZEOF_MFT_ENUM_DATA);
                 Marshal.StructureToPtr(med, medBuffer, true);
 
                 int buffersize = sizeof(UInt64) + 0x10000;
@@ -178,7 +234,7 @@ namespace mftdb
                     ChangeJournalRootHandle,           // VolumHandler
                     PInvokeWin32.FSCTL_ENUM_USN_DATA,   // Command
                     medBuffer,                          // Command Block, inputer buffer
-                    PInvokeWin32.SizeOf_MFT_ENUM_DATA,                // Command Block Size
+                    PInvokeWin32.SIZEOF_MFT_ENUM_DATA,                // Command Block Size
                     pData,                              // Output buffer
                     buffersize,           // size of output buffer
                     out outBytesReturned,               // Return Value (Error Message)
@@ -188,7 +244,7 @@ namespace mftdb
 
                     IntPtr pUsnRecord = new IntPtr(pData.ToInt32() + sizeof(Int64));
 
-                    while (outBytesReturned > PInvokeWin32.SizeOf_USN_RECORD)
+                    while (outBytesReturned > PInvokeWin32.SIZEOF_USN_RECORD)
                     {
                         PInvokeWin32.USN_RECORD usn = new PInvokeWin32.USN_RECORD(pUsnRecord);                        
                         yield return usn;
@@ -271,8 +327,8 @@ namespace mftdb
             try
             {
                 // Set User Buffer
-                UsnBuffer = Marshal.AllocHGlobal(PInvokeWin32.SizeOf_READ_USN_JOURNAL_DATA);
-                PInvokeWin32.ZeroMemory(UsnBuffer, PInvokeWin32.SizeOf_READ_USN_JOURNAL_DATA);
+                UsnBuffer = Marshal.AllocHGlobal(PInvokeWin32.SIZEOF_READ_USN_JOURNAL_DATA);
+                PInvokeWin32.ZeroMemory(UsnBuffer, PInvokeWin32.SIZEOF_READ_USN_JOURNAL_DATA);
                 Marshal.StructureToPtr(Rujd, UsnBuffer, true);
 
                 // Set Output Buffer
@@ -293,7 +349,7 @@ namespace mftdb
                     var retOK = PInvokeWin32.DeviceIoControl(ChangeJournalRootHandle,
                         PInvokeWin32.FSCTL_READ_USN_JOURNAL,
                         UsnBuffer,
-                        PInvokeWin32.SizeOf_READ_USN_JOURNAL_DATA,
+                        PInvokeWin32.SIZEOF_READ_USN_JOURNAL_DATA,
                         pData,
                         buffersize,
                         out outBytesReturned,

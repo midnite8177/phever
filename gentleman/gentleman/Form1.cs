@@ -10,6 +10,7 @@ using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using Microsoft.WindowsAPICodePack.Shell;
 using System.IO;
+using Microsoft.VisualBasic.FileIO;
 
 namespace gentleman
 {
@@ -18,7 +19,7 @@ namespace gentleman
         // secret = 24889
         private const string CacheFile = ".Gentleman.db";
         
-        private static List<string> SupportFileExt = new List<string>() { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
+        private static List<string> SupportFileExt = new List<string>() { ".jpg", ".jpeg", ".png", ".bmp", ". " };
         
         Dictionary<string, Dictionary<string, PMetaData>> HashDB = new Dictionary<string, Dictionary<string, PMetaData>>();
 
@@ -26,8 +27,7 @@ namespace gentleman
 
         public Form1()
         {
-            InitializeComponent();            
-            USN.PathDB p = new gentleman.USN.PathDB("c:");            
+            InitializeComponent();           
         }
 
         public Dictionary<string, PMetaData> ScanFolder(string folder)
@@ -197,21 +197,51 @@ namespace gentleman
         int Page = 1;
         private void buttonDuplicate_Click(object sender, EventArgs e)
         {
-            Dictionary<string, Dictionary<string, PMetaData>> datas = new Dictionary<string, Dictionary<string, PMetaData>>();
-            Dictionary<string, List<string>> tags = new Dictionary<string,List<string>>();
-            foreach (var item in HashDB)
+            //Dictionary<string, Dictionary<string, int>> Folders = new Dictionary<string, Dictionary<string, int>>();
+            //foreach (var hashitem in HashDB)
+            //{
+            //    if (hashitem.Value.Count > 1)
+            //    {
+            //        foreach (var path1 in hashitem.Value)
+            //        {
+            //            foreach (var path2 in hashitem.Value)
+            //            {                            
+            //                Folders[System.IO.Path.GetDirectoryName(path1.Key)][System.IO.Path.GetDirectoryName(path2.Key)] += 1;
+            //            }
+            //        }
+            //    }
+            //}
+            foreach (var hashitem in HashDB)
             {
-                if (item.Value.Count > 1)
-                    datas[item.Key] = item.Value;
-
-                tags[item.Key] = new List<string>();
-                foreach(var v in item.Value) {
-                    tags[item.Key].AddRange(v.Value.Keywords);
+                if (hashitem.Value.Count > 1)
+                {
+                    foreach (var path in HashDB[hashitem.Key])
+                    {
+                        if (!imageList1.Images.ContainsKey(hashitem.Key))
+                        {
+                            imageList1.Images.Add(hashitem.Key, new Bitmap(path.Key));
+                            listView1.Groups.Add(new ListViewGroup(hashitem.Key, hashitem.Key));
+                        }
+                        var group = listView1.Groups[hashitem.Key];
+                        listView1.Items.Add(new ListViewItem { Group = group, Text = path.Key, ImageKey = hashitem.Key });
+                    }
                 }
-                tags[item.Key] = Algorithm.TagSet(tags[item.Key]);
             }
-            uploader.secret = "24889";
-            uploader.UploadImage(tags);
+            //Dictionary<string, Dictionary<string, PMetaData>> datas = new Dictionary<string, Dictionary<string, PMetaData>>();
+            //Dictionary<string, List<string>> tags = new Dictionary<string,List<string>>();
+            //foreach (var item in HashDB)
+            //{
+            //    if (item.Value.Count > 1)
+            //        datas[item.Key] = item.Value;
+
+            //    tags[item.Key] = new List<string>();
+            //    foreach(var v in item.Value) {
+            //        tags[item.Key].AddRange(v.Value.Keywords);
+            //    }
+            //    tags[item.Key] = Algorithm.TagSet(tags[item.Key]);
+            //}
+            //uploader.secret = "24889";
+            //uploader.UploadImage(tags);
 
             //Page = 1;
             //toolStripLabel1.Text = "Page 1";
@@ -231,6 +261,38 @@ namespace gentleman
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void contextMenuStrip1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void openContainFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /// Open File Folder Clicked
+            foreach(var i in listView1.SelectedItems) {
+                var a = i as ListViewItem;
+                System.Diagnostics.Process.Start(System.IO.Path.GetDirectoryName(a.Text));
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var i in listView1.SelectedItems)
+            {
+                var a = i as ListViewItem;                
+                FileSystem.DeleteFile(a.Text, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            }
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            foreach (var i in listView1.SelectedItems)
+            {
+                var a = i as ListViewItem;
+                System.Diagnostics.Process.Start(a.Text);
+            }
         }        
     }
 }
