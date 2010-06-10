@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="" Member="T3_Files">
+    <Type Name="T3_Files">
+      <Column Name="frn" Type="System.UInt64" CanBeNull="false" />
+      <Column Name="name" Type="System.String" CanBeNull="false" />
+      <Column Name="parent_frn" Type="System.UInt64" CanBeNull="false" />
+      <Association Name="T2_T3_Files" Member="T2" ThisKey="frn" OtherKey="frn" Type="T2" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="T2s">
+    <Type Name="T2">
+      <Column Name="frn" Type="System.UInt64" CanBeNull="false" />
+      <Column Name="hash" Member="md5" Storage="_hash" Type="System.String" CanBeNull="false" />
+      <Association Name="T2_T3_Files" Member="T3_Files" ThisKey="frn" OtherKey="frn" Type="T3_Files" />
+      <Association Name="T2_T3_Folders" Member="T3_Folders" ThisKey="frn" OtherKey="frn" Type="T3_Folders" />
+      <Association Name="T1_Local_T2" Member="T1_Local" ThisKey="md5" OtherKey="md5" Type="T1_Local" IsForeignKey="true" />
+      <Association Name="T1_Global_T2" Member="T1_Global" ThisKey="md5" OtherKey="md5" Type="T1_Global" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="T3_Folders">
+    <Type Name="T3_Folders">
+      <Column Name="frn" Type="System.UInt64" CanBeNull="false" />
+      <Column Name="name" Type="System.String" CanBeNull="false" />
+      <Column Name="parent_frn" Type="System.UInt64" CanBeNull="false" />
+      <Association Name="T2_T3_Folders" Member="T2" ThisKey="frn" OtherKey="frn" Type="T2" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="T1_Locals">
+    <Type Name="T1_Local">
+      <Column Name="tag" Type="System.String" CanBeNull="false" />
+      <Column Name="hash" Member="md5" Storage="_hash" Type="System.String" CanBeNull="false" />
+      <Column Member="location" Type="System.String" CanBeNull="false" />
+      <Association Name="T1_Local_T2" Member="T2s" ThisKey="md5" OtherKey="md5" Type="T2" />
+      <Association Name="T1_Local_Commit_list" Member="Commit_lists" ThisKey="md5" OtherKey="md5" Type="Commit_list" />
+      <Association Name="UserData_T1_Local" Member="UserData" ThisKey="md5" OtherKey="md5" Type="UserData" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="UserDatas">
+    <Type Name="UserData">
+      <Column Name="hash" Member="md5" Storage="_hash" Type="System.String" CanBeNull="false" />
+      <Column Name="tags" Type="System.String" CanBeNull="false" />
+      <Column Name="user" Type="System.String" CanBeNull="false" />
+      <Column Name="Last_Updated" Type="System.String" CanBeNull="false" />
+      <Column Member="location" Type="System.String" CanBeNull="false" />
+      <Column Member="Lock" Type="System.String" CanBeNull="false" />
+      <Association Name="UserData_GlobalData" Member="GlobalDatas" ThisKey="md5" OtherKey="md5" Type="GlobalData" />
+      <Association Name="UserData_User" Member="Users" ThisKey="user" OtherKey="username" Type="User" />
+      <Association Name="UserData_T1_Local" Member="T1_Locals" ThisKey="md5" OtherKey="md5" Type="T1_Local" />
+      <Association Name="Commit_list_UserData" Member="Commit_list" ThisKey="md5" OtherKey="md5" Type="Commit_list" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="GlobalDatas">
+    <Type Name="GlobalData">
+      <Column Name="hash" Member="md5" Storage="_hash" Type="System.String" CanBeNull="false" />
+      <Column Name="tags" Type="System.String" CanBeNull="false" />
+      <Column Name="users" Type="System.String" CanBeNull="false" />
+      <Column Name="Last_Updated" Type="System.String" CanBeNull="false" />
+      <Column Member="location" Type="System.String" CanBeNull="false" />
+      <Association Name="GlobalData_T1_Global" Member="T1_Globals" ThisKey="md5" OtherKey="md5" Type="T1_Global" />
+      <Association Name="GlobalData_User" Member="Users1" ThisKey="users" OtherKey="username" Type="User" />
+      <Association Name="UserData_GlobalData" Member="UserData" ThisKey="md5" OtherKey="md5" Type="UserData" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="Users">
+    <Type Name="User">
+      <Column Name="username" Type="System.String" CanBeNull="false" />
+      <Column Name="email" Type="System.String" CanBeNull="false" />
+      <Column Name="secret" Type="System.String" CanBeNull="false" />
+      <Association Name="UserData_User" Member="UserData" ThisKey="username" OtherKey="user" Type="UserData" IsForeignKey="true" />
+      <Association Name="GlobalData_User" Member="GlobalData" ThisKey="username" OtherKey="users" Type="GlobalData" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="T1_Globals">
+    <Type Name="T1_Global">
+      <Column Name="tag" Type="System.String" CanBeNull="false" />
+      <Column Name="hash" Member="md5" Storage="_hash" Type="System.String" CanBeNull="false" />
+      <Column Member="location" Type="System.String" CanBeNull="false" />
+      <Association Name="T1_Global_T2" Member="T2s" ThisKey="md5" OtherKey="md5" Type="T2" />
+      <Association Name="GlobalData_T1_Global" Member="GlobalData" ThisKey="md5" OtherKey="md5" Type="GlobalData" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="Last_Sync_Locals">
+    <Type Name="Last_Sync_Local" />
+  </Table>
+  <Table Name="" Member="Last_USNs">
+    <Type Name="Last_USN" />
+  </Table>
+  <Table Name="" Member="Last_Sync_Globals">
+    <Type Name="Last_Sync_Global" />
+  </Table>
+  <Table Name="" Member="Commit_lists">
+    <Type Name="Commit_list">
+      <Column Member="md5" Type="System.String" CanBeNull="false" />
+      <Column Member="tag" Type="System.String" CanBeNull="false" />
+      <Column Member="location" Type="System.String" CanBeNull="false" />
+      <Column Member="timestamp" Type="System.String" CanBeNull="false" />
+      <Column Member="reason" Type="System.String" CanBeNull="false" />
+      <Association Name="Commit_list_UserData" Member="UserDatas" ThisKey="md5" OtherKey="md5" Type="UserData" />
+      <Association Name="T1_Local_Commit_list" Member="T1_Local" ThisKey="md5" OtherKey="md5" Type="T1_Local" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="" Member="Counters">
+    <Type Name="Counter">
+      <Column Member="type" Type="System.String" CanBeNull="false" />
+      <Column Member="key" Type="System.String" CanBeNull="false" />
+      <Column Member="count" Type="System.String" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
