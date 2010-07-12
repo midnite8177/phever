@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+  <head> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
+    <title>Google Maps API Example - Random Weather Map</title> 
+    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQcTQoRJ_JVFHVwderj38GcfiXt6hQX5E6h3W3sV-l-QbtgIls1pN0iAw"
+            type="text/javascript"></script> 
+    <script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js"></script> 
+    <script type="text/javascript"> 
+    //<![CDATA[
+ 
+    var IMAGES = [ "sun", "rain", "snow", "storm" ];
+    var ICONS = [];
+    var map = null;
+    var mgr = null;
+	var StarInfors = [];
+ 
+ 	var blueIcon = new GIcon(G_DEFAULT_ICON);
+	blueIcon.image = "http://www.skywatchertelescope.net/swtgallery/Planets/g1_b_ridS.jpg";
+                
+	// Set up our GMarkerOptions object
+	var markerOptions = { icon:blueIcon };
+
+	var skymap = null;
+	var map = null;
+	var mgr = null;
+	var skymgr = null;
+	
+	function SetupMap(){
+		if(GBrowserIsCompatible()) {
+			map = new GMap2(document.getElementById("map"));
+			map.addControl(new GMapTypeControl()); 
+			map.addControl(new GLargeMapControl());
+			map.setCenter(new GLatLng(48.25, 11.00),4);
+			window.setTimeout(SetupPoint,0);
+		}
+	}
+	var index = 0;
+	function GetInfoWindowNode(data){
+		id = data[0];
+		name = data[1];
+		loc = data[2];
+		lat = data[3];
+		lng = data[4];
+		imgurl = data[5];
+		thumburl = data[6];
+		title = data[7];
+		content = data[8];			
+		
+		var text = '<b>' + title + '</b>' + content;
+		var link = "http://www.skywatchertelescope.net/swtinc/gallery_view.php?id=" + id;
+		var src = thumburl;
+		//alert("<table border=0><tr><td><a border=0 href='" + link + "'><img border=0 src='" + src + "'></a><td>"+text+"</td></tr></table>");
+		return "<table border=0><tr><td><a border=0 href='" + link + "'><img border=0 src='" + src + "'></a><td>"+text+"</td></tr></table>";
+		
+		
+	}
+	
+	function GetMarkers()
+	{
+		var starinfos = [1,2,3,4,5,6,7,8,9,10]
+		var batch = []
+		for (var i in starinfos) {
+			var lat = 48.25 + (Math.random() - 0.5)*14.5;
+			var lng = 11.00 + (Math.random() - 0.5)*36;
+			var point = new GLatLng(Math.round(lat*10)/10, Math.round(lng*10)/10);
+			var marker = new GMarker(point);
+			GEvent.addListener(marker, "click", function(latlng)
+			{								
+				map.openInfoWindowHtml(latlng, GetInfoWindowNode());
+			});
+			batch.push(marker);
+		}			
+		return batch;
+	}
+	
+	function GetSkyMarkers(){
+		{
+		var starinfos = [1,2,3,4,5,6,7,8,9,10]
+		var batch = []
+		for (var i in starinfos) {
+			var lat = 48.25 + (Math.random() - 0.5)*14.5;
+			var lng = 11.00 + (Math.random() - 0.5)*36;
+			var point = new GLatLng(Math.round(lat*10)/10, Math.round(lng*10)/10);
+			var marker = new GMarker(point);
+			GEvent.addListener(marker, "click", function(latlng)
+			{								
+				skymap.openInfoWindowHtml(latlng, GetInfoWindowNode());
+			});
+			batch.push(marker);
+		}			
+		return batch;
+	}
+	}
+	
+		
+	function SetupPoint()
+	{
+		mgr = new MarkerManager(map);
+      	mgr.addMarkers(StarBatch,0);
+		mgr.refresh();
+	}
+	
+	function SetupSkyPoint(){
+		skymgr = new MarkerManager(skymap);
+		skymgr.addMarkers(GetSkyMarkers(),0);
+		skymgr.refresh();		
+	}
+	
+	function SetupSkyMap(){	
+		if(GBrowserIsCompatible()) {
+			skymap = new GMap2(document.getElementById("skymap"), {mapTypes: G_SKY_MAP_TYPES});
+			skymap.addControl(new GMapTypeControl()); 
+			skymap.addControl(new GLargeMapControl());
+			skymap.setCenter(new GLatLng(48.25, 11.00),4);		
+			window.setTimeout(SetupSkyPoint,0);
+		}
+	}
+	var StarBatch = [];
+	function AddStarInfo(iid, name, location, lat, lng, imgurl, thumburl, title, content){	
+		var point = new GLatLng(lat, lng);
+		var marker = new GMarker(point);
+		marker.data = [iid,name,location, lat, lng, imgurl, thumburl, title, content];
+		
+		GEvent.addListener(marker, "click", function(latlng)
+		{										
+			map.openInfoWindowHtml(latlng, GetInfoWindowNode(marker.data));
+		});
+		StarBatch.push(marker);
+	}
+	
+	{% for i in result %}
+	 	AddStarInfo({{i.0}},"{{i.1}}","{{i.2}}",{{i.3}},{{i.4}},"{{i.5}}", "{{i.6}}", "{{i.7}}", "{{i.8}}");
+	{% endfor %}	
+     //]]>		
+    </script> 
+  </head> 
+ 
+  <body onload="SetupMap(), SetupSkyMap()" onunload="GUnload()"> 
+    <div id="map" style="margin: 5px auto; width: 650px; height: 400px"></div> 
+    <div style="text-align: center; font-size: large;"> 
+      Random Weather Map
+    </div> 
+	<div id="skymap" style="margin: 5px auto; width: 650px; height: 400px"></div>	
+  </body> 
+</html> 
+ 
